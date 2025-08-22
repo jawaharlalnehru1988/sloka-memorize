@@ -1,0 +1,7 @@
+{
+  "name": "harekrishnasloka",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
