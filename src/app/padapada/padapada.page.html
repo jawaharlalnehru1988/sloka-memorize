@@ -1,0 +1,272 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>🕉️ Padapāṭha - पदपाठ</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="padapada-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Padapāṭha</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Introduction Section -->
+  <div class="introduction-section">
+    <div class="intro-header">
+      <ion-icon name="text-outline" color="primary"></ion-icon>
+      <h2>What is Padapāṭha (पदपाठ)?</h2>
+    </div>
+    
+    <div class="intro-content">
+      <div class="definition-card">
+        <h3>📖 Definition</h3>
+        <p><strong>"Pada"</strong> = word, <strong>"pāṭha"</strong> = recitation</p>
+        <p>The verse (śloka) is split into individual words and recited one by one, slowly and clearly.</p>
+      </div>
+
+      <div class="purpose-card">
+        <h3>🎯 Purpose</h3>
+        <ul>
+          <li>Helps beginners grasp exact pronunciation of each word</li>
+          <li>Prevents merging or mispronouncing words in continuous chanting</li>
+          <li>Builds strong foundation for Vedic chanting accuracy</li>
+          <li>Develops clarity in Sanskrit pronunciation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example Section -->
+  <div class="example-section">
+    <h2>📚 Bhagavad Gītā Example</h2>
+    
+    <div class="sloka-example">
+      <div class="continuous-sloka">
+        <h3>Continuous Recitation:</h3>
+        <div class="sloka-text">श्रीभगवानुवाच</div>
+        <div class="sloka-roman">śrī-bhagavān uvāca</div>
+        <div class="sloka-meaning">"The Supreme Lord said"</div>
+      </div>
+
+      <div class="padapatha-breakdown">
+        <h3>Padapāṭha Breakdown:</h3>
+        <div class="words-container">
+          <div class="word-item">
+            <div class="word-devanagari">श्री</div>
+            <div class="word-roman">śrī</div>
+            <div class="word-meaning">blessed</div>
+          </div>
+          <div class="separator">+</div>
+          <div class="word-item">
+            <div class="word-devanagari">भगवान्</div>
+            <div class="word-roman">bhagavān</div>
+            <div class="word-meaning">Lord</div>
+          </div>
+          <div class="separator">+</div>
+          <div class="word-item">
+            <div class="word-devanagari">उवाच</div>
+            <div class="word-roman">uvāca</div>
+            <div class="word-meaning">said</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Training Section -->
+  <div class="training-section">
+    <h2>🎓 Interactive Training Method</h2>
+    
+    <div class="training-flow">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Word Display</h3>
+          <p>Each word shown individually with Devanagari, transliteration, and meaning</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Audio Playback</h3>
+          <p>Clear, slow pronunciation with replay option for perfect learning</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Practice & Record</h3>
+          <p>Record your pronunciation and get instant feedback</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Progressive Mastery</h3>
+          <p>Unlock combinations and full śloka recitation</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Practice Section -->
+  <div class="practice-section">
+    <h2>🎯 Start Your Practice</h2>
+    
+    <div class="sloka-selection">
+      <h3>Select a Śloka to Practice:</h3>
+      <div class="sloka-cards">
+        <ion-card class="sloka-card" (click)="selectSloka(1)">
+          <ion-card-header>
+            <ion-card-title>Gītā 2.47</ion-card-title>
+            <ion-card-subtitle>कर्मण्येवाधिकारस्ते</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            Famous verse about action without attachment to results
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="sloka-card" (click)="selectSloka(2)">
+          <ion-card-header>
+            <ion-card-title>Gītā 7.1</ion-card-title>
+            <ion-card-subtitle>श्रीभगवानुवाच</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            Beginning of Krishna's teachings on devotional knowledge
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="sloka-card" (click)="selectSloka(3)">
+          <ion-card-header>
+            <ion-card-title>Gītā 18.66</ion-card-title>
+            <ion-card-subtitle>सर्वधर्मान्परित्यज्य</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            The ultimate instruction of surrender unto Krishna
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Training Interface (Hidden initially) -->
+  <div class="training-interface" *ngIf="selectedSloka">
+    <div class="training-header">
+      <h3>Practicing: {{selectedSloka.title}}</h3>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+      </div>
+      <p>Word {{currentWordIndex + 1}} of {{selectedSloka.words.length}}</p>
+    </div>
+
+    <div class="word-display-panel">
+      <div class="current-word">
+        <div class="word-devanagari-large">{{currentWord.devanagari}}</div>
+        <div class="word-roman-large">{{currentWord.roman}}</div>
+        <div class="word-meaning-large">{{currentWord.meaning}}</div>
+      </div>
+
+      <div class="audio-controls">
+        <ion-button (click)="playWordSlow()" color="primary">
+          <ion-icon name="volume-medium" slot="start"></ion-icon>
+          Play Slow
+        </ion-button>
+        <ion-button (click)="playWordNormal()" color="secondary">
+          <ion-icon name="volume-high" slot="start"></ion-icon>
+          Play Normal
+        </ion-button>
+      </div>
+
+      <div class="practice-controls">
+        <ion-button (click)="startRecording()" [disabled]="isRecording" color="danger">
+          <ion-icon name="mic" slot="start"></ion-icon>
+          {{isRecording ? 'Recording...' : 'Record Yourself'}}
+        </ion-button>
+        
+        <div class="feedback-display" *ngIf="pronunciationFeedback">
+          <div class="feedback-score" [ngClass]="feedbackClass">
+            {{pronunciationFeedback}}
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation-controls">
+        <ion-button (click)="previousWord()" [disabled]="currentWordIndex === 0" fill="outline">
+          <ion-icon name="chevron-back" slot="start"></ion-icon>
+          Previous
+        </ion-button>
+        
+        <ion-button (click)="nextWord()" [disabled]="currentWordIndex === selectedSloka.words.length - 1" fill="outline">
+          Next
+          <ion-icon name="chevron-forward" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="word-progress">
+      <h4>Your Progress:</h4>
+      <div class="word-checkmarks">
+        <div 
+          *ngFor="let word of selectedSloka.words; let i = index" 
+          class="word-status"
+          [ngClass]="{
+            'completed': word.practiced,
+            'current': i === currentWordIndex,
+            'pending': !word.practiced && i !== currentWordIndex
+          }"
+        >
+          <span class="word-index">{{i + 1}}</span>
+          <span class="word-text">{{word.roman}}</span>
+          <ion-icon *ngIf="word.practiced" name="checkmark-circle" color="success"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="completion-section" *ngIf="isAllWordsPracticed()">
+      <div class="completion-card">
+        <ion-icon name="trophy" color="warning"></ion-icon>
+        <h3>Excellent! All Words Mastered!</h3>
+        <p>You've practiced all individual words. Ready for the full śloka?</p>
+        <ion-button (click)="practiceFullSloka()" color="success">
+          <ion-icon name="play-circle" slot="start"></ion-icon>
+          Practice Full Śloka
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips Section -->
+  <div class="tips-section">
+    <h2>💡 Practice Tips</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <ion-icon name="ear-outline" color="primary"></ion-icon>
+        <h4>Listen Carefully</h4>
+        <p>Pay attention to each syllable and vowel sound</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="repeat-outline" color="secondary"></ion-icon>
+        <h4>Repeat Often</h4>
+        <p>Practice each word multiple times before moving forward</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="time-outline" color="tertiary"></ion-icon>
+        <h4>Take Your Time</h4>
+        <p>Don't rush - clarity is more important than speed</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="heart-outline" color="danger"></ion-icon>
+        <h4>Practice Daily</h4>
+        <p>Consistent daily practice builds strong memory</p>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp } from 'ionicons/icons';
+import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -13,15 +13,20 @@ import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutlin
 })
 export class AppComponent {
   public appPages = [
-    { title: 'Inbox', url: '/folder/inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/spam', icon: 'warning' },
+    { title: 'Home', url: '/home', icon: 'home' },
+    { title: 'Padapāṭha', url: '/padapada', icon: 'text' },
+    { title: 'Vākyapāṭha', url: '/vakyapada', icon: 'document-text' },
+    { title: 'Anuloma Pāṭha', url: '/anuloma', icon: 'arrow-forward' },
+    { title: 'Pratiloma Pāṭha', url: '/pratiloma', icon: 'arrow-back' },
+    { title: 'Krama Pāṭha', url: '/kramapada', icon: 'swap-horizontal' },
+    { title: 'Jatā Pāṭha', url: '/jatapada', icon: 'git-branch' },
+    { title: 'Ghana Pāṭha', url: '/ghanapada', icon: 'layers' },
+    { title: 'Ucchāraṇa', url: '/uchcharana', icon: 'volume-high' },
+    { title: 'Likitha Pāṭha', url: '/likhitapada', icon: 'create' },
+    { title: 'Smaraṇa', url: '/smarana', icon: 'bulb' },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  public labels = ['Bhagavad Gītā', 'Śrīmad Bhāgavatam', 'Vedic Mantras', 'Stotras', 'Daily Practice', 'Progress Tracking'];
   constructor() {
-    addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp });
+    addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb });
   }
 }

@@ -1,0 +1,501 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="warning">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>लिखित पाठ - Likhita Pāṭha</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="likhita-content">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-icon">✍️</div>
+    <h1 class="hero-title">Likhita Pāṭha</h1>
+    <h2 class="hero-sanskrit">लिखित पाठ</h2>
+    <p class="hero-description">
+      Master sacred texts through traditional written practice. 
+      Develop deep connection and memory through mindful writing of Sanskrit ślokas in multiple scripts.
+    </p>
+    <div class="prestige-badge">
+      <ion-icon name="create"></ion-icon>
+      <span>Written Mastery</span>
+    </div>
+  </div>
+
+  <!-- Prerequisites Section -->
+  <div class="prerequisites-section">
+    <div class="prereq-header">
+      <ion-icon name="checkmark-circle"></ion-icon>
+      <h2>Prerequisites</h2>
+    </div>
+    <div class="prereq-content">
+      <div class="warning-card">
+        <h3>
+          <ion-icon name="information-circle"></ion-icon>
+          Foundation Requirements
+        </h3>
+        <p>
+          Likhita Pāṭha requires proficiency in pronunciation and basic recitation methods. 
+          Written practice enhances memory through kinesthetic learning and visual reinforcement.
+        </p>
+      </div>
+      <div class="mastery-checklist">
+        <h3>
+          <ion-icon name="list-circle"></ion-icon>
+          Technique Mastery Status
+        </h3>
+        <div class="checklist-items">
+          <div class="checklist-item" [ngClass]="getMasteryClass('padapada')">
+            <ion-icon [name]="getMasteryIcon('padapada')"></ion-icon>
+            <span>Padapāṭha (Word Recitation)</span>
+            <div class="mastery-level">{{ getMasteryLevel('padapada') }}</div>
+          </div>
+          <div class="checklist-item" [ngClass]="getMasteryClass('uchcharana')">
+            <ion-icon [name]="getMasteryIcon('uchcharana')"></ion-icon>
+            <span>Ucchāraṇa (Pronunciation)</span>
+            <div class="mastery-level">{{ getMasteryLevel('uchcharana') }}</div>
+          </div>
+          <div class="checklist-item" [ngClass]="getMasteryClass('vakyapada')">
+            <ion-icon [name]="getMasteryIcon('vakyapada')"></ion-icon>
+            <span>Vākyapāṭha (Sentence Recitation)</span>
+            <div class="mastery-level">{{ getMasteryLevel('vakyapada') }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Introduction Section -->
+  <div class="introduction-section">
+    <div class="intro-header">
+      <ion-icon name="library"></ion-icon>
+      <h2>Understanding Likhita Pāṭha</h2>
+    </div>
+    <div class="intro-content">
+      <div class="definition-card">
+        <h3>
+          <ion-icon name="book"></ion-icon>
+          Definition
+        </h3>
+        <p>
+          <strong>Likhita Pāṭha (लिखित पाठ)</strong> means "written recitation" in Sanskrit. 
+          This ancient technique involves mindful writing of sacred texts to enhance memory, concentration, and spiritual connection.
+        </p>
+        <p>
+          The practice engages multiple senses - visual, kinesthetic, and cognitive - creating stronger neural pathways 
+          for memorization and deeper understanding of the text's meaning and rhythm.
+        </p>
+      </div>
+      <div class="significance-card">
+        <h3>
+          <ion-icon name="star"></ion-icon>
+          Benefits & Significance
+        </h3>
+        <p>Written practice in traditional learning provides:</p>
+        <ul>
+          <li>Enhanced memory through multi-sensory engagement</li>
+          <li>Improved concentration and mindfulness</li>
+          <li>Better understanding of Sanskrit script and language</li>
+          <li>Kinesthetic reinforcement of pronunciation patterns</li>
+          <li>Development of reverence through mindful writing</li>
+          <li>Creation of personal study manuscripts</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Options Section -->
+  <div class="script-options-section">
+    <h2>Writing Script Options</h2>
+    <div class="script-explanation">
+      <p>Practice writing in traditional and modern scripts to deepen your connection with the text:</p>
+    </div>
+    
+    <div class="script-cards">
+      <div class="script-card devanagari" (click)="selectScript('devanagari')">
+        <div class="script-sample">
+          <span class="sample-text">धर्मक्षेत्रे कुरुक्षेत्रे</span>
+        </div>
+        <h4>देवनागरी</h4>
+        <h5>Devanāgarī Script</h5>
+        <p>Traditional Sanskrit script with precise character formation and sacred geometry.</p>
+        <div class="difficulty-level foundation">
+          <ion-icon name="star"></ion-icon>
+          <span>Recommended</span>
+        </div>
+      </div>
+
+      <div class="script-card roman" (click)="selectScript('roman')">
+        <div class="script-sample">
+          <span class="sample-text">dharma-kṣetre kuru-kṣetre</span>
+        </div>
+        <h4>रोमन</h4>
+        <h5>Roman Transliteration</h5>
+        <p>IAST romanization with proper diacritical marks for accurate pronunciation.</p>
+        <div class="difficulty-level beginner">
+          <ion-icon name="leaf"></ion-icon>
+          <span>Beginner Friendly</span>
+        </div>
+      </div>
+
+      <div class="script-card combined" (click)="selectScript('combined')">
+        <div class="script-sample">
+          <span class="sample-text-dual">
+            <span class="devanagari-line">धर्मक्षेत्रे कुरुक्षेत्रे</span>
+            <span class="roman-line">dharma-kṣetre kuru-kṣetre</span>
+          </span>
+        </div>
+        <h4>संयुक्त</h4>
+        <h5>Combined Practice</h5>
+        <p>Write in both scripts for comprehensive learning and script comparison.</p>
+        <div class="difficulty-level advanced">
+          <ion-icon name="diamond"></ion-icon>
+          <span>Advanced</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Training Modes Section -->
+  <div class="training-modes-section">
+    <h2>Writing Practice Modes</h2>
+    <div class="modes-grid">
+      <div class="mode-card tracing" (click)="startWritingPractice('tracing')" [class.disabled]="!canAccessMode('tracing')">
+        <div class="mode-icon">
+          <ion-icon name="finger-print" color="success"></ion-icon>
+        </div>
+        <h3>Guided Tracing</h3>
+        <p>Follow dotted outlines to learn proper character formation and stroke order in your chosen script.</p>
+        <div class="mode-features">
+          <span>Character stroke guidance</span>
+          <span>Proper formation practice</span>
+          <span>Speed control</span>
+          <span>Real-time feedback</span>
+        </div>
+        <div class="access-requirement" *ngIf="!canAccessMode('tracing')">
+          Complete Ucchāraṇa mastery required
+        </div>
+      </div>
+
+      <div class="mode-card copying" (click)="startWritingPractice('copying')" [class.disabled]="!canAccessMode('copying')">
+        <div class="mode-icon">
+          <ion-icon name="copy" color="warning"></ion-icon>
+        </div>
+        <h3>Mindful Copying</h3>
+        <p>Copy complete words and phrases while maintaining awareness of meaning and pronunciation.</p>
+        <div class="mode-features">
+          <span>Word-by-word copying</span>
+          <span>Meaning integration</span>
+          <span>Rhythm awareness</span>
+          <span>Aesthetic presentation</span>
+        </div>
+        <div class="access-requirement" *ngIf="!canAccessMode('copying')">
+          Guided tracing mastery required
+        </div>
+      </div>
+
+      <div class="mode-card composition" (click)="startWritingPractice('composition')" [class.disabled]="!canAccessMode('composition')">
+        <div class="mode-icon">
+          <ion-icon name="create" color="danger"></ion-icon>
+        </div>
+        <h3>Memory Writing</h3>
+        <p>Write from memory to test retention and develop independent recall abilities.</p>
+        <div class="mode-features">
+          <span>Memory recall practice</span>
+          <span>Error detection</span>
+          <span>Progressive difficulty</span>
+          <span>Accuracy assessment</span>
+        </div>
+        <div class="access-requirement" *ngIf="!canAccessMode('composition')">
+          Mindful copying mastery required
+        </div>
+      </div>
+
+      <div class="mode-card manuscript" (click)="startWritingPractice('manuscript')" [class.disabled]="!canAccessMode('manuscript')">
+        <div class="mode-icon">
+          <ion-icon name="document-text" color="tertiary"></ion-icon>
+        </div>
+        <h3>Manuscript Creation</h3>
+        <p>Create beautiful manuscripts with proper formatting, decoration, and traditional presentation.</p>
+        <div class="mode-features">
+          <span>Complete śloka writing</span>
+          <span>Traditional formatting</span>
+          <span>Decorative elements</span>
+          <span>Portfolio creation</span>
+        </div>
+        <div class="access-requirement" *ngIf="!canAccessMode('manuscript')">
+          Memory writing mastery required
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Writing Interface -->
+  <div class="writing-interface" *ngIf="isWriting">
+    <div class="writing-header">
+      <h3>{{ currentMode | titlecase }} Practice</h3>
+      <div class="writing-progress">
+        <div class="progress-info">
+          <span>Exercise: {{ currentExercise }}/{{ totalExercises }}</span>
+          <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Writing Exercise -->
+    <div class="current-writing-section">
+      <div class="exercise-header">
+        <h4>Current Exercise</h4>
+        <div class="exercise-type" [ngClass]="currentExerciseType">
+          <ion-icon [name]="getExerciseIcon()"></ion-icon>
+          <span>{{ currentExerciseType | titlecase }}</span>
+        </div>
+      </div>
+      
+      <div class="exercise-display">
+        <div class="reference-text">
+          <h5>
+            <ion-icon name="book-outline"></ion-icon>
+            Reference Text
+          </h5>
+          <div class="text-display">
+            <div class="devanagari-reference" *ngIf="selectedScript === 'devanagari' || selectedScript === 'combined'">
+              {{ currentExerciseData?.devanagari }}
+            </div>
+            <div class="roman-reference" *ngIf="selectedScript === 'roman' || selectedScript === 'combined'">
+              {{ currentExerciseData?.roman }}
+            </div>
+            <div class="meaning-reference" *ngIf="currentExerciseData?.meaning">
+              <strong>Meaning:</strong> {{ currentExerciseData?.meaning }}
+            </div>
+          </div>
+        </div>
+
+        <div class="writing-canvas-container">
+          <div class="writing-instructions">
+            <p>{{ currentInstruction }}</p>
+          </div>
+          
+          <div class="writing-canvas" #writingCanvas>
+            <div class="canvas-header">
+              <h6>
+                <ion-icon name="create"></ion-icon>
+                Writing Area
+              </h6>
+              <div class="canvas-controls">
+                <ion-button fill="clear" size="small" (click)="clearCanvas()">
+                  <ion-icon name="refresh" slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" size="small" (click)="undoLastStroke()">
+                  <ion-icon name="arrow-undo" slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" size="small" (click)="toggleGuidelines()">
+                  <ion-icon name="grid" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+            
+            <div class="canvas-workspace" [ngClass]="{ 'guidelines-active': showGuidelines }">
+              <!-- Dynamic canvas area for touch/stylus writing -->
+              <canvas #drawingCanvas 
+                      width="800" 
+                      height="400"
+                      (touchstart)="startDrawing($event)"
+                      (touchmove)="draw($event)"
+                      (touchend)="stopDrawing($event)"
+                      (mousedown)="startDrawing($event)"
+                      (mousemove)="draw($event)"
+                      (mouseup)="stopDrawing($event)">
+              </canvas>
+              
+              <!-- Guidelines overlay -->
+              <div class="guidelines-overlay" *ngIf="showGuidelines">
+                <div class="guideline baseline"></div>
+                <div class="guideline midline"></div>
+                <div class="guideline topline"></div>
+                <div class="guideline margin-left"></div>
+                <div class="guideline margin-right"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="writing-feedback" *ngIf="writingFeedback">
+            <div class="feedback-header">
+              <h6>
+                <ion-icon name="analytics"></ion-icon>
+                Writing Assessment
+              </h6>
+            </div>
+            <div class="feedback-content">
+              <div class="accuracy-metrics">
+                <div class="metric-item">
+                  <span class="metric-label">Character Formation:</span>
+                  <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.characterFormation)">
+                    {{ writingFeedback.characterFormation }}%
+                  </span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Stroke Order:</span>
+                  <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.strokeOrder)">
+                    {{ writingFeedback.strokeOrder }}%
+                  </span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Spacing & Alignment:</span>
+                  <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.spacing)">
+                    {{ writingFeedback.spacing }}%
+                  </span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Overall Quality:</span>
+                  <span class="metric-value overall" [ngClass]="getAccuracyClass(writingFeedback.overall)">
+                    {{ writingFeedback.overall }}%
+                  </span>
+                </div>
+              </div>
+              
+              <div class="improvement-tips" *ngIf="writingFeedback.suggestions?.length">
+                <h6>
+                  <ion-icon name="bulb"></ion-icon>
+                  Improvement Tips
+                </h6>
+                <ul>
+                  <li *ngFor="let tip of writingFeedback.suggestions">{{ tip }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="writing-controls">
+            <ion-button fill="outline" color="medium" (click)="repeatExercise()">
+              <ion-icon name="refresh" slot="start"></ion-icon>
+              Repeat
+            </ion-button>
+            <ion-button fill="outline" color="warning" (click)="getWritingHelp()">
+              <ion-icon name="help-circle" slot="start"></ion-icon>
+              Help
+            </ion-button>
+            <ion-button fill="solid" color="primary" (click)="evaluateWriting()">
+              <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+              Evaluate
+            </ion-button>
+            <ion-button fill="solid" color="success" (click)="nextExercise()" [disabled]="!canProceed()">
+              <ion-icon name="arrow-forward" slot="end"></ion-icon>
+              Next
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Writing Progress Overview -->
+    <div class="writing-progress-section">
+      <h4>
+        <ion-icon name="trophy"></ion-icon>
+        Writing Mastery Progress
+      </h4>
+      <div class="progress-categories">
+        <div class="category-item" *ngFor="let category of writingCategories" [ngClass]="category.status">
+          <ion-icon [name]="getMasteryStatusIcon(category.status)"></ion-icon>
+          <span>{{ category.name }}</span>
+          <div class="category-progress">{{ category.progress }}%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completion Section -->
+  <div class="completion-section" *ngIf="isCompleted">
+    <div class="completion-card">
+      <div class="completion-animation">
+        <ion-icon name="trophy" color="warning"></ion-icon>
+        <div class="celebration-text">Exceptional Achievement!</div>
+      </div>
+      <h3>Likhita Pāṭha Mastered!</h3>
+      <p>
+        Congratulations! You have mastered the art of sacred writing. 
+        Your written practice has deepened your connection with the texts and enhanced your memorization abilities through mindful engagement.
+      </p>
+      
+      <div class="completion-stats">
+        <div class="stat-item">
+          <ion-icon name="create" color="success"></ion-icon>
+          <span>{{ completionStats.charactersWritten }} Characters Written</span>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="document-text" color="primary"></ion-icon>
+          <span>{{ completionStats.exercisesCompleted }} Exercises Completed</span>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <span>{{ completionStats.accuracy }}% Average Accuracy</span>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="time" color="warning"></ion-icon>
+          <span>{{ completionStats.practiceTime }} Practice Time</span>
+        </div>
+      </div>
+      
+      <div class="manuscript-showcase" *ngIf="completionStats.manuscriptsCreated > 0">
+        <h4>Your Manuscripts</h4>
+        <p>You have created {{ completionStats.manuscriptsCreated }} beautiful manuscript(s) during your practice.</p>
+        <ion-button fill="outline" color="tertiary" (click)="viewManuscripts()">
+          <ion-icon name="library" slot="start"></ion-icon>
+          View Your Manuscripts
+        </ion-button>
+      </div>
+      
+      <div class="completion-actions">
+        <ion-button fill="solid" color="success" (click)="proceedToNextTechnique()">
+          <ion-icon name="arrow-forward" slot="end"></ion-icon>
+          Continue to Smaraṇa Pāṭha
+        </ion-button>
+        <ion-button fill="outline" color="primary" (click)="reviewWriting()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Review & Practice More
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips Section -->
+  <div class="tips-section">
+    <h2>Written Practice Tips</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <ion-icon name="hand-left" color="warning"></ion-icon>
+        <h4>Proper Posture</h4>
+        <p>Maintain comfortable writing posture with relaxed shoulders. Use appropriate writing tools for your chosen script.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="time" color="primary"></ion-icon>
+        <h4>Mindful Pace</h4>
+        <p>Write slowly and mindfully. Focus on quality over speed to develop proper muscle memory and concentration.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="heart" color="danger"></ion-icon>
+        <h4>Reverent Attitude</h4>
+        <p>Approach writing practice with reverence and devotion. Consider each character as a sacred offering.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="refresh" color="success"></ion-icon>
+        <h4>Regular Practice</h4>
+        <p>Consistent daily writing, even for short periods, builds stronger neural pathways than irregular long sessions.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="book" color="tertiary"></ion-icon>
+        <h4>Study Scripts</h4>
+        <p>Learn about the history and structure of Devanāgarī script to deepen your appreciation and accuracy.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="eye" color="medium"></ion-icon>
+        <h4>Visual Memory</h4>
+        <p>Pay attention to the visual patterns of words. Written practice strengthens visual memory of text structures.</p>
+      </div>
+    </div>
+  </div>
+</ion-content>

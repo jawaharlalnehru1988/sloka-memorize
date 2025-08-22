@@ -1,0 +1,189 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>🕉️ Bhagavad Gītā Sloka Memorization</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">🕉️ Bhagavad Gītā</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Inspirational Section with Krishna and Prabhupada -->
+  <div class="inspiration-section">
+    <div class="krishna-section">
+      <div class="image-container">
+        <img src="https://res.cloudinary.com/dbmkctsda/image/upload/v1755826489/6c5b5f34493a22073fec89464565a7a2_nzjsqr.jpg" alt="Lord Krishna" class="krishna-image">
+      </div>
+      <div class="quote-container">
+        <h3>Lord Krishna's Promise</h3>
+        <p class="verse-number">Bhagavad Gītā 18.68</p>
+        <blockquote>
+          "For one who explains this supreme secret to the devotees, pure devotional service is guaranteed, and at the end he will come back to Me."
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="prabhupada-section">
+      <div class="image-container">
+        <img src="https://res.cloudinary.com/dbmkctsda/image/upload/v1752822424/9a17fc1227bf21a0e727d0d5b54ccd09_rakknx.jpg" alt="Srila Prabhupada" class="prabhupada-image">
+      </div>
+      <div class="quote-container">
+        <h3>Srila Prabhupada's Instruction</h3>
+        <blockquote>
+          "From now on everyone in ISKCON must learn to pronounce Sanskrit correctly and understand the Sanskrit ślokas."
+        </blockquote>
+        <p class="quote-emphasis">Master the sacred verses through these time-tested Vedic methods</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="welcome-section">
+    <h2>🙏 Traditional Vedic Methods of Memorization</h2>
+    <p>Master the sacred verses of Bhagavad Gītā through time-tested techniques</p>
+  </div>
+
+  <div class="techniques-grid">
+    <!-- Row 1 -->
+    <ion-card class="technique-card" (click)="navigateTo('/padapada')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="text-outline" color="primary"></ion-icon>
+        </div>
+        <ion-card-title>1. Padapāṭha</ion-card-title>
+        <ion-card-subtitle>पदपाठ — Word-by-Word</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Each word recited separately, slowly and clearly. Perfect for beginners to learn exact pronunciation.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="technique-card" (click)="navigateTo('/vakyapada')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="document-text-outline" color="secondary"></ion-icon>
+        </div>
+        <ion-card-title>2. Vākyapāṭha</ion-card-title>
+        <ion-card-subtitle>वाक्यपाठ — Continuous Flow</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Natural flow recitation without breaks. Regular chanting style for rhythm and devotional practice.
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Row 2 -->
+    <ion-card class="technique-card" (click)="navigateTo('/anuloma')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="arrow-forward-outline" color="tertiary"></ion-icon>
+        </div>
+        <ion-card-title>3. Anuloma Pāṭha</ion-card-title>
+        <ion-card-subtitle>अनुलोमपाठ — Forward Repetition</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Line-by-line forward repetition. Build verses gradually by adding one line at a time.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="technique-card" (click)="navigateTo('/pratiloma')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="arrow-back-outline" color="success"></ion-icon>
+        </div>
+        <ion-card-title>4. Pratiloma Pāṭha</ion-card-title>
+        <ion-card-subtitle>प्रतिलोमपाठ — Reverse Recitation</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Reverse order chanting of lines or words. Strengthens memory and prevents forgetting.
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Row 3 -->
+    <ion-card class="technique-card" (click)="navigateTo('/kramapada')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="swap-horizontal-outline" color="warning"></ion-icon>
+        </div>
+        <ion-card-title>5. Krama Pāṭha</ion-card-title>
+        <ion-card-subtitle>क्रमपाठ — Sequential Pairing</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Words recited in pairs: (word1+word2), (word2+word3). Powerful for precise retention.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="technique-card" (click)="navigateTo('/jatapada')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="git-branch-outline" color="danger"></ion-icon>
+        </div>
+        <ion-card-title>6. Jatā Pāṭha</ion-card-title>
+        <ion-card-subtitle>जटापाठ — Braided Recitation</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Complex braid-like pattern: word1-word2, word2-word1, word1-word2-word3. Very secure method.
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Row 4 -->
+    <ion-card class="technique-card" (click)="navigateTo('/ghanapada')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="layers-outline" color="medium"></ion-icon>
+        </div>
+        <ion-card-title>7. Ghana Pāṭha</ion-card-title>
+        <ion-card-subtitle>घनपाठ — Dense Recitation</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Most advanced technique. Multiple word combinations with zero chance of corruption.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="technique-card" (click)="navigateTo('/uchcharana')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="volume-high-outline" color="primary"></ion-icon>
+        </div>
+        <ion-card-title>8. Ucchāraṇa</ion-card-title>
+        <ion-card-subtitle>उच्चारण — Loud Pronunciation</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Loud chanting to align ears, tongue, and mind. Builds strong sound memory.
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Row 5 -->
+    <ion-card class="technique-card" (click)="navigateTo('/likhitapada')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="create-outline" color="secondary"></ion-icon>
+        </div>
+        <ion-card-title>9. Likitha Pāṭha</ion-card-title>
+        <ion-card-subtitle>लिखितपाठ — Writing Practice</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Writing verses repeatedly while reciting. Strengthens visual and muscular memory.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="technique-card" (click)="navigateTo('/smarana')">
+      <ion-card-header>
+        <div class="card-icon">
+          <ion-icon name="bulb-outline" color="tertiary"></ion-icon>
+        </div>
+        <ion-card-title>10. Smaraṇa</ion-card-title>
+        <ion-card-subtitle>स्मरण — Silent Recollection</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Mental recitation without voice. Internalize verses and meditate on their meaning.
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div class="footer-section">
+    <p>🌺 May Lord Krishna guide your sacred learning journey 🌺</p>
+  </div>
+
+</ion-content>

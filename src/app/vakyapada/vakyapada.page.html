@@ -1,0 +1,446 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>🕉️ Vākyapāṭha - वाक्यपाठ</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="vakyapada-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Vākyapāṭha</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Introduction Section -->
+  <div class="introduction-section">
+    <div class="intro-header">
+      <ion-icon name="document-text-outline" color="secondary"></ion-icon>
+      <h2>What is Vākyapāṭha (वाक्यपाठ)?</h2>
+    </div>
+    
+    <div class="intro-content">
+      <div class="definition-card">
+        <h3>📖 Definition</h3>
+        <p><strong>"Vākya"</strong> = sentence/phrase, <strong>"pāṭha"</strong> = recitation</p>
+        <p>The entire sentence or line of the śloka is recited as a whole, combining words into meaningful phrases.</p>
+      </div>
+
+      <div class="purpose-card">
+        <h3>🎯 Purpose & Benefits</h3>
+        <ul>
+          <li>Move from fragmented learning to flow-based recitation</li>
+          <li>Train mind to connect words smoothly</li>
+          <li>Understand śloka in syntactic and musical flow</li>
+          <li>Build natural rhythm and pronunciation fluency</li>
+          <li>Bridge between word-by-word and continuous chanting</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Section -->
+  <div class="comparison-section">
+    <h2>🔄 Padapāṭha vs Vākyapāṭha</h2>
+    
+    <div class="comparison-container">
+      <div class="comparison-card padapatha-card">
+        <div class="method-header">
+          <ion-icon name="text-outline" color="primary"></ion-icon>
+          <h3>Padapāṭha (Word-by-Word)</h3>
+        </div>
+        <div class="example-text">
+          <div class="sanskrit-text fragmented">
+            <span class="word-fragment">Kṛṣṇāya</span>
+            <span class="separator">—</span>
+            <span class="word-fragment">Vāsudevāya</span>
+            <span class="separator">—</span>
+            <span class="word-fragment">Devakī</span>
+            <span class="separator">—</span>
+            <span class="word-fragment">Nandanāya</span>
+            <span class="separator">—</span>
+            <span class="word-fragment">ca</span>
+          </div>
+          <p class="description">Each word pronounced separately with pauses</p>
+        </div>
+      </div>
+
+      <div class="comparison-card vakyapatha-card">
+        <div class="method-header">
+          <ion-icon name="document-text-outline" color="secondary"></ion-icon>
+          <h3>Vākyapāṭha (Flow-based)</h3>
+        </div>
+        <div class="example-text">
+          <div class="sanskrit-text flowing">
+            Kṛṣṇāya Vāsudevāya Devakī Nandanāya ca
+          </div>
+          <p class="description">Words flow together as natural phrases</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Learning Progression Section -->
+  <div class="progression-section">
+    <h2>📈 Learning Progression Flow</h2>
+    
+    <div class="progression-steps">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Audio Demonstration</h3>
+          <p>Listen to teacher/audio reciting full lines with proper flow and rhythm</p>
+          <ion-icon name="volume-high-outline" color="tertiary"></ion-icon>
+        </div>
+      </div>
+
+      <div class="flow-arrow">
+        <ion-icon name="arrow-down-outline"></ion-icon>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Highlighted Flow</h3>
+          <p>Watch words highlight together as complete phrases during recitation</p>
+          <ion-icon name="color-wand-outline" color="warning"></ion-icon>
+        </div>
+      </div>
+
+      <div class="flow-arrow">
+        <ion-icon name="arrow-down-outline"></ion-icon>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Line Practice</h3>
+          <p>Practice each line with audio support and voice recognition</p>
+          <ion-icon name="mic-outline" color="danger"></ion-icon>
+        </div>
+      </div>
+
+      <div class="flow-arrow">
+        <ion-icon name="arrow-down-outline"></ion-icon>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Full Mastery</h3>
+          <p>Recite complete śloka with natural flow and rhythm</p>
+          <ion-icon name="trophy-outline" color="success"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Practice Section -->
+  <div class="practice-section">
+    <h2>🎓 Choose Your Śloka for Vākyapāṭha Practice</h2>
+    
+    <div class="sloka-selection">
+      <div class="sloka-cards">
+        <ion-card class="sloka-card" (click)="selectSloka(1)">
+          <ion-card-header>
+            <ion-card-title>Gītā 2.47</ion-card-title>
+            <ion-card-subtitle>कर्मण्येवाधिकारस्ते मा फलेषु कदाचन</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="line-count">
+              <ion-icon name="list-outline"></ion-icon>
+              <span>2 Lines to Master</span>
+            </div>
+            <p>Practice flowing recitation of this famous verse about action without attachment</p>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="sloka-card" (click)="selectSloka(2)">
+          <ion-card-header>
+            <ion-card-title>Gītā 7.1</ion-card-title>
+            <ion-card-subtitle>मय्यासक्तमनाः पार्थ योगं युञ्जन्मदाश्रयः</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="line-count">
+              <ion-icon name="list-outline"></ion-icon>
+              <span>2 Lines to Master</span>
+            </div>
+            <p>Learn the flowing rhythm of Krishna's teaching on devotional knowledge</p>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="sloka-card" (click)="selectSloka(3)">
+          <ion-card-header>
+            <ion-card-title>Gītā 18.66</ion-card-title>
+            <ion-card-subtitle>सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="line-count">
+              <ion-icon name="list-outline"></ion-icon>
+              <span>2 Lines to Master</span>
+            </div>
+            <p>Master the ultimate instruction with perfect flow and devotional sentiment</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Training Interface -->
+  <div class="training-interface" *ngIf="selectedSloka">
+    <div class="training-header">
+      <h3>🎯 Practicing: {{selectedSloka.title}}</h3>
+      <div class="overall-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="overallProgress"></div>
+        </div>
+        <p>Line {{currentLineIndex + 1}} of {{selectedSloka.lines.length}} | Overall Progress: {{overallProgress}}%</p>
+      </div>
+    </div>
+
+    <!-- Current Line Display -->
+    <div class="line-display-panel">
+      <div class="line-header">
+        <h4>Line {{currentLineIndex + 1}}</h4>
+        <div class="line-attempts">
+          <span *ngFor="let attempt of currentLine.attempts; let i = index" 
+                [ngClass]="getAttemptClass(attempt)">
+            ●
+          </span>
+          <span class="attempts-text">{{currentLine.successfulAttempts}}/3 successful attempts</span>
+        </div>
+      </div>
+
+      <div class="current-line-content">
+        <div class="line-devanagari" [ngClass]="{'highlighting': isPlaying}">
+          {{currentLine.devanagari}}
+        </div>
+        <div class="line-roman" [ngClass]="{'highlighting': isPlaying}">
+          {{currentLine.roman}}
+        </div>
+        <div class="line-meaning">
+          {{currentLine.meaning}}
+        </div>
+      </div>
+
+      <!-- Practice Mode Steps -->
+      <div class="practice-modes">
+        <div class="mode-tabs">
+          <ion-button 
+            *ngFor="let mode of practiceModes; let i = index"
+            [fill]="currentPracticeMode === i ? 'solid' : 'outline'"
+            [color]="currentPracticeMode === i ? 'secondary' : 'medium'"
+            (click)="setPracticeMode(i)"
+            [disabled]="!isModeUnlocked(i)"
+          >
+            <ion-icon [name]="mode.icon" slot="start"></ion-icon>
+            {{mode.name}}
+            <ion-icon *ngIf="!isModeUnlocked(i)" name="lock-closed-outline" slot="end"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div class="current-mode-content">
+          <div class="mode-description">
+            <h5>{{practiceModes[currentPracticeMode].name}}</h5>
+            <p>{{practiceModes[currentPracticeMode].description}}</p>
+          </div>
+
+          <!-- Audio Controls -->
+          <div class="audio-controls" *ngIf="currentPracticeMode <= 2">
+            <ion-button (click)="playLineAudio()" [disabled]="isPlaying" color="primary">
+              <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+              {{isPlaying ? 'Playing...' : 'Play Line'}}
+            </ion-button>
+            <ion-button (click)="repeatLineAudio()" color="tertiary">
+              <ion-icon name="repeat-outline" slot="start"></ion-icon>
+              Repeat 3x
+            </ion-button>
+          </div>
+
+          <!-- Recording Controls -->
+          <div class="recording-controls">
+            <ion-button 
+              (click)="startRecording()" 
+              [disabled]="isRecording || (currentPracticeMode === 0 && !hasHeardAudio)"
+              color="danger"
+            >
+              <ion-icon name="mic-outline" slot="start"></ion-icon>
+              {{isRecording ? 'Recording...' : 'Record Your Attempt'}}
+            </ion-button>
+            
+            <div class="recording-feedback" *ngIf="recordingFeedback">
+              <div class="feedback-score" [ngClass]="feedbackClass">
+                {{recordingFeedback}}
+              </div>
+            </div>
+          </div>
+
+          <!-- Text Display Controls -->
+          <div class="text-controls" *ngIf="currentPracticeMode === 2">
+            <ion-button (click)="toggleTextVisibility()" fill="outline">
+              <ion-icon [name]="textVisible ? 'eye-off-outline' : 'eye-outline'" slot="start"></ion-icon>
+              {{textVisible ? 'Hide Text' : 'Show Text'}}
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Controls -->
+      <div class="navigation-controls">
+        <ion-button 
+          (click)="previousLine()" 
+          [disabled]="currentLineIndex === 0" 
+          fill="outline"
+        >
+          <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
+          Previous Line
+        </ion-button>
+        
+        <ion-button 
+          (click)="nextLine()" 
+          [disabled]="currentLineIndex === selectedSloka.lines.length - 1 || !currentLine.mastered" 
+          fill="outline"
+        >
+          Next Line
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Lines Progress Overview -->
+    <div class="lines-progress">
+      <h4>📋 Lines Progress</h4>
+      <div class="lines-grid">
+        <div 
+          *ngFor="let line of selectedSloka.lines; let i = index"
+          class="line-progress-item"
+          [ngClass]="{
+            'completed': line.mastered,
+            'current': i === currentLineIndex,
+            'locked': !isLineUnlocked(i)
+          }"
+        >
+          <div class="line-number">{{i + 1}}</div>
+          <div class="line-preview">{{line.roman.substring(0, 30)}}...</div>
+          <div class="line-status">
+            <ion-icon 
+              *ngIf="line.mastered" 
+              name="checkmark-circle" 
+              color="success"
+            ></ion-icon>
+            <ion-icon 
+              *ngIf="!isLineUnlocked(i)" 
+              name="lock-closed-outline" 
+              color="medium"
+            ></ion-icon>
+            <span *ngIf="!line.mastered && isLineUnlocked(i)" class="attempts-count">
+              {{line.successfulAttempts}}/3
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion Section -->
+    <div class="completion-section" *ngIf="isSlokaCompleted()">
+      <div class="completion-card">
+        <ion-icon name="trophy" color="warning"></ion-icon>
+        <h3>🎉 Śloka Mastered!</h3>
+        <p>Excellent! You've mastered all lines with perfect flow. Ready for the complete recitation?</p>
+        <div class="completion-actions">
+          <ion-button (click)="practiceFullSloka()" color="success">
+            <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+            Practice Full Śloka
+          </ion-button>
+          <ion-button (click)="earnBadge()" color="warning">
+            <ion-icon name="medal-outline" slot="start"></ion-icon>
+            Claim Mastery Badge
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gamification Section -->
+  <div class="gamification-section">
+    <h2>🏆 Your Achievements</h2>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <ion-icon name="flame-outline" color="danger"></ion-icon>
+        <div class="stat-content">
+          <h3>{{streakDays}}</h3>
+          <p>Day Streak</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <ion-icon name="star-outline" color="warning"></ion-icon>
+        <div class="stat-content">
+          <h3>{{totalPoints}}</h3>
+          <p>Points Earned</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+        <div class="stat-content">
+          <h3>{{completedSlokas}}</h3>
+          <p>Slokas Mastered</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <ion-icon name="time-outline" color="tertiary"></ion-icon>
+        <div class="stat-content">
+          <h3>{{practiceMinutes}}</h3>
+          <p>Minutes Practiced</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="badges-section">
+      <h3>🥇 Earned Badges</h3>
+      <div class="badges-grid">
+        <div class="badge-item" *ngFor="let badge of earnedBadges">
+          <ion-icon [name]="badge.icon" [color]="badge.color"></ion-icon>
+          <span>{{badge.name}}</span>
+        </div>
+        <div class="badge-item locked" *ngFor="let badge of lockedBadges">
+          <ion-icon name="lock-closed-outline" color="medium"></ion-icon>
+          <span>{{badge.name}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips Section -->
+  <div class="tips-section">
+    <h2>💡 Vākyapāṭha Mastery Tips</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <ion-icon name="musical-notes-outline" color="primary"></ion-icon>
+        <h4>Find the Rhythm</h4>
+        <p>Feel the natural musical flow of Sanskrit verses</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="heart-outline" color="danger"></ion-icon>
+        <h4>Connect with Meaning</h4>
+        <p>Understand the phrase meaning for natural flow</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="refresh-outline" color="tertiary"></ion-icon>
+        <h4>Practice Transitions</h4>
+        <p>Focus on smooth word-to-word connections</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="volume-medium-outline" color="secondary"></ion-icon>
+        <h4>Listen & Imitate</h4>
+        <p>Copy the teacher's pace and intonation patterns</p>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

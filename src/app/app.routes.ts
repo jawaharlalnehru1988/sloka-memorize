@@ -3,12 +3,56 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/inbox',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
   {
     path: 'folder/:id',
     loadComponent: () =>
       import('./folder/folder.page').then((m) => m.FolderPage),
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./home/home.page').then( m => m.HomePage)
+  },
+  {
+    path: 'padapada',
+    loadComponent: () => import('./padapada/padapada.page').then( m => m.PadapadaPage)
+  },
+  {
+    path: 'vakyapada',
+    loadComponent: () => import('./vakyapada/vakyapada.page').then( m => m.VakyapadaPage)
+  },
+  {
+    path: 'anuloma',
+    loadComponent: () => import('./anuloma/anuloma.page').then( m => m.AnulomaPage)
+  },
+  {
+    path: 'pratiloma',
+    loadComponent: () => import('./pratiloma/pratiloma.page').then( m => m.PratilomaPage)
+  },
+  {
+    path: 'kramapada',
+    loadComponent: () => import('./kramapada/kramapada.page').then( m => m.KramapadaPage)
+  },
+  {
+    path: 'jatapada',
+    loadComponent: () => import('./jatapada/jatapada.page').then( m => m.JatapadaPage)
+  },
+  {
+    path: 'ghanapada',
+    loadComponent: () => import('./ghanapada/ghanapada.page').then( m => m.GhanapadaPage)
+  },
+  {
+    path: 'uchcharana',
+    loadComponent: () => import('./uchcharana/uchcharana.page').then( m => m.UchcharanaPage)
+  },
+  {
+    path: 'likhitapada',
+    loadComponent: () => import('./likhitapada/likhitapada.page').then( m => m.LikhitapadaPage)
+  },
+  {
+    path: 'smarana',
+    loadComponent: () => import('./smarana/smarana.page').then( m => m.SmaranaPage)
   },
 ];

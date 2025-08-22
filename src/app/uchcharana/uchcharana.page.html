@@ -1,0 +1,541 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>उच्चारण पाठ - Ucchāraṇa Pāṭha</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="uchcharana-content">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-icon">🎤</div>
+    <h1 class="hero-title">Ucchāraṇa Pāṭha</h1>
+    <h2 class="hero-sanskrit">उच्चारण पाठ</h2>
+    <p class="hero-description">
+      Master perfect pronunciation through systematic phonetic training. 
+      Develop clarity, precision, and authentic Sanskrit articulation following traditional guidelines.
+    </p>
+    <div class="prestige-badge">
+      <ion-icon name="volume-high"></ion-icon>
+      <span>Pronunciation Mastery</span>
+    </div>
+  </div>
+
+  <!-- Prerequisites Section -->
+  <div class="prerequisites-section">
+    <div class="prereq-header">
+      <ion-icon name="checkmark-circle"></ion-icon>
+      <h2>Prerequisites</h2>
+    </div>
+    <div class="prereq-content">
+      <div class="warning-card">
+        <h3>
+          <ion-icon name="information-circle"></ion-icon>
+          Foundation Requirements
+        </h3>
+        <p>
+          Ucchāraṇa requires mastery of basic recitation patterns. 
+          Ensure completion of foundational techniques before proceeding with advanced pronunciation training.
+        </p>
+      </div>
+      <div class="mastery-checklist">
+        <h3>
+          <ion-icon name="list-circle"></ion-icon>
+          Technique Mastery Status
+        </h3>
+        <div class="checklist-items">
+          <div class="checklist-item" [ngClass]="getMasteryClass('padapada')">
+            <ion-icon [name]="getMasteryIcon('padapada')"></ion-icon>
+            <span>Padapāṭha (Word Recitation)</span>
+            <div class="mastery-level">{{ getMasteryLevel('padapada') }}</div>
+          </div>
+          <div class="checklist-item" [ngClass]="getMasteryClass('vakyapada')">
+            <ion-icon [name]="getMasteryIcon('vakyapada')"></ion-icon>
+            <span>Vākyapāṭha (Sentence Recitation)</span>
+            <div class="mastery-level">{{ getMasteryLevel('vakyapada') }}</div>
+          </div>
+          <div class="checklist-item" [ngClass]="getMasteryClass('anuloma')">
+            <ion-icon [name]="getMasteryIcon('anuloma')"></ion-icon>
+            <span>Anuloma Pāṭha (Forward Recitation)</span>
+            <div class="mastery-level">{{ getMasteryLevel('anuloma') }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Introduction Section -->
+  <div class="introduction-section">
+    <div class="intro-header">
+      <ion-icon name="library"></ion-icon>
+      <h2>Understanding Ucchāraṇa</h2>
+    </div>
+    <div class="intro-content">
+      <div class="definition-card">
+        <h3>
+          <ion-icon name="book"></ion-icon>
+          Definition
+        </h3>
+        <p>
+          <strong>Ucchāraṇa (उच्चारण)</strong> means "pronunciation" or "articulation" in Sanskrit. 
+          This technique focuses on the precise phonetic delivery of each syllable, consonant, and vowel according to traditional Sanskrit pronunciation rules.
+        </p>
+        <p>
+          It emphasizes proper breath control, tongue placement, and vocal resonance to achieve 
+          authentic Sanskrit articulation that preserves the sacred sound vibrations of the text.
+        </p>
+      </div>
+      <div class="significance-card">
+        <h3>
+          <ion-icon name="star"></ion-icon>
+          Spiritual & Academic Significance
+        </h3>
+        <p>Perfect pronunciation in Sanskrit tradition is considered essential because:</p>
+        <ul>
+          <li>Preserves the sacred sound vibrations (śabda-brahman)</li>
+          <li>Ensures proper transmission of meaning and intention</li>
+          <li>Develops sensitivity to phonetic precision</li>
+          <li>Enhances memory through acoustic patterns</li>
+          <li>Builds foundation for advanced chanting practices</li>
+          <li>Connects practitioners to authentic tradition</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phonetic System Section -->
+  <div class="phonetic-system-section">
+    <h2>Sanskrit Phonetic System</h2>
+    <div class="phonetic-explanation">
+      <div class="phonetic-intro">
+        <h3>
+          <ion-icon name="library-outline"></ion-icon>
+          Traditional Classification
+        </h3>
+        <p>Sanskrit follows a systematic phonetic arrangement based on the position and manner of articulation:</p>
+      </div>
+      
+      <div class="sound-categories">
+        <div class="category-card vowels">
+          <h4>
+            <ion-icon name="musical-notes"></ion-icon>
+            Vowels (स्वर - Svara)
+          </h4>
+          <div class="sound-grid">
+            <div class="sound-item" (click)="playPhonetic('a')">
+              <span class="devanagari">अ</span>
+              <span class="roman">a</span>
+              <span class="description">Short 'a'</span>
+            </div>
+            <div class="sound-item" (click)="playPhonetic('aa')">
+              <span class="devanagari">आ</span>
+              <span class="roman">ā</span>
+              <span class="description">Long 'aa'</span>
+            </div>
+            <div class="sound-item" (click)="playPhonetic('i')">
+              <span class="devanagari">इ</span>
+              <span class="roman">i</span>
+              <span class="description">Short 'i'</span>
+            </div>
+            <div class="sound-item" (click)="playPhonetic('ii')">
+              <span class="devanagari">ई</span>
+              <span class="roman">ī</span>
+              <span class="description">Long 'ee'</span>
+            </div>
+            <div class="sound-item" (click)="playPhonetic('u')">
+              <span class="devanagari">उ</span>
+              <span class="roman">u</span>
+              <span class="description">Short 'u'</span>
+            </div>
+            <div class="sound-item" (click)="playPhonetic('uu')">
+              <span class="devanagari">ऊ</span>
+              <span class="roman">ū</span>
+              <span class="description">Long 'oo'</span>
+            </div>
+            <div class="sound-item" (click)="playPhonetic('e')">
+              <span class="devanagari">ए</span>
+              <span class="roman">e</span>
+              <span class="description">'ay' sound</span>
+            </div>
+            <div class="sound-item" (click)="playPhonetic('o')">
+              <span class="devanagari">ओ</span>
+              <span class="roman">o</span>
+              <span class="description">'oh' sound</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="category-card consonants">
+          <h4>
+            <ion-icon name="volume-high"></ion-icon>
+            Consonants (व्यञ्जन - Vyañjana)
+          </h4>
+          <div class="consonant-groups">
+            <div class="group-card">
+              <h5>Gutturals (कण्ठ्य)</h5>
+              <div class="sound-grid">
+                <div class="sound-item" (click)="playPhonetic('ka')">
+                  <span class="devanagari">क</span>
+                  <span class="roman">ka</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('kha')">
+                  <span class="devanagari">ख</span>
+                  <span class="roman">kha</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('ga')">
+                  <span class="devanagari">ग</span>
+                  <span class="roman">ga</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('gha')">
+                  <span class="devanagari">घ</span>
+                  <span class="roman">gha</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('nga')">
+                  <span class="devanagari">ङ</span>
+                  <span class="roman">ṅa</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="group-card">
+              <h5>Palatals (तालव्य)</h5>
+              <div class="sound-grid">
+                <div class="sound-item" (click)="playPhonetic('cha')">
+                  <span class="devanagari">च</span>
+                  <span class="roman">ca</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('chha')">
+                  <span class="devanagari">छ</span>
+                  <span class="roman">cha</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('ja')">
+                  <span class="devanagari">ज</span>
+                  <span class="roman">ja</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('jha')">
+                  <span class="devanagari">झ</span>
+                  <span class="roman">jha</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('nya')">
+                  <span class="devanagari">ञ</span>
+                  <span class="roman">ña</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="group-card">
+              <h5>Retroflexes (मूर्धन्य)</h5>
+              <div class="sound-grid">
+                <div class="sound-item" (click)="playPhonetic('ta-retro')">
+                  <span class="devanagari">ट</span>
+                  <span class="roman">ṭa</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('tha-retro')">
+                  <span class="devanagari">ठ</span>
+                  <span class="roman">ṭha</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('da-retro')">
+                  <span class="devanagari">ड</span>
+                  <span class="roman">ḍa</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('dha-retro')">
+                  <span class="devanagari">ढ</span>
+                  <span class="roman">ḍha</span>
+                </div>
+                <div class="sound-item" (click)="playPhonetic('na-retro')">
+                  <span class="devanagari">ण</span>
+                  <span class="roman">ṇa</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Training Modes Section -->
+  <div class="training-modes-section">
+    <h2>Pronunciation Training Modes</h2>
+    <div class="modes-grid">
+      <div class="mode-card foundation" (click)="startPhoneticTraining('foundation')" [class.disabled]="!canAccessMode('foundation')">
+        <div class="mode-icon">
+          <ion-icon name="volume-low" color="success"></ion-icon>
+        </div>
+        <h3>Foundation Phonetics</h3>
+        <p>Learn individual sounds, vowels, and basic consonants with proper mouth positioning and breath control.</p>
+        <div class="mode-features">
+          <span>Individual sound practice</span>
+          <span>Mouth position guidance</span>
+          <span>Breath control exercises</span>
+          <span>Audio comparison</span>
+        </div>
+        <div class="access-requirement" *ngIf="!canAccessMode('foundation')">
+          Complete Padapāṭha mastery required
+        </div>
+      </div>
+
+      <div class="mode-card intermediate" (click)="startPhoneticTraining('intermediate')" [class.disabled]="!canAccessMode('intermediate')">
+        <div class="mode-icon">
+          <ion-icon name="volume-medium" color="warning"></ion-icon>
+        </div>
+        <h3>Syllable Combinations</h3>
+        <p>Practice complex consonant clusters, sandhi rules, and syllable transitions for fluent articulation.</p>
+        <div class="mode-features">
+          <span>Consonant clusters</span>
+          <span>Sandhi pronunciation</span>
+          <span>Syllable flow</span>
+          <span>Rhythm patterns</span>
+        </div>
+        <div class="access-requirement" *ngIf="!canAccessMode('intermediate')">
+          Foundation phonetics mastery required
+        </div>
+      </div>
+
+      <div class="mode-card advanced" (click)="startPhoneticTraining('advanced')" [class.disabled]="!canAccessMode('advanced')">
+        <div class="mode-icon">
+          <ion-icon name="volume-high" color="danger"></ion-icon>
+        </div>
+        <h3>Word Precision</h3>
+        <p>Master complete word pronunciation with emphasis on difficult combinations and traditional accents.</p>
+        <div class="mode-features">
+          <span>Complete word mastery</span>
+          <span>Accent patterns</span>
+          <span>Difficult combinations</span>
+          <span>Speed variations</span>
+        </div>
+        <div class="access-requirement" *ngIf="!canAccessMode('advanced')">
+          Syllable combination mastery required
+        </div>
+      </div>
+
+      <div class="mode-card master" (click)="startPhoneticTraining('master')" [class.disabled]="!canAccessMode('master')">
+        <div class="mode-icon">
+          <ion-icon name="mic-outline" color="tertiary"></ion-icon>
+        </div>
+        <h3>Perfect Recitation</h3>
+        <p>Achieve flawless pronunciation of complete ślokas with authentic traditional intonation and rhythm.</p>
+        <div class="mode-features">
+          <span>Complete śloka recitation</span>
+          <span>Traditional intonation</span>
+          <span>Authentic rhythm</span>
+          <span>Performance assessment</span>
+        </div>
+        <div class="access-requirement" *ngIf="!canAccessMode('master')">
+          Word precision mastery required
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Training Interface -->
+  <div class="training-interface" *ngIf="isTraining">
+    <div class="training-header">
+      <h3>{{ currentMode | titlecase }} Training</h3>
+      <div class="training-progress">
+        <div class="progress-info">
+          <span>Progress: {{ currentExercise }}/{{ totalExercises }}</span>
+          <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Exercise Section -->
+    <div class="current-exercise-section">
+      <div class="exercise-header">
+        <h4>Current Exercise</h4>
+        <div class="exercise-type" [ngClass]="currentExerciseType">
+          <ion-icon [name]="getExerciseIcon()"></ion-icon>
+          <span>{{ currentExerciseType | titlecase }}</span>
+        </div>
+      </div>
+      
+      <div class="exercise-display">
+        <div class="exercise-content">
+          <div class="instruction" *ngIf="currentInstruction">
+            <p>{{ currentInstruction }}</p>
+          </div>
+          
+          <div class="target-pronunciation">
+            <div class="target-text">
+              <div class="devanagari-display">{{ currentExerciseData?.devanagari }}</div>
+              <div class="roman-display">{{ currentExerciseData?.roman }}</div>
+              <div class="phonetic-guide" *ngIf="currentExerciseData?.phoneticGuide">{{ currentExerciseData?.phoneticGuide }}</div>
+            </div>
+            
+            <div class="mouth-position" *ngIf="currentExerciseData?.mouthPosition">
+              <h5>
+                <ion-icon name="body"></ion-icon>
+                Mouth Position Guide
+              </h5>
+              <p>{{ currentExerciseData?.mouthPosition }}</p>
+            </div>
+          </div>
+
+          <div class="audio-controls">
+            <ion-button fill="outline" color="success" (click)="playModelPronunciation()">
+              <ion-icon name="play" slot="start"></ion-icon>
+              Model Pronunciation
+            </ion-button>
+            <ion-button fill="outline" color="warning" (click)="playSlowPronunciation()">
+              <ion-icon name="play-skip-forward" slot="start"></ion-icon>
+              Slow Practice
+            </ion-button>
+            <ion-button fill="solid" color="primary" (click)="startRecording()" [disabled]="isRecording">
+              <ion-icon [name]="isRecording ? 'stop' : 'mic'" slot="start"></ion-icon>
+              {{ isRecording ? 'Recording...' : 'Record Attempt' }}
+            </ion-button>
+          </div>
+
+          <div class="feedback-section" *ngIf="pronunciationFeedback">
+            <div class="feedback-header">
+              <h5>
+                <ion-icon name="analytics"></ion-icon>
+                Pronunciation Feedback
+              </h5>
+            </div>
+            <div class="accuracy-display">
+              <div class="accuracy-score" [ngClass]="getAccuracyClass()">
+                <span class="score">{{ pronunciationFeedback.accuracy }}%</span>
+                <span class="label">Accuracy</span>
+              </div>
+              <div class="accuracy-breakdown">
+                <div class="metric">
+                  <span class="metric-label">Vowel Clarity:</span>
+                  <span class="metric-value">{{ pronunciationFeedback.vowelClarity }}%</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Consonant Precision:</span>
+                  <span class="metric-value">{{ pronunciationFeedback.consonantPrecision }}%</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Rhythm & Flow:</span>
+                  <span class="metric-value">{{ pronunciationFeedback.rhythm }}%</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="improvement-suggestions" *ngIf="pronunciationFeedback.suggestions?.length">
+              <h6>
+                <ion-icon name="bulb"></ion-icon>
+                Improvement Suggestions
+              </h6>
+              <ul>
+                <li *ngFor="let suggestion of pronunciationFeedback.suggestions">{{ suggestion }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="practice-controls">
+            <ion-button fill="outline" color="medium" (click)="repeatExercise()">
+              <ion-icon name="refresh" slot="start"></ion-icon>
+              Repeat
+            </ion-button>
+            <ion-button fill="solid" color="success" (click)="nextExercise()" [disabled]="!canProceed()">
+              <ion-icon name="arrow-forward" slot="end"></ion-icon>
+              Next Exercise
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mastery Progress -->
+    <div class="mastery-progress-section">
+      <h4>
+        <ion-icon name="trophy"></ion-icon>
+        Mastery Progress
+      </h4>
+      <div class="mastery-grid">
+        <div class="mastery-item" *ngFor="let category of masteryCategories" [ngClass]="category.status">
+          <ion-icon [name]="getMasteryStatusIcon(category.status)"></ion-icon>
+          <span>{{ category.name }}</span>
+          <div class="category-progress">{{ category.progress }}%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completion Section -->
+  <div class="completion-section" *ngIf="isCompleted">
+    <div class="completion-card">
+      <div class="completion-animation">
+        <ion-icon name="trophy" color="warning"></ion-icon>
+        <div class="celebration-text">Outstanding Achievement!</div>
+      </div>
+      <h3>Ucchāraṇa Pāṭha Mastered!</h3>
+      <p>
+        Congratulations! You have achieved mastery in Sanskrit pronunciation. 
+        Your articulation skills now meet traditional standards, enabling authentic recitation of sacred texts.
+      </p>
+      
+      <div class="completion-stats">
+        <div class="stat-item">
+          <ion-icon name="volume-high" color="success"></ion-icon>
+          <span>{{ completionStats.accuracy }}% Overall Accuracy</span>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="time" color="primary"></ion-icon>
+          <span>{{ completionStats.practiceTime }} Practice Time</span>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <span>{{ completionStats.exercisesCompleted }} Exercises Completed</span>
+        </div>
+      </div>
+      
+      <div class="completion-actions">
+        <ion-button fill="solid" color="success" (click)="proceedToNextTechnique()">
+          <ion-icon name="arrow-forward" slot="end"></ion-icon>
+          Continue to Likhita Pāṭha
+        </ion-button>
+        <ion-button fill="outline" color="primary" (click)="reviewPronunciation()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Review & Practice
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips Section -->
+  <div class="tips-section">
+    <h2>Pronunciation Mastery Tips</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <ion-icon name="body" color="success"></ion-icon>
+        <h4>Proper Posture</h4>
+        <p>Maintain straight spine and relaxed shoulders. Good posture enables proper breath flow and clear articulation.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="fitness" color="primary"></ion-icon>
+        <h4>Breath Control</h4>
+        <p>Practice diaphragmatic breathing. Steady breath support is essential for sustained and clear pronunciation.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="ear" color="warning"></ion-icon>
+        <h4>Active Listening</h4>
+        <p>Listen carefully to model pronunciations. Train your ear to distinguish subtle differences in Sanskrit sounds.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="time" color="medium"></ion-icon>
+        <h4>Regular Practice</h4>
+        <p>Consistent daily practice builds muscle memory. Even 15 minutes daily yields significant improvement.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="school" color="tertiary"></ion-icon>
+        <h4>Traditional Guidance</h4>
+        <p>Seek guidance from qualified teachers. Traditional knowledge enhances digital learning significantly.</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="heart" color="danger"></ion-icon>
+        <h4>Patient Progress</h4>
+        <p>Be patient with yourself. Pronunciation mastery is a gradual process requiring dedicated practice.</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
