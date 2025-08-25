@@ -2,30 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton } from '@ionic/angular/standalone';
+import { PadapadaService, Sloka, Word } from './padapada.service';
 
-interface Word {
-  devanagari: string;
-  roman: string;
-  meaning: string;
-  practiced?: boolean;
-  audio?: string;
-}
 
-interface Sloka {
-  id: number;
-  title: string;
-  subtitle: string;
-  description: string;
-  text: string;
-  words: Word[];
-}
 
 @Component({
   selector: 'app-padapada',
   templateUrl: './padapada.page.html',
   styleUrls: ['./padapada.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, CommonModule, FormsModule]
 })
 export class PadapadaPage implements OnInit {
 
@@ -34,56 +20,16 @@ export class PadapadaPage implements OnInit {
   isRecording: boolean = false;
   pronunciationFeedback: string = '';
   feedbackClass: string = '';
+  slokas: Sloka[];
 
-  // Sample sloka data
-  slokas: Sloka[] = [
-    {
-      id: 1,
-      title: 'Gītā 2.47',
-      subtitle: 'कर्मण्येवाधिकारस्ते',
-      description: 'Famous verse about action without attachment to results',
-      text: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन',
-      words: [
-        { devanagari: 'कर्मणि', roman: 'karmaṇi', meaning: 'in action' },
-        { devanagari: 'एव', roman: 'eva', meaning: 'only' },
-        { devanagari: 'अधिकारः', roman: 'adhikāraḥ', meaning: 'right' },
-        { devanagari: 'ते', roman: 'te', meaning: 'your' },
-        { devanagari: 'मा', roman: 'mā', meaning: 'never' },
-        { devanagari: 'फलेषु', roman: 'phaleṣu', meaning: 'in results' },
-        { devanagari: 'कदाचन', roman: 'kadācana', meaning: 'at any time' }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Gītā 7.1',
-      subtitle: 'श्रीभगवानुवाच',
-      description: 'Beginning of Krishna\'s teachings on devotional knowledge',
-      text: 'श्रीभगवानुवाच',
-      words: [
-        { devanagari: 'श्री', roman: 'śrī', meaning: 'blessed' },
-        { devanagari: 'भगवान्', roman: 'bhagavān', meaning: 'Lord' },
-        { devanagari: 'उवाच', roman: 'uvāca', meaning: 'said' }
-      ]
-    },
-    {
-      id: 3,
-      title: 'Gītā 18.66',
-      subtitle: 'सर्वधर्मान्परित्यज्य',
-      description: 'The ultimate instruction of surrender unto Krishna',
-      text: 'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज',
-      words: [
-        { devanagari: 'सर्व', roman: 'sarva', meaning: 'all' },
-        { devanagari: 'धर्मान्', roman: 'dharmān', meaning: 'duties' },
-        { devanagari: 'परित्यज्य', roman: 'parityajya', meaning: 'abandoning' },
-        { devanagari: 'माम्', roman: 'mām', meaning: 'unto Me' },
-        { devanagari: 'एकम्', roman: 'ekam', meaning: 'only' },
-        { devanagari: 'शरणम्', roman: 'śaraṇam', meaning: 'surrender' },
-        { devanagari: 'व्रज', roman: 'vraja', meaning: 'go' }
-      ]
-    }
-  ];
 
-  constructor() { }
+
+
+  constructor(private padapadaService: PadapadaService) {
+    // Load slokas from the service
+    this.slokas = this.padapadaService.slokas;
+
+   }
 
   ngOnInit() {
   }
@@ -146,16 +92,6 @@ export class PadapadaPage implements OnInit {
       this.simulatePronunciationCheck();
     }, 2000);
 
-    // TODO: Implement actual speech recognition
-    // if ('webkitSpeechRecognition' in window) {
-    //   const recognition = new (window as any).webkitSpeechRecognition();
-    //   recognition.lang = 'sa-IN'; // Sanskrit
-    //   recognition.onresult = (event: any) => {
-    //     const transcript = event.results[0][0].transcript;
-    //     this.checkPronunciation(transcript);
-    //   };
-    //   recognition.start();
-    // }
   }
 
   private simulatePronunciationCheck() {

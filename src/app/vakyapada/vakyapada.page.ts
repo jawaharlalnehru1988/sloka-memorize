@@ -2,24 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton } from '@ionic/angular/standalone';
+import { Line, VakyaPadaSloka, Vakyapda } from './vakyapda';
 
-interface Line {
-  devanagari: string;
-  roman: string;
-  meaning: string;
-  attempts: ('success' | 'good' | 'failed')[];
-  successfulAttempts: number;
-  mastered: boolean;
-  audio?: string;
-}
-
-interface Sloka {
-  id: number;
-  title: string;
-  subtitle: string;
-  description: string;
-  lines: Line[];
-}
 
 interface PracticeMode {
   name: string;
@@ -43,7 +27,7 @@ interface Badge {
 })
 export class VakyapadaPage implements OnInit {
 
-  selectedSloka: Sloka | null = null;
+  selectedSloka: VakyaPadaSloka | null = null;
   currentLineIndex: number = 0;
   currentPracticeMode: number = 0;
   isPlaying: boolean = false;
@@ -93,86 +77,16 @@ export class VakyapadaPage implements OnInit {
     { name: 'Sloka Sage', icon: 'library-outline', color: 'secondary', unlocked: false },
     { name: 'Daily Devotee', icon: 'calendar-outline', color: 'danger', unlocked: false }
   ];
+  vakyaPadaSlokas: VakyaPadaSloka[] = [];
 
   // Sample sloka data with lines
-  slokas: Sloka[] = [
-    {
-      id: 1,
-      title: 'Gītā 2.47',
-      subtitle: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन',
-      description: 'Practice flowing recitation of this famous verse about action without attachment',
-      lines: [
-        {
-          devanagari: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन',
-          roman: 'karmaṇy evādhikāras te mā phaleṣu kadācana',
-          meaning: 'You have a right to perform action, but never to the results',
-          attempts: [],
-          successfulAttempts: 0,
-          mastered: false
-        },
-        {
-          devanagari: 'मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि',
-          roman: 'mā karma-phala-hetur bhūr mā te saṅgo \'stv akarmaṇi',
-          meaning: 'Never consider yourself the cause of results, nor be attached to inaction',
-          attempts: [],
-          successfulAttempts: 0,
-          mastered: false
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Gītā 7.1',
-      subtitle: 'मय्यासक्तमनाः पार्थ योगं युञ्जन्मदाश्रयः',
-      description: 'Learn the flowing rhythm of Krishna\'s teaching on devotional knowledge',
-      lines: [
-        {
-          devanagari: 'मय्यासक्तमनाः पार्थ योगं युञ्जन्मदाश्रयः',
-          roman: 'mayy āsakta-manāḥ pārtha yogaṁ yuñjan mad-āśrayaḥ',
-          meaning: 'With mind attached to Me, O Pārtha, practicing yoga under My protection',
-          attempts: [],
-          successfulAttempts: 0,
-          mastered: false
-        },
-        {
-          devanagari: 'असंशयं समग्रं मां यथा ज्ञास्यसि तच्छृणु',
-          roman: 'asaṁśayaṁ samagraṁ māṁ yathā jñāsyasi tac chṛṇu',
-          meaning: 'How you will know Me completely, without doubt - please listen',
-          attempts: [],
-          successfulAttempts: 0,
-          mastered: false
-        }
-      ]
-    },
-    {
-      id: 3,
-      title: 'Gītā 18.66',
-      subtitle: 'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज',
-      description: 'Master the ultimate instruction with perfect flow and devotional sentiment',
-      lines: [
-        {
-          devanagari: 'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज',
-          roman: 'sarva-dharmān parityajya mām ekaṁ śaraṇaṁ vraja',
-          meaning: 'Abandon all varieties of duties and surrender unto Me alone',
-          attempts: [],
-          successfulAttempts: 0,
-          mastered: false
-        },
-        {
-          devanagari: 'अहं त्वां सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः',
-          roman: 'ahaṁ tvāṁ sarva-pāpebhyo mokṣayiṣyāmi mā śucaḥ',
-          meaning: 'I will deliver you from all sinful reactions; do not fear',
-          attempts: [],
-          successfulAttempts: 0,
-          mastered: false
-        }
-      ]
-    }
-  ];
+ 
 
-  constructor() { }
+  constructor(private vakyapda: Vakyapda) { }
 
   ngOnInit() {
+
+    this.vakyaPadaSlokas =  this.vakyapda.vakyaPadaSlokas;
   }
 
   get currentLine(): Line {
@@ -193,7 +107,7 @@ export class VakyapadaPage implements OnInit {
   }
 
   selectSloka(slokaId: number) {
-    this.selectedSloka = this.slokas.find(s => s.id === slokaId) || null;
+    this.selectedSloka = this.vakyapda.vakyaPadaSlokas.find(s => s.id === slokaId) || null;
     this.currentLineIndex = 0;
     this.currentPracticeMode = 0;
     this.resetLineState();
@@ -208,7 +122,7 @@ export class VakyapadaPage implements OnInit {
   }
 
   nextLine() {
-    if (this.selectedSloka && this.currentLineIndex < this.selectedSloka.lines.length - 1 && this.currentLine.mastered) {
+    if (this.selectedSloka && this.currentLineIndex < this.selectedSloka.lines.length - 1) {
       this.currentLineIndex++;
       this.currentPracticeMode = 0;
       this.resetLineState();
@@ -238,8 +152,9 @@ export class VakyapadaPage implements OnInit {
   }
 
   isLineUnlocked(lineIndex: number): boolean {
-    if (lineIndex === 0) return true;
-    return this.selectedSloka?.lines[lineIndex - 1].mastered || false;
+    // For testing, allow access to all lines
+    // In production, you might want: if (lineIndex === 0) return true; return this.selectedSloka?.lines[lineIndex - 1].mastered || false;
+    return true;
   }
 
   playLineAudio() {
@@ -333,6 +248,15 @@ export class VakyapadaPage implements OnInit {
 
   toggleTextVisibility() {
     this.textVisible = !this.textVisible;
+  }
+
+  markCurrentLineAsComplete() {
+    // Quick test method to mark current line as mastered
+    this.currentLine.mastered = true;
+    this.currentLine.successfulAttempts = 3;
+    this.currentLine.attempts = ['success', 'success', 'success'];
+    this.recordingFeedback = '🏆 Line marked as completed for testing!';
+    this.feedbackClass = 'feedback-excellent';
   }
 
   private resetLineState() {

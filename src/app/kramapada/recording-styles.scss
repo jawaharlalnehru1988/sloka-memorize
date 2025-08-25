@@ -1,0 +1,215 @@
+/* Recording interface styles */
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(245, 101, 101, 0.1);
+  border: 1px solid var(--ion-color-danger);
+  border-radius: 8px;
+  font-size: 0.9em;
+  color: var(--ion-color-danger);
+}
+
+.recording-pulse {
+  width: 12px;
+  height: 12px;
+  background: var(--ion-color-danger);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Step recordings section */
+.step-recordings {
+  margin: 16px 0;
+  padding: 16px;
+  background: var(--ion-color-light);
+  border-radius: 12px;
+  border: 1px solid var(--ion-color-medium-tint);
+}
+
+.step-recordings h4 {
+  margin: 0 0 12px 0;
+  color: var(--ion-color-dark);
+  font-size: 1.1em;
+}
+
+.recordings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recording-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--ion-color-light-shade);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.recording-info {
+  flex: 1;
+}
+
+.recording-details {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.recording-details span {
+  font-size: 0.9em;
+  color: var(--ion-color-medium-shade);
+}
+
+.recording-time {
+  font-weight: 500;
+}
+
+.recording-duration {
+  color: var(--ion-color-primary);
+  font-weight: 500;
+}
+
+.recording-size {
+  color: var(--ion-color-tertiary);
+}
+
+.recording-mode {
+  font-size: 0.8em;
+  color: var(--ion-color-medium);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.recording-actions {
+  display: flex;
+  gap: 4px;
+}
+
+/* Progress info enhancements */
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.recordings-count {
+  font-size: 0.85em;
+  color: var(--ion-color-tertiary);
+  background: var(--ion-color-tertiary-tint);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--ion-color-tertiary-shade);
+}
+
+/* Enhanced practice controls */
+.practice-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.step-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.audio-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.audio-controls ion-button {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .recording-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .recording-actions {
+    align-self: flex-end;
+  }
+
+  .progress-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .recordings-count {
+    align-self: flex-end;
+  }
+}
+
+/* Mode switcher enhancements */
+.mode-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header-main h3 {
+  margin: 0;
+}
+
+/* Training interface improvements */
+.training-interface {
+  margin-top: 20px;
+}
+
+.training-header {
+  background: var(--ion-color-light);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid var(--ion-color-medium-tint);
+}
+
+/* Empty state for recordings */
+.no-recordings {
+  text-align: center;
+  padding: 20px;
+  color: var(--ion-color-medium);
+  font-style: italic;
+}

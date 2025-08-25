@@ -143,45 +143,17 @@
     
     <div class="sloka-selection">
       <div class="sloka-cards">
-        <ion-card class="sloka-card" (click)="selectSloka(1)">
+        <ion-card class="sloka-card" *ngFor="let sloka of vakyaPadaSlokas" (click)="selectSloka(sloka.id)">
           <ion-card-header>
-            <ion-card-title>Gītā 2.47</ion-card-title>
-            <ion-card-subtitle>कर्मण्येवाधिकारस्ते मा फलेषु कदाचन</ion-card-subtitle>
+            <ion-card-title>{{sloka.title}}</ion-card-title>
+            <ion-card-subtitle>{{sloka.subtitle}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <div class="line-count">
               <ion-icon name="list-outline"></ion-icon>
-              <span>2 Lines to Master</span>
+              <span>{{sloka.lines.length}} Lines to Master</span>
             </div>
-            <p>Practice flowing recitation of this famous verse about action without attachment</p>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="sloka-card" (click)="selectSloka(2)">
-          <ion-card-header>
-            <ion-card-title>Gītā 7.1</ion-card-title>
-            <ion-card-subtitle>मय्यासक्तमनाः पार्थ योगं युञ्जन्मदाश्रयः</ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-            <div class="line-count">
-              <ion-icon name="list-outline"></ion-icon>
-              <span>2 Lines to Master</span>
-            </div>
-            <p>Learn the flowing rhythm of Krishna's teaching on devotional knowledge</p>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="sloka-card" (click)="selectSloka(3)">
-          <ion-card-header>
-            <ion-card-title>Gītā 18.66</ion-card-title>
-            <ion-card-subtitle>सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज</ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-            <div class="line-count">
-              <ion-icon name="list-outline"></ion-icon>
-              <span>2 Lines to Master</span>
-            </div>
-            <p>Master the ultimate instruction with perfect flow and devotional sentiment</p>
+            <p>{{sloka.description}}</p>
           </ion-card-content>
         </ion-card>
       </div>
@@ -300,11 +272,22 @@
         
         <ion-button 
           (click)="nextLine()" 
-          [disabled]="currentLineIndex === selectedSloka.lines.length - 1 || !currentLine.mastered" 
+          [disabled]="currentLineIndex === selectedSloka.lines.length - 1" 
           fill="outline"
         >
           Next Line
           <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-button>
+        
+        <!-- Quick Test Button for Development -->
+        <ion-button 
+          (click)="markCurrentLineAsComplete()" 
+          color="success"
+          size="small"
+          fill="outline"
+        >
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          Mark Complete (Test)
         </ion-button>
       </div>
     </div>
