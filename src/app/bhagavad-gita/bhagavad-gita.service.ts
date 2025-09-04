@@ -17,7 +17,7 @@ export interface BhagavadGitaSloka {
   providedIn: 'root'
 })
 export class BhagavadGitaService {
-  private baseUrl = environment.baseUrl;
+  private baseUrl = "https://dats-backend.vercel.app";
 
   constructor(private http: HttpClient) { }
 
