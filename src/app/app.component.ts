@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb } from 'ionicons/icons';
+import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb, bookmarks, library, flower, infinite, planet } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -25,8 +25,14 @@ export class AppComponent {
     { title: 'Likitha Pāṭha', url: '/likhitapada', icon: 'create' },
     { title: 'Smaraṇa', url: '/smarana', icon: 'bulb' },
   ];
-  public labels = ['Bhagavad Gītā', 'Śrīmad Bhāgavatam', 'Vedic Mantras', 'Stotras', 'Daily Practice', 'Progress Tracking'];
+  public scripturePages = [
+    { title: 'Bhagavad Gītā', url: '/bhagavad-gita', icon: 'bookmarks' },
+    { title: 'Śrīmad Bhāgavatam', url: '/srimad-bhagavatam', icon: 'library' },
+    { title: 'Upadeshamrtam', url: '/upadeshamritam', icon: 'flower' },
+    { title: 'Ishopanishad', url: '/ishopanishad', icon: 'infinite' },
+    { title: 'Brahma-samhita', url: '/brahma-samhita', icon: 'planet' }
+  ];
   constructor() {
-    addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb });
+    addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb, bookmarks, library, flower, infinite, planet });
   }
 }

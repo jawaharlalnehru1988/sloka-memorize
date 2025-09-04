@@ -55,4 +55,24 @@ export const routes: Routes = [
     path: 'smarana',
     loadComponent: () => import('./smarana/smarana.page').then( m => m.SmaranaPage)
   },
+  {
+    path: 'bhagavad-gita',
+    loadComponent: () => import('./bhagavad-gita/bhagavad-gita.page').then( m => m.BhagavadGitaPage)
+  },
+  {
+    path: 'srimad-bhagavatam',
+    loadComponent: () => import('./srimad-bhagavatam/srimad-bhagavatam.page').then( m => m.SrimadBhagavatamPage)
+  },
+  {
+    path: 'upadeshamritam',
+    loadComponent: () => import('./upadeshamritam/upadeshamritam.page').then( m => m.UpadeshamritamPage)
+  },
+  {
+    path: 'ishopanishad',
+    loadComponent: () => import('./ishopanishad/ishopanishad.page').then( m => m.IshopanishadPage)
+  },
+  {
+    path: 'brahma-samhita',
+    loadComponent: () => import('./brahma-samhita/brahma-samhita.page').then( m => m.BrahmaSamhitaPage)
+  },
 ];
