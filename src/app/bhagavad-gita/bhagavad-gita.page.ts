@@ -60,6 +60,7 @@ export interface CardContent {
 })
 export class BhagavadGitaPage implements OnInit {
   cardContents: CardContent[] = [];
+  loading: boolean = true;
 
   constructor(
     private bhagavadGitaService: BhagavadGitaService,
@@ -74,6 +75,7 @@ export class BhagavadGitaPage implements OnInit {
 
   private loadChapterData(): void {
     console.log('Loading Bhagavad Gita chapter data...');
+    this.loading = true;
     
     this.bhagavadGitaService.getBgChaptersByCategory('tamil').subscribe({
       next: (response) => {
@@ -103,9 +105,11 @@ export class BhagavadGitaPage implements OnInit {
       },
       error: (error) => {
         console.error('❌ Error fetching Bhagavad Gita chapters:', error);
+        this.loading = false;
       },
       complete: () => {
         console.log('✅ Bhagavad Gita chapters loading completed');
+        this.loading = false;
       }
     });
   }

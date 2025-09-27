@@ -34,6 +34,34 @@
   }
 }
 
+// Loading container
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  margin: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-height: 200px;
+
+  ion-spinner {
+    --color: #667eea;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+  }
+
+  .loading-text {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    text-align: center;
+  }
+}
+
 // Cards container
 .cards-container {
   padding: 1rem;
@@ -242,6 +270,11 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 1rem;
   position: relative;
+  
+  // Fixed card dimensions
+  height: 450px; // Increased total card height to accommodate larger image
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-8px) scale(1.02);
@@ -255,8 +288,9 @@
   // Card image container
   .card-image-container {
     position: relative;
-    height: 200px;
+    height: 250px; // Increased from 200px to 250px for better visibility
     overflow: hidden;
+    flex-shrink: 0; // Prevent image from shrinking
 
     .card-image {
       width: 100%;
@@ -283,25 +317,88 @@
     }
   }
 
-  // Card header
+  // Card header with fixed height and text truncation
   ion-card-header {
     padding: 1rem;
     background: rgba(255, 255, 255, 0.95);
+    height: 120px; // Fixed header height to accommodate 3 lines
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; // Prevent header from shrinking
 
     .card-title {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 600;
       color: var(--ion-color-primary);
       margin: 0;
-      line-height: 1.3;
+      line-height: 1.4;
       text-align: center;
+      width: 100%;
+      
+      // Text truncation with ellipsis after 3 lines
+      display: -webkit-box;
+      -webkit-line-clamp: 3; // Limit to 3 lines
+      -webkit-box-orient: vertical;
+      line-clamp: 3; // Standard property for compatibility
+      overflow: hidden;
+      text-overflow: ellipsis;
+      
+      // Fallback for browsers that don't support -webkit-line-clamp
+      max-height: calc(1.4em * 3); // 3 lines * line-height
+      word-wrap: break-word;
+      
+      // Show full title on hover with tooltip effect
+      position: relative;
+      cursor: default;
+      
+      &:hover {
+        &::after {
+          content: attr(title);
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(0, 0, 0, 0.9);
+          color: white;
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-size: 0.9rem;
+          white-space: nowrap;
+          z-index: 1000;
+          opacity: 0;
+          animation: tooltipFadeIn 0.3s ease forwards;
+          pointer-events: none;
+          max-width: 250px;
+          white-space: normal;
+          text-align: center;
+          line-height: 1.3;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        &::before {
+          content: '';
+          position: absolute;
+          bottom: calc(100% - 8px);
+          left: 50%;
+          transform: translateX(-50%);
+          border: 6px solid transparent;
+          border-top-color: rgba(0, 0, 0, 0.9);
+          z-index: 1001;
+          opacity: 0;
+          animation: tooltipFadeIn 0.3s ease forwards;
+        }
+      }
     }
   }
 
-  // Card content
+  // Card content with flexible height
   ion-card-content {
     padding: 0 1rem 1.5rem;
     background: rgba(255, 255, 255, 0.95);
+    flex-grow: 1; // Take remaining space
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; // Push button to bottom
 
     .card-description {
       color: var(--ion-color-medium);
@@ -309,6 +406,7 @@
       margin-bottom: 1.5rem;
       font-size: 0.95rem;
       text-align: center;
+      flex-grow: 1; // Take available space
     }
 
     .card-button {
@@ -318,6 +416,7 @@
       font-weight: 600;
       letter-spacing: 0.5px;
       --box-shadow: 0 4px 16px rgba(var(--ion-color-primary-rgb), 0.3);
+      flex-shrink: 0; // Prevent button from shrinking
       
       ion-icon {
         margin-right: 8px;
@@ -327,6 +426,18 @@
         --box-shadow: 0 6px 20px rgba(var(--ion-color-primary-rgb), 0.4);
       }
     }
+  }
+}
+
+// Tooltip animation
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 }
 
@@ -367,12 +478,18 @@
   }
 
   .sloka-card {
+    height: 430px; // Increased from 380px
+    
     .card-image-container {
-      height: 160px;
+      height: 230px; // Increased from 180px for better mobile image visibility
     }
 
-    ion-card-header .card-title {
-      font-size: 1.1rem;
+    ion-card-header {
+      height: 110px; // Adjust header height
+      
+      .card-title {
+        font-size: 1.1rem;
+      }
     }
 
     ion-card-content .card-description {
@@ -387,8 +504,18 @@
   }
 
   .sloka-card {
+    height: 410px; // Increased from 360px
+    
     .card-image-container {
-      height: 140px;
+      height: 200px; // Increased from 160px
+    }
+    
+    ion-card-header {
+      height: 100px;
+      
+      .card-title {
+        font-size: 1rem;
+      }
     }
   }
 }
@@ -400,8 +527,14 @@
   }
 
   .sloka-card {
+    height: 470px; // Increased from 420px
+    
     .card-image-container {
-      height: 180px;
+      height: 270px; // Increased from 220px
+    }
+    
+    ion-card-header {
+      height: 130px;
     }
   }
 }
@@ -418,8 +551,18 @@
   }
 
   .sloka-card {
+    height: 500px; // Increased from 450px
+    
     .card-image-container {
-      height: 220px;
+      height: 300px; // Increased from 240px for best image visibility
+    }
+    
+    ion-card-header {
+      height: 140px;
+      
+      .card-title {
+        font-size: 1.3rem;
+      }
     }
 
     &:hover {

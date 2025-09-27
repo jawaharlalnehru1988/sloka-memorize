@@ -59,7 +59,59 @@
           <ion-text color="primary">
             <h3>🎵 Listen to Chapter</h3>
           </ion-text>
-          <div class="audio-container">
+          
+          <!-- Custom Audio Player -->
+          <div class="custom-audio-player">
+            <!-- Progress Bar -->
+            <div class="audio-progress-container" (click)="onProgressBarClick($event)">
+              <div class="audio-progress-bar">
+                <div class="audio-progress-fill" [style.width.%]="progress"></div>
+              </div>
+            </div>
+            
+            <!-- Audio Controls -->
+            <div class="audio-controls">
+              <div class="audio-time">
+                <span class="current-time">{{ formatTime(currentTime) }}</span>
+                <span class="duration">{{ formatTime(duration) }}</span>
+              </div>
+              
+              <div class="audio-actions">
+                <ion-button 
+                  expand="block" 
+                  fill="solid" 
+                  [color]="isPlaying ? 'warning' : 'secondary'"
+                  (click)="playAudio(chapterData.audioData.audioSrc)">
+                  <ion-icon [name]="isPlaying ? 'pause' : 'play'" slot="start"></ion-icon>
+                  {{ isPlaying ? 'Pause Chapter' : 'Play Chapter' }}
+                </ion-button>
+                
+                <!-- Additional Controls Row -->
+                <div class="audio-controls-row">
+                  <!-- Playback Speed Control -->
+                  <ion-button 
+                    fill="outline" 
+                    color="primary"
+                    (click)="changePlaybackSpeed()">
+                    <ion-icon name="speedometer" slot="start"></ion-icon>
+                    {{ playbackSpeed }}x
+                  </ion-button>
+                  
+                  <!-- Download Button -->
+                  <ion-button 
+                    fill="outline" 
+                    color="success"
+                    (click)="downloadAudio()">
+                    <ion-icon name="download" slot="start"></ion-icon>
+                    Download
+                  </ion-button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Fallback Native Audio Controls -->
+          <!-- <div class="audio-container">
             <audio 
               controls 
               preload="metadata"
@@ -67,19 +119,7 @@
               <source [src]="chapterData.audioData.audioSrc" type="audio/mpeg">
               Your browser does not support the audio element.
             </audio>
-          </div>
-          
-          <!-- Audio Action Button -->
-          <div class="audio-actions">
-            <ion-button 
-              expand="block" 
-              fill="solid" 
-              color="secondary" 
-              (click)="playAudio(chapterData.audioData.audioSrc)">
-              <ion-icon name="play" slot="start"></ion-icon>
-              Play Chapter Audio
-            </ion-button>
-          </div>
+          </div> -->
         </div>
 
         <!-- Description Section -->

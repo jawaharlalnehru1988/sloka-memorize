@@ -21,41 +21,53 @@
     </ion-text>
   </div>
 
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <ion-text color="medium">
+        <p class="loading-text">Loading chapters...</p>
+      </ion-text>
+    </div>
+  }
+
   <!-- Cards Grid -->
-  <div class="cards-container">
-    <ion-grid>
-      <ion-row>
-        @for (card of cardContents; track card.sectionToRedirect) {
-          <ion-col size="12" size-md="6" size-lg="4">
-            <ion-card class="sloka-card" button="true" (click)="navigateToChapter(card.sectionToRedirect)">
-              <div class="card-image-container">
-                <img [src]="card.image" [alt]="card.title" class="card-image" />
-                <div class="card-overlay"></div>
-              </div>
-              
-              <ion-card-header>
-                <ion-card-title class="card-title">
-                  {{ card.title }}
-                </ion-card-title>
-              </ion-card-header>
-              
-              <ion-card-content>
-                <ion-button 
-                  expand="block" 
-                  fill="solid" 
-                  color="primary" 
-                  class="card-button"
-                  (click)="navigateToChapter(card.sectionToRedirect); $event.stopPropagation()">
-                  <ion-icon name="book" slot="start"></ion-icon>
-                  {{ card.buttonText }}
-                </ion-button>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        }
-      </ion-row>
-    </ion-grid>
-  </div>
+  @else {
+    <div class="cards-container">
+      <ion-grid>
+        <ion-row>
+          @for (card of cardContents; track card.sectionToRedirect) {
+            <ion-col size="12" size-md="6" size-lg="4">
+              <ion-card class="sloka-card" button="true" (click)="navigateToChapter(card.sectionToRedirect)">
+                <div class="card-image-container">
+                  <img [src]="card.image" [alt]="card.title" class="card-image" />
+                  <div class="card-overlay"></div>
+                </div>
+                
+                <ion-card-header>
+                  <ion-card-title class="card-title" [title]="card.title">
+                    {{ card.title }}
+                  </ion-card-title>
+                </ion-card-header>
+                
+                <ion-card-content>
+                  <ion-button 
+                    expand="block" 
+                    fill="solid" 
+                    color="primary" 
+                    class="card-button"
+                    (click)="navigateToChapter(card.sectionToRedirect); $event.stopPropagation()">
+                    <ion-icon name="book" slot="start"></ion-icon>
+                    {{ card.buttonText }}
+                  </ion-button>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+    </div>
+  }
 
   
 </ion-content>
