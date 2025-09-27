@@ -74,13 +74,14 @@ export class BhagavadGitaPage implements OnInit {
   }
 
   private loadChapterData(): void {
-    console.log('Loading Bhagavad Gita chapter data...');
+    console.log('🔄 Loading Bhagavad Gita chapter data...');
     this.loading = true;
     
+    // Use cached data if available, otherwise fetch from API
     this.bhagavadGitaService.getBgChaptersByCategory('tamil').subscribe({
       next: (response) => {
         console.log('=== BHAGAVAD GITA CHAPTERS ===');
-        console.log('Chapter data received:', response);
+        console.log('✅ Chapter data received:', response);
         
         // Extract card items from the response and add to cardContents
         if (response && response.length > 0) {
@@ -100,7 +101,7 @@ export class BhagavadGitaPage implements OnInit {
           // Add sorted chapter cards to the existing cardContents
           this.cardContents = [...this.cardContents, ...chapterCards];
           
-          console.log('Updated cardContents:', this.cardContents);
+          console.log('📚 Updated cardContents:', this.cardContents);
         }
       },
       error: (error) => {

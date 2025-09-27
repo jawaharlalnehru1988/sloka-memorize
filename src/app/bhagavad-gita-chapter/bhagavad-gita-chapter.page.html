@@ -40,6 +40,28 @@
 
   <!-- Chapter Content -->
   @else if (chapterData) {
+    <!-- Floating Audio Control (Mobile Only - Shows when scrolled to description) -->
+    @if (showFloatingControl) {
+      <div class="floating-audio-control">
+        <ion-button 
+          fill="solid" 
+          shape="round"
+          [color]="isPlaying ? 'warning' : 'secondary'"
+          (click)="playAudio(chapterData.audioData.audioSrc)"
+          class="floating-play-button">
+          <ion-icon [name]="isPlaying ? 'pause' : 'play'" slot="icon-only"></ion-icon>
+        </ion-button>
+        
+        <!-- Progress indicator -->
+        <div class="floating-progress">
+          <span class="floating-time">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
+          <div class="floating-progress-bar">
+            <div class="floating-progress-fill" [style.width.%]="progress"></div>
+          </div>
+        </div>
+      </div>
+    }
+
     <div class="chapter-detail-container">
       <!-- Chapter Image -->
       <div class="chapter-image-section">
@@ -54,8 +76,8 @@
 
       <!-- Chapter Content -->
       <div class="chapter-content-section">
-        <!-- Audio Section -->
-        <div class="audio-section">
+        <!-- Sticky Audio Section -->
+        <div class="audio-section sticky-audio">
           <ion-text color="primary">
             <h3>🎵 Listen to Chapter</h3>
           </ion-text>
@@ -105,86 +127,87 @@
                     <ion-icon name="download" slot="start"></ion-icon>
                     Download
                   </ion-button>
+
+                  <!-- Share Button -->
+                  <ion-button 
+                    fill="outline" 
+                    color="tertiary"
+                    (click)="shareChapter()">
+                    <ion-icon name="share" slot="start"></ion-icon>
+                    Share
+                  </ion-button>
                 </div>
               </div>
             </div>
           </div>
-          
-          <!-- Fallback Native Audio Controls -->
-          <!-- <div class="audio-container">
-            <audio 
-              controls 
-              preload="metadata"
-              class="chapter-audio">
-              <source [src]="chapterData.audioData.audioSrc" type="audio/mpeg">
-              Your browser does not support the audio element.
-            </audio>
-          </div> -->
         </div>
 
-        <!-- Description Section -->
-        <div class="description-section">
-          <ion-text color="primary">
-            <h3>📖 Chapter Description</h3>
-          </ion-text>
-          <div class="description-content">
+        <!-- Scrollable Content Area -->
+        <div class="scrollable-content">
+          <!-- Description Section -->
+          <div class="description-section">
+            <ion-text color="primary">
+              <h3>📖 Chapter Description</h3>
+            </ion-text>
+            <div class="description-content">
+              <ion-text color="dark">
+                <div [innerHTML]="chapterData.desc"></div>
+              </ion-text>
+            </div>
+          </div>
+
+          <!-- Chapter Info -->
+          <div class="chapter-info-section">
+            <ion-text color="primary">
+              <h3>ℹ️ Chapter Information</h3>
+            </ion-text>
+            <div class="info-grid">
+              <div class="info-item">
+                <ion-text color="medium">
+                  <strong>Chapter Number:</strong>
+                </ion-text>
+                <ion-text color="dark">
+                  <p>{{ chapterData.category }}</p>
+                </ion-text>
+              </div>
+              <div class="info-item">
+                <ion-text color="medium">
+                  <strong>Author:</strong>
+                </ion-text>
+                <ion-text color="dark">
+                  <p>{{ chapterData.audioData.auther }}</p>
+                </ion-text>
+              </div>
+              <div class="info-item">
+                <ion-text color="medium">
+                  <strong>Rating:</strong>
+                </ion-text>
+                <ion-text color="dark">
+                  <p>⭐ {{ chapterData.rating }}/5</p>
+                </ion-text>
+              </div>
+            </div>
+          </div>
+
+          <!-- Learning Instructions -->
+          <div class="instructions-section">
+            <ion-text color="primary">
+              <h3>📚 Learning Guide</h3>
+            </ion-text>
             <ion-text color="dark">
-              <div [innerHTML]="chapterData.desc"></div>
+              <p>
+                Listen to this chapter audio to understand the deeper meanings and context. 
+                The Tamil narration will help you grasp the spiritual teachings of the Bhagavad Gita 
+                in your native language.
+              </p>
+              <ul>
+                <li>Listen to the full chapter audio</li>
+                <li>Reflect on the teachings</li>
+                <li>Practice memorization of key verses</li>
+                <li>Apply the learnings in daily life</li>
+              </ul>
             </ion-text>
           </div>
-        </div>
-
-        <!-- Chapter Info -->
-        <div class="chapter-info-section">
-          <ion-text color="primary">
-            <h3>ℹ️ Chapter Information</h3>
-          </ion-text>
-          <div class="info-grid">
-            <div class="info-item">
-              <ion-text color="medium">
-                <strong>Chapter Number:</strong>
-              </ion-text>
-              <ion-text color="dark">
-                <p>{{ chapterData.category }}</p>
-              </ion-text>
-            </div>
-            <div class="info-item">
-              <ion-text color="medium">
-                <strong>Author:</strong>
-              </ion-text>
-              <ion-text color="dark">
-                <p>{{ chapterData.audioData.auther }}</p>
-              </ion-text>
-            </div>
-            <div class="info-item">
-              <ion-text color="medium">
-                <strong>Rating:</strong>
-              </ion-text>
-              <ion-text color="dark">
-                <p>⭐ {{ chapterData.rating }}/5</p>
-              </ion-text>
-            </div>
-          </div>
-        </div>
-
-        <!-- Learning Instructions -->
-        <div class="instructions-section">
-          <ion-text color="primary">
-            <h3>📚 Learning Guide</h3>
-          </ion-text>
-          <ion-text color="dark">
-            <p>
-              Listen to this chapter audio to understand the deeper meanings and context. 
-              The Tamil narration will help you grasp the spiritual teachings of the Bhagavad Gita 
-              in your native language.
-            </p>
-            <ul>
-              <li>Listen to the full chapter audio</li>
-              <li>Reflect on the teachings</li>
-              <li>Practice memorization of key verses</li>
-              <li>Apply the learnings in daily life</li>
-            </ul>
-          </ion-text>
         </div>
       </div>
     </div>

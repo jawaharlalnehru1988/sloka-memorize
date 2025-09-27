@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +15,7 @@ import {
   IonButtons
 } from '@ionic/angular/standalone';
 import { BhagavadGitaService, BhagavadGitaChapterItem } from '../bhagavad-gita/bhagavad-gita.service';
-import { play, pause, arrowBack, download, speedometer } from 'ionicons/icons';
+import { play, pause, arrowBack, download, speedometer, share } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 
 @Component({
@@ -38,7 +38,7 @@ import { addIcons } from 'ionicons';
     FormsModule
   ]
 })
-export class BhagavadGitaChapterPage implements OnInit {
+export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   chapterData: BhagavadGitaChapterItem | null = null;
   chapterNumber: string = '';
   loading: boolean = true;
@@ -52,13 +52,16 @@ export class BhagavadGitaChapterPage implements OnInit {
   progress: number = 0;
   playbackSpeed: number = 1;
   availableSpeeds: number[] = [0.5, 0.75, 1, 1.25, 1.5, 2];
+  
+  // Floating control visibility
+  showFloatingControl: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private bhagavadGitaService: BhagavadGitaService
   ) {
-    addIcons({ play, pause, arrowBack, download, speedometer });
+    addIcons({ play, pause, arrowBack, download, speedometer, share });
   }
 
   ngOnInit() {
@@ -75,11 +78,23 @@ export class BhagavadGitaChapterPage implements OnInit {
   }
 
   private loadChapterData(): void {
-    console.log('Loading Bhagavad Gita chapter data...');
+    console.log('🔄 Loading Bhagavad Gita chapter data...');
     
+    // First try to get data from cache synchronously
+    const cachedChapter = this.bhagavadGitaService.getChapterByNumber(this.chapterNumber);
+    
+    if (cachedChapter) {
+      console.log('✅ Found chapter in cache:', cachedChapter);
+      this.chapterData = cachedChapter;
+      this.loading = false;
+      this.setupScrollDetection();
+      return;
+    }
+    
+    // If not in cache, fetch from API (which will cache it)
     this.bhagavadGitaService.getBgChaptersByCategory('tamil').subscribe({
       next: (response) => {
-        console.log('Chapter data received:', response);
+        console.log('✅ Chapter data received from API:', response);
         
         if (response && response.length > 0) {
           // Find the specific chapter
@@ -89,7 +104,7 @@ export class BhagavadGitaChapterPage implements OnInit {
           
           if (chapter) {
             this.chapterData = chapter;
-            console.log('Found chapter:', this.chapterData);
+            console.log('📖 Found chapter:', this.chapterData);
           } else {
             this.error = `Chapter ${this.chapterNumber} not found`;
           }
@@ -98,6 +113,9 @@ export class BhagavadGitaChapterPage implements OnInit {
         }
         
         this.loading = false;
+        
+        // Setup scroll detection after data is loaded
+        this.setupScrollDetection();
       },
       error: (error) => {
         console.error('❌ Error fetching chapter data:', error);
@@ -105,6 +123,67 @@ export class BhagavadGitaChapterPage implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  private scrollHandler: any = null;
+  
+  private setupScrollDetection(): void {
+    // Add scroll event listener to detect when description section is visible
+    setTimeout(() => {
+      // Get the Ionic content element
+      const content = document.querySelector('ion-content');
+      if (!content) return;
+      
+      // Save the bound handler for later removal
+      this.scrollHandler = this.onScroll.bind(this);
+      
+      // First, get the scrollable element inside ion-content
+      const scrollEl = content.shadowRoot?.querySelector('.inner-scroll') || content;
+      
+      // Add event listener to the scrollable element
+      scrollEl.addEventListener('scroll', this.scrollHandler);
+      
+      // Initial check in case page is already scrolled
+      this.onScroll({ target: scrollEl });
+      
+      console.log('Scroll detection set up successfully');
+    }, 500); // Longer delay to ensure DOM and shadow DOM are fully ready
+  }
+
+  private onScroll(event: any): void {
+    if (!event.target) return;
+    
+    const scrollEl = event.target;
+    const scrollTop = scrollEl.scrollTop;
+    
+    // Define a scroll threshold where we consider the user to be reading (e.g., 200px down)
+    const scrollThreshold = 200;
+    
+    // Simple approach: show floating control when user has scrolled down enough
+    const shouldShow = scrollTop > scrollThreshold;
+    
+    if (this.showFloatingControl !== shouldShow) {
+      console.log(`Floating control visibility changed to: ${shouldShow}, scroll position: ${scrollTop}`);
+      this.showFloatingControl = shouldShow;
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Clean up scroll listener
+    if (this.scrollHandler) {
+      const content = document.querySelector('ion-content');
+      const scrollEl = content?.shadowRoot?.querySelector('.inner-scroll') || content;
+      
+      if (scrollEl) {
+        scrollEl.removeEventListener('scroll', this.scrollHandler);
+      }
+    }
+    
+    // Clean up audio
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio = null;
+    }
   }
 
   playAudio(audioUrl: string): void {
@@ -231,6 +310,88 @@ export class BhagavadGitaChapterPage implements OnInit {
       console.log(`Download initiated for: ${fileName}`);
     } else {
       console.error('No audio source available for download');
+    }
+  }
+
+  // Share chapter functionality
+  shareChapter(): void {
+    if (this.chapterData) {
+      const shareText = `🕉️ Check out this Bhagavad Gita chapter: "${this.chapterData.title}" - Chapter ${this.chapterNumber}
+
+Listen to the Tamil narration and discover the spiritual teachings of this sacred text.
+
+#BhagavadGita #SpiritualLearning #Tamil #Hinduism`;
+
+      const shareUrl = window.location.href;
+
+      // Check if Web Share API is supported
+      if (navigator.share) {
+        navigator.share({
+          title: `${this.chapterData.title} - Bhagavad Gita Chapter ${this.chapterNumber}`,
+          text: shareText,
+          url: shareUrl
+        }).then(() => {
+          console.log('Content shared successfully');
+        }).catch((error) => {
+          console.log('Error sharing:', error);
+          this.fallbackShare(shareText, shareUrl);
+        });
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        this.fallbackShare(shareText, shareUrl);
+      }
+    }
+  }
+
+  private fallbackShare(text: string, url: string): void {
+    // Create share options for different platforms
+    const encodedText = encodeURIComponent(text);
+    const encodedUrl = encodeURIComponent(url);
+
+    const shareOptions = [
+      {
+        name: 'Twitter',
+        url: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`
+      },
+      {
+        name: 'Facebook',
+        url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`
+      },
+      {
+        name: 'WhatsApp',
+        url: `https://wa.me/?text=${encodedText}%20${encodedUrl}`
+      },
+      {
+        name: 'LinkedIn',
+        url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
+      },
+      {
+        name: 'Copy Link',
+        action: 'copy'
+      }
+    ];
+
+    // Show share options (simple implementation)
+    const shareMessage = `Share this chapter:\n\n${shareOptions.map((option, index) => 
+      `${index + 1}. ${option.name}`).join('\n')}\n\nWhich platform would you like to use?`;
+
+    // For now, just copy to clipboard and show alert
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(`${text}\n\n${url}`).then(() => {
+        alert('Chapter details copied to clipboard! You can now paste and share on your preferred social media platform.');
+      }).catch(() => {
+        this.showShareAlert(text, url);
+      });
+    } else {
+      this.showShareAlert(text, url);
+    }
+  }
+
+  private showShareAlert(text: string, url: string): void {
+    const fullText = `${text}\n\n${url}`;
+    const userChoice = prompt(`Copy this text to share:\n\n${fullText}\n\nPress Ctrl+C to copy, then click OK`);
+    if (userChoice !== null) {
+      console.log('User acknowledged share text');
     }
   }
 
