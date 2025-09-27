@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton, 
          IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
          IonButton, IonIcon } from '@ionic/angular/standalone';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 // Interfaces for Jatā Pāṭha
 interface Word {
@@ -64,8 +65,8 @@ type TrainingMode = 'guided' | 'pattern-practice' | 'speed-building' | 'memory-c
   styleUrls: ['./jatapada.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton,
-           IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
-           IonButton, IonIcon, CommonModule, FormsModule, RouterModule]
+    IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
+    IonButton, IonIcon, CommonModule, FormsModule, RouterModule, TechniqueHeaderComponent]
 })
 export class JatapadaPage implements OnInit {
   

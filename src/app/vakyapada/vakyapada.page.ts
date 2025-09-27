@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton } from '@ionic/angular/standalone';
 import { Line, VakyaPadaSloka, Vakyapda } from './vakyapda';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 
 interface PracticeMode {
@@ -23,7 +24,7 @@ interface Badge {
   templateUrl: './vakyapada.page.html',
   styleUrls: ['./vakyapada.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, CommonModule, FormsModule, TechniqueHeaderComponent]
 })
 export class VakyapadaPage implements OnInit {
 

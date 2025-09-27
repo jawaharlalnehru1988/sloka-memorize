@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, IonHeader, IonToolbar, IonButtons, IonTitle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronBackOutline, chevronForwardOutline, playOutline, micOutline, checkmarkCircleOutline, starOutline, ellipseOutline, radioButtonOffOutline, trophyOutline, ribbonOutline, libraryOutline, volumeHighOutline, recordingOutline, arrowForwardOutline, arrowDownOutline, playCircleOutline, layersOutline, listOutline, musicalNotesOutline, playForwardOutline, radioButtonOn, lockClosedOutline, medalOutline, timeOutline, repeatOutline, checkmarkCircle, trophy, bookOutline } from 'ionicons/icons';
+import { TechniqueHeaderComponent } from '../shared/components/technique-header/technique-header.component';
 
 interface Line {
   devanagari: string;
@@ -28,7 +29,7 @@ interface Sloka {
   templateUrl: './anuloma.page.html',
   styleUrls: ['./anuloma.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, CommonModule, FormsModule, TechniqueHeaderComponent]
 })
 export class AnulomaPage implements OnInit {
 

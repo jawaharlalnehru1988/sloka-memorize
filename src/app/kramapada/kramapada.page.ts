@@ -7,6 +7,7 @@ import {
   IonButton, IonIcon
 } from '@ionic/angular/standalone';
 import { AudioRecordingService, AudioRecording } from './audio-recording.service';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 // Interfaces for Krama Pāṭha
 interface Word {
@@ -51,8 +52,9 @@ interface PracticeResult {
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
-    IonButton, IonIcon, CommonModule, FormsModule
-  ]
+    IonButton, IonIcon, CommonModule, FormsModule,
+    TechniqueHeaderComponent
+]
 })
 export class KramapadaPage implements OnInit {
   // Training state

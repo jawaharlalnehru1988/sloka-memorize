@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronBackOutline, chevronForwardOutline, playOutline, micOutline, checkmarkCircleOutline, ellipseOutline, volumeHighOutline, recordingOutline, libraryOutline, helpOutline, eyeOffOutline, refreshOutline, checkmarkOutline, closeOutline, ribbonOutline, bulbOutline, checkmarkCircle } from 'ionicons/icons';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 interface Word {
   devanagari: string;
@@ -51,7 +52,7 @@ interface TrainingLevel {
   templateUrl: './pratiloma.page.html',
   styleUrls: ['./pratiloma.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonButton, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonButton, CommonModule, FormsModule, TechniqueHeaderComponent]
 })
 export class PratilomaPage implements OnInit {
 

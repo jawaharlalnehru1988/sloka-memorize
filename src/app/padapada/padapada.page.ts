@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton } from '@ionic/angular/standalone';
 import { PadapadaService, Sloka, Word } from './padapada.service';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 
 
@@ -11,7 +12,7 @@ import { PadapadaService, Sloka, Word } from './padapada.service';
   templateUrl: './padapada.page.html',
   styleUrls: ['./padapada.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, CommonModule, FormsModule, TechniqueHeaderComponent]
 })
 export class PadapadaPage implements OnInit {
 

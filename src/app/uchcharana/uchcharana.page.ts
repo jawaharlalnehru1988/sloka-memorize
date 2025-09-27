@@ -44,6 +44,7 @@ import {
   school,
   heart
 } from 'ionicons/icons';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 // Interfaces for Pronunciation Training
 interface PhoneticSound {
@@ -97,19 +98,20 @@ interface CompletionStats {
   styleUrls: ['./uchcharana.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonButton, 
-    IonButtons, 
-    IonBackButton, 
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonButtons,
+    IonBackButton,
     IonIcon,
-    CommonModule, 
+    CommonModule,
     NgIf,
     NgFor,
-    FormsModule
-  ]
+    FormsModule,
+    TechniqueHeaderComponent
+]
 })
 export class UchcharanaPage implements OnInit {
   // Training state

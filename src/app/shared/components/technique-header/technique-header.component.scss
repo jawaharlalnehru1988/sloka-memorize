@@ -1,0 +1,29 @@
+ion-header {
+  ion-toolbar {
+    ion-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      
+      span {
+        font-size: 0.9rem;
+        font-style: italic;
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  ion-header {
+    ion-toolbar {
+      ion-title {
+        font-size: 1rem;
+        
+        span {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}

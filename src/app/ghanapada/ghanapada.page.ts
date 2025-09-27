@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton, 
          IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
          IonButton, IonIcon } from '@ionic/angular/standalone';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 // Interfaces for Ghana Pāṭha
 interface Word {
@@ -73,8 +74,8 @@ type TrainingMode = 'foundation' | 'intensive' | 'perfection' | 'certification';
   styleUrls: ['./ghanapada.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton,
-           IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
-           IonButton, IonIcon, CommonModule, FormsModule, RouterModule]
+    IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
+    IonButton, IonIcon, CommonModule, FormsModule, RouterModule, TechniqueHeaderComponent]
 })
 export class GhanapadaPage implements OnInit {
   

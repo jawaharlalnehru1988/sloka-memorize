@@ -22,6 +22,7 @@ import {
 import { BhagavadGitaService, BhagavadGitaChapterResponse, BhagavadGitaChapterItem } from './bhagavad-gita.service';
 import { book, close, chevronDown, play, bookmark, image } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 export interface CardContent {
   audioSrc: string;
@@ -39,9 +40,9 @@ export interface CardContent {
   styleUrls: ['./bhagavad-gita.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
+    IonContent,
+    IonHeader,
+    IonTitle,
     IonToolbar,
     IonCard,
     IonCardHeader,
@@ -54,9 +55,10 @@ export interface CardContent {
     IonCol,
     IonText,
     IonSpinner,
-    CommonModule, 
-    FormsModule
-  ]
+    CommonModule,
+    FormsModule,
+    TechniqueHeaderComponent
+]
 })
 export class BhagavadGitaPage implements OnInit {
   cardContents: CardContent[] = [];

@@ -40,6 +40,7 @@ import {
   documentText,
   heart
 } from 'ionicons/icons';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 // Interfaces for Memory Challenges
 interface MemoryQuestion {
@@ -96,18 +97,19 @@ interface ChallengeType {
   styleUrls: ['./smarana.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonButtons, 
-    IonBackButton, 
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
     IonIcon,
-    CommonModule, 
+    CommonModule,
     NgIf,
     NgFor,
-    FormsModule
-  ]
+    FormsModule,
+    TechniqueHeaderComponent
+]
 })
 export class SmaranaPage implements OnInit, OnDestroy {
   // Challenge state

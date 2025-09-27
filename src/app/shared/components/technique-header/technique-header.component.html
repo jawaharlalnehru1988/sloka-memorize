@@ -1,0 +1,8 @@
+<ion-header [translucent]="translucent">
+  <ion-toolbar [color]="color">
+    <ion-buttons slot="start" *ngIf="showMenuButton">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{emoji}} {{title}}<span *ngIf="sanskrit"> - {{sanskrit}}</span></ion-title>
+  </ion-toolbar>
+</ion-header>

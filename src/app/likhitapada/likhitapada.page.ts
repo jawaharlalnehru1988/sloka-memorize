@@ -40,6 +40,7 @@ import {
   time,
   heart,
   eye, leaf, diamond } from 'ionicons/icons';
+import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 // Interfaces for Writing Practice
 interface WritingExercise {
@@ -97,19 +98,20 @@ interface DrawingStroke {
   styleUrls: ['./likhitapada.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonButton, 
-    IonButtons, 
-    IonBackButton, 
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonButtons,
+    IonBackButton,
     IonIcon,
-    CommonModule, 
+    CommonModule,
     NgIf,
     NgFor,
-    FormsModule
-  ]
+    FormsModule,
+    TechniqueHeaderComponent
+]
 })
 export class LikhitapadaPage implements OnInit {
   @ViewChild('drawingCanvas', { static: false }) drawingCanvas!: ElementRef<HTMLCanvasElement>;
