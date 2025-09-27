@@ -450,6 +450,121 @@
   }
 }
 
+// Chapter Content Section
+.chapter-content {
+  padding: 1rem;
+
+  .chapter-description {
+    margin-bottom: 1.5rem;
+    
+    .content-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      text-align: center;
+      font-style: italic;
+    }
+  }
+
+  .chapter-audio-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+    h4 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .audio-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+
+      .chapter-audio {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 8px;
+        background: #f8f9fa;
+        
+        &::-webkit-media-controls-panel {
+          background-color: #f8f9fa;
+        }
+      }
+    }
+
+    .audio-actions {
+      display: flex;
+      justify-content: center;
+      
+      ion-button {
+        --border-radius: 20px;
+        --padding-start: 1rem;
+        --padding-end: 1rem;
+        font-weight: 600;
+        
+        ion-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  .no-audio {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+
+    p {
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+
+  .learning-instructions {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+
+    h4 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    p {
+      line-height: 1.6;
+      text-align: center;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+// Responsive adjustments for chapter content
+@media (max-width: 768px) {
+  .chapter-content {
+    padding: 0.75rem;
+
+    .chapter-audio-section {
+      padding: 1rem;
+      
+      .audio-container .chapter-audio {
+        max-width: 100%;
+      }
+    }
+
+    .learning-instructions {
+      padding: 1rem;
+    }
+  }
+}
+
 // Custom scrollbar for webkit browsers
 ::-webkit-scrollbar {
   width: 8px;

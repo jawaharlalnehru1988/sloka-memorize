@@ -13,6 +13,28 @@ export interface BhagavadGitaSloka {
   __v: number;
 }
 
+export interface BhagavadGitaChapterItem {
+  img: string;
+  title: string;
+  category: string;
+  desc: string;
+  audioData: {
+    audioSrc: string;
+    imageSrc: string;
+    auther: string;
+    title: string;
+    _id: string;
+  };
+  rating: string;
+  action: string;
+  _id: string;
+}
+
+export interface BhagavadGitaChapterResponse {
+  categoryName: string;
+  cardItems: BhagavadGitaChapterItem[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,6 +48,13 @@ export class BhagavadGitaService {
     const url = `${this.baseUrl}/bg-sloka`;
     console.log('Fetching BG slokas from:', url);
     return this.http.get<BhagavadGitaSloka[]>(url);
+  }
+
+  // Get Bhagavad Gita chapters by category (Tamil)
+  getBgChaptersByCategory(category: string = 'tamil'): Observable<BhagavadGitaChapterResponse[]> {
+    const url = `${this.baseUrl}/bg-sloka-chapters/category/${category}`;
+    console.log('Fetching BG chapters from:', url);
+    return this.http.get<BhagavadGitaChapterResponse[]>(url);
   }
 
   // Get a specific sloka by ID

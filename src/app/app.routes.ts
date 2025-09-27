@@ -75,4 +75,8 @@ export const routes: Routes = [
     path: 'brahma-samhita',
     loadComponent: () => import('./brahma-samhita/brahma-samhita.page').then( m => m.BrahmaSamhitaPage)
   },
+  {
+    path: 'bhagavad-gita-chapter/:chapterNumber',
+    loadComponent: () => import('./bhagavad-gita-chapter/bhagavad-gita-chapter.page').then( m => m.BhagavadGitaChapterPage)
+  },
 ];

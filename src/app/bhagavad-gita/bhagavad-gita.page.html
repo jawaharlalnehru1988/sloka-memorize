@@ -27,7 +27,7 @@
       <ion-row>
         @for (card of cardContents; track card.sectionToRedirect) {
           <ion-col size="12" size-md="6" size-lg="4">
-            <ion-card class="sloka-card" button="true" (click)="scrollToSlokas(card.sectionToRedirect)">
+            <ion-card class="sloka-card" button="true" (click)="navigateToChapter(card.sectionToRedirect)">
               <div class="card-image-container">
                 <img [src]="card.image" [alt]="card.title" class="card-image" />
                 <div class="card-overlay"></div>
@@ -40,14 +40,12 @@
               </ion-card-header>
               
               <ion-card-content>
-                <p class="card-description">{{ card.content }}</p>
-                
                 <ion-button 
                   expand="block" 
                   fill="solid" 
                   color="primary" 
                   class="card-button"
-                  (click)="scrollToSlokas(card.sectionToRedirect); $event.stopPropagation()">
+                  (click)="navigateToChapter(card.sectionToRedirect); $event.stopPropagation()">
                   <ion-icon name="book" slot="start"></ion-icon>
                   {{ card.buttonText }}
                 </ion-button>
@@ -59,95 +57,6 @@
     </ion-grid>
   </div>
 
-  <!-- Slokas Section -->
-  <div #slokasSection class="slokas-section" [class.visible]="showSlokas">
-    <div class="slokas-header">
-      <ion-text color="primary">
-        <h2 class="section-title">{{ selectedSectionTitle }}</h2>
-      </ion-text>
-      <ion-button fill="clear" color="medium" (click)="hideSlokas()" class="close-button">
-        <ion-icon name="close" slot="icon-only"></ion-icon>
-      </ion-button>
-    </div>
-
-    @if (slokas.length > 0) {
-      <ion-accordion-group [multiple]="true" class="slokas-accordion">
-        @for (sloka of slokas; track sloka._id) {
-          <ion-accordion value="{{ sloka._id }}">
-            <ion-item slot="header" color="light">
-              <ion-label>
-                <h3>Sloka {{ sloka.slokaNo }}</h3>
-                <p>Order: {{ sloka.orderNo }}</p>
-              </ion-label>
-              <ion-icon name="chevron-down" slot="end"></ion-icon>
-            </ion-item>
-            
-            <div class="sloka-content" slot="content">
-              <!-- Sloka Text -->
-              <div class="sloka-text-section">
-                <ion-text color="primary">
-                  <h4>🕉️ Sloka Text</h4>
-                </ion-text>
-                <p class="sloka-text">{{ sloka.slokaText }}</p>
-              </div>
-
-              <!-- Audio Section -->
-              <div class="sloka-audio-section">
-                <ion-text color="secondary">
-                  <h4>🎵 Audio</h4>
-                </ion-text>
-                <div class="audio-container">
-                  <audio 
-                    controls 
-                    preload="metadata"
-                    class="sloka-audio">
-                    <source [src]="sloka.SlokaVoice" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-              </div>
-
-              <!-- Meaning Section -->
-              <div class="sloka-meaning-section">
-                <ion-text color="tertiary">
-                  <h4>💭 Meaning</h4>
-                </ion-text>
-                <p class="sloka-meaning">{{ sloka.slokaMeaning }}</p>
-              </div>
-
-              <!-- Action Buttons -->
-              <div class="sloka-actions">
-                <ion-button fill="outline" size="small" (click)="playAudio(sloka.SlokaVoice)">
-                  <ion-icon name="play" slot="start"></ion-icon>
-                  Play Audio
-                </ion-button>
-                <ion-button fill="outline" size="small" color="secondary">
-                  <ion-icon name="bookmark" slot="start"></ion-icon>
-                  Bookmark
-                </ion-button>
-              </div>
-            </div>
-          </ion-accordion>
-        }
-      </ion-accordion-group>
-    } @else {
-      <div class="no-slokas">
-        <ion-text color="medium">
-          <p>Loading slokas...</p>
-        </ion-text>
-        <ion-spinner name="crescent" color="primary"></ion-spinner>
-      </div>
-    }
-  </div>
-
-  <!-- Loading State -->
-  @if (slokas.length === 0) {
-    <div class="loading-container">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <ion-text color="medium">
-        <p>Loading slokas...</p>
-      </ion-text>
-    </div>
-  }
+  
 </ion-content>
 
