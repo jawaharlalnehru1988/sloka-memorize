@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 import { 
   IonContent, 
   IonHeader, 
@@ -66,13 +67,47 @@ export class BhagavadGitaPage implements OnInit {
 
   constructor(
     private bhagavadGitaService: BhagavadGitaService,
-    private router: Router
+    private router: Router,
+    private meta: Meta,
+    private titleService: Title
   ) {
     addIcons({book});
   }
 
   ngOnInit() {
+    this.setupMetaTags();
     this.loadChapterData();
+  }
+
+  private setupMetaTags(): void {
+    // Set page title
+    const pageTitle = 'Bhagavad Gita - Tamil Audio with Meanings';
+    this.titleService.setTitle(pageTitle);
+
+    // Set Open Graph meta tags for social media sharing
+    const lordKrishnaImageUrl = 'https://res.cloudinary.com/dbmkctsda/image/upload/v1755826489/6c5b5f34493a22073fec89464565a7a2_nzjsqr.jpg';
+    const description = 'Listen to all 18 chapters of Bhagavad Gita in Tamil with detailed meanings. Experience the divine teachings of Lord Krishna through audio recitation and spiritual learning.';
+    
+    this.meta.updateTag({ property: 'og:title', content: pageTitle });
+    this.meta.updateTag({ property: 'og:description', content: description });
+    this.meta.updateTag({ property: 'og:image', content: lordKrishnaImageUrl });
+    this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:url', content: window.location.href });
+    
+    // Twitter Card meta tags
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
+    this.meta.updateTag({ name: 'twitter:description', content: description });
+    this.meta.updateTag({ name: 'twitter:image', content: lordKrishnaImageUrl });
+    
+    // WhatsApp and social media specific meta tags
+    this.meta.updateTag({ property: 'og:site_name', content: 'Hare Krishna Sloka' });
+    this.meta.updateTag({ property: 'og:locale', content: 'en_US' });
+    this.meta.updateTag({ property: 'og:image:width', content: '1200' });
+    this.meta.updateTag({ property: 'og:image:height', content: '630' });
+    this.meta.updateTag({ property: 'og:image:alt', content: 'Lord Krishna - Bhagavad Gita Tamil' });
+    
+    console.log('✅ Meta tags set up for Bhagavad Gita main page with Lord Krishna image');
   }
 
   private loadChapterData(): void {

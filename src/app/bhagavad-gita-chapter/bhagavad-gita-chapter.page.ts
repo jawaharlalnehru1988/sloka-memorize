@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 import { 
   IonContent, 
   IonHeader, 
@@ -59,7 +60,9 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private bhagavadGitaService: BhagavadGitaService
+    private bhagavadGitaService: BhagavadGitaService,
+    private meta: Meta,
+    private titleService: Title
   ) {
     addIcons({ play, pause, arrowBack, download, speedometer, share });
   }
@@ -88,6 +91,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
       this.chapterData = cachedChapter;
       this.loading = false;
       this.setupScrollDetection();
+      this.setupMetaTags();
       return;
     }
     
@@ -105,6 +109,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
           if (chapter) {
             this.chapterData = chapter;
             console.log('📖 Found chapter:', this.chapterData);
+            this.setupMetaTags();
           } else {
             this.error = `Chapter ${this.chapterNumber} not found`;
           }
@@ -123,6 +128,38 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
         this.loading = false;
       }
     });
+  }
+
+  private setupMetaTags(): void {
+    if (!this.chapterData) return;
+
+    // Set page title
+    const pageTitle = `Chapter ${this.chapterNumber}: ${this.chapterData.title}`;
+    this.titleService.setTitle(pageTitle);
+
+    // Set Open Graph meta tags for social media sharing
+    const lordKrishnaImageUrl = 'https://res.cloudinary.com/dbmkctsda/image/upload/v1755826489/6c5b5f34493a22073fec89464565a7a2_nzjsqr.jpg';
+    
+    this.meta.updateTag({ property: 'og:title', content: pageTitle });
+    this.meta.updateTag({ property: 'og:description', content: this.chapterData.desc });
+    this.meta.updateTag({ property: 'og:image', content: lordKrishnaImageUrl });
+    this.meta.updateTag({ property: 'og:type', content: 'article' });
+    this.meta.updateTag({ property: 'og:url', content: window.location.href });
+    
+    // Twitter Card meta tags
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
+    this.meta.updateTag({ name: 'twitter:description', content: this.chapterData.desc });
+    this.meta.updateTag({ name: 'twitter:image', content: lordKrishnaImageUrl });
+    
+    // WhatsApp specific meta tags
+    this.meta.updateTag({ property: 'og:site_name', content: 'Hare Krishna Sloka' });
+    this.meta.updateTag({ property: 'og:locale', content: 'en_US' });
+    this.meta.updateTag({ property: 'og:image:width', content: '1200' });
+    this.meta.updateTag({ property: 'og:image:height', content: '630' });
+    this.meta.updateTag({ property: 'og:image:alt', content: 'Lord Krishna - Bhagavad Gita' });
+    
+    console.log('✅ Meta tags set up for social sharing with Lord Krishna image');
   }
 
   private scrollHandler: any = null;
@@ -316,11 +353,11 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   // Share chapter functionality
   shareChapter(): void {
     if (this.chapterData) {
-      const shareText = `🕉️ Check out this Bhagavad Gita chapter: "${this.chapterData.title}" - Chapter ${this.chapterNumber}
+      const shareText = `🕉️ இதோ இந்த பகவத் கீதை அத்தியாயத்தினை அர்த்தத்துடன் கேளுங்கள்: "${this.chapterData.title}" - அத்தியாயம் ${this.chapterNumber}
 
-Listen to the Tamil narration and discover the spiritual teachings of this sacred text.
+தமிழ் அர்த்தத்தையும் கேட்டு, இந்தப் புனித நூலின் ஆன்மீக போதனைகளைக் மனதில் பதிய வைக்கவும்.
 
-#BhagavadGita #SpiritualLearning #Tamil #Hinduism`;
+#BhagavadGita #SpiritualLearning #HareKrishnaTamil #HareKrishnaSloka`;
 
       const shareUrl = window.location.href;
 

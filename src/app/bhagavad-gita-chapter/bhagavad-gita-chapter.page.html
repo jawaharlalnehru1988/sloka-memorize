@@ -40,27 +40,7 @@
 
   <!-- Chapter Content -->
   @else if (chapterData) {
-    <!-- Floating Audio Control (Mobile Only - Shows when scrolled to description) -->
-    @if (showFloatingControl) {
-      <div class="floating-audio-control">
-        <ion-button 
-          fill="solid" 
-          shape="round"
-          [color]="isPlaying ? 'warning' : 'secondary'"
-          (click)="playAudio(chapterData.audioData.audioSrc)"
-          class="floating-play-button">
-          <ion-icon [name]="isPlaying ? 'pause' : 'play'" slot="icon-only"></ion-icon>
-        </ion-button>
-        
-        <!-- Progress indicator -->
-        <div class="floating-progress">
-          <span class="floating-time">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
-          <div class="floating-progress-bar">
-            <div class="floating-progress-fill" [style.width.%]="progress"></div>
-          </div>
-        </div>
-      </div>
-    }
+    
 
     <div class="chapter-detail-container">
       <!-- Chapter Image -->
