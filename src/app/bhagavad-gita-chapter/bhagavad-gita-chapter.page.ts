@@ -83,8 +83,12 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   private loadChapterData(): void {
     console.log('🔄 Loading Bhagavad Gita chapter data...');
     
+    // Get selected language from query params
+    const selectedLanguage = this.route.snapshot.queryParamMap.get('lang') || 'tamil';
+    console.log('🌐 Loading chapter data for language:', selectedLanguage);
+    
     // First try to get data from cache synchronously
-    const cachedChapter = this.bhagavadGitaService.getChapterByNumber(this.chapterNumber);
+    const cachedChapter = this.bhagavadGitaService.getChapterByNumber(this.chapterNumber, selectedLanguage);
     
     if (cachedChapter) {
       console.log('✅ Found chapter in cache:', cachedChapter);
@@ -96,7 +100,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     }
     
     // If not in cache, fetch from API (which will cache it)
-    this.bhagavadGitaService.getBgChaptersByCategory('tamil').subscribe({
+    this.bhagavadGitaService.getChaptersByLanguage(selectedLanguage).subscribe({
       next: (response) => {
         console.log('✅ Chapter data received from API:', response);
         

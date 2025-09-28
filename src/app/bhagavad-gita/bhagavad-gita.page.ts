@@ -18,7 +18,11 @@ import {
   IonRow,
   IonCol,
   IonText,
-  IonSpinner
+  IonSpinner,
+  IonSelect,
+  IonSelectOption,
+  IonItem,
+  IonLabel
 } from '@ionic/angular/standalone';
 import { BhagavadGitaService, BhagavadGitaChapterResponse, BhagavadGitaChapterItem } from './bhagavad-gita.service';
 import { book, close, chevronDown, play, bookmark, image } from 'ionicons/icons';
@@ -56,6 +60,10 @@ export interface CardContent {
     IonCol,
     IonText,
     IonSpinner,
+    IonSelect,
+    IonSelectOption,
+    IonItem,
+    IonLabel,
     CommonModule,
     FormsModule,
     TechniqueHeaderComponent
@@ -64,6 +72,7 @@ export interface CardContent {
 export class BhagavadGitaPage implements OnInit {
   cardContents: CardContent[] = [];
   loading: boolean = true;
+  selectedLanguage: string = 'tamil'; // Default language
 
   constructor(
     private bhagavadGitaService: BhagavadGitaService,
@@ -111,14 +120,14 @@ export class BhagavadGitaPage implements OnInit {
   }
 
   private loadChapterData(): void {
-    console.log('🔄 Loading Bhagavad Gita chapter data...');
+    console.log('🔄 Loading Bhagavad Gita chapter data for language:', this.selectedLanguage);
     this.loading = true;
     
-    // Use cached data if available, otherwise fetch from API
-    this.bhagavadGitaService.getBgChaptersByCategory('tamil').subscribe({
+    // Use the optimized service to get chapters by language
+    this.bhagavadGitaService.getChaptersByLanguage(this.selectedLanguage).subscribe({
       next: (response) => {
         console.log('=== BHAGAVAD GITA CHAPTERS ===');
-        console.log('✅ Chapter data received:', response);
+        console.log('✅ Chapter data received for language:', this.selectedLanguage, response);
         
         // Extract card items from the response and add to cardContents
         if (response && response.length > 0) {
@@ -135,10 +144,10 @@ export class BhagavadGitaPage implements OnInit {
           // Sort chapter cards by orderNo in ascending order
           chapterCards.sort((a, b) => a.orderNo - b.orderNo);
 
-          // Add sorted chapter cards to the existing cardContents
-          this.cardContents = [...this.cardContents, ...chapterCards];
+          // Replace existing cardContents with new data
+          this.cardContents = chapterCards;
           
-          console.log('📚 Updated cardContents:', this.cardContents);
+          console.log('📚 Updated cardContents for', this.selectedLanguage, ':', this.cardContents);
         }
       },
       error: (error) => {
@@ -146,7 +155,7 @@ export class BhagavadGitaPage implements OnInit {
         this.loading = false;
       },
       complete: () => {
-        console.log('✅ Bhagavad Gita chapters loading completed');
+        console.log('✅ Bhagavad Gita chapters loading completed for', this.selectedLanguage);
         this.loading = false;
       }
     });
@@ -166,12 +175,24 @@ export class BhagavadGitaPage implements OnInit {
       const chapterNumber = section.replace('bhagavad-gita-chapter-', '');
       console.log(`Extracted chapter number: ${chapterNumber}`);
       
-      // Navigate to chapter detail page
-      this.router.navigate(['/bhagavad-gita-chapter', chapterNumber]);
+      // Navigate to chapter detail page with language parameter
+      this.router.navigate(['/bhagavad-gita-chapter', chapterNumber], {
+        queryParams: { lang: this.selectedLanguage }
+      });
     } else {
       // For other sections, you could navigate to different pages or handle differently
       console.log('Non-chapter section clicked:', section);
     }
+  }
+
+  onLanguageChange(): void {
+    console.log('🔄 Language changed to:', this.selectedLanguage);
+    
+    // Clear existing card contents
+    this.cardContents = [];
+    
+    // Reload chapter data with new language
+    this.loadChapterData();
   }
 
 

@@ -42,16 +42,16 @@ export interface BhagavadGitaChapterResponse {
 export class BhagavadGitaService {
   private baseUrl = "https://dats-backend.vercel.app";
   
-  // Cache for storing data
+  // Cache for storing all chapter data (all languages at once)
+  private allChaptersCache: BhagavadGitaChapterResponse[] | null = null;
   private slokaCache: BhagavadGitaSloka[] | null = null;
-  private chapterCache: BhagavadGitaChapterResponse[] | null = null;
   
   // BehaviorSubjects for reactive state management
-  private chapterDataSubject = new BehaviorSubject<BhagavadGitaChapterResponse[] | null>(null);
+  private allChaptersSubject = new BehaviorSubject<BhagavadGitaChapterResponse[] | null>(null);
   private slokaDataSubject = new BehaviorSubject<BhagavadGitaSloka[] | null>(null);
   
   // Public observables for components to subscribe to
-  public chapterData$ = this.chapterDataSubject.asObservable();
+  public allChapters$ = this.allChaptersSubject.asObservable();
   public slokaData$ = this.slokaDataSubject.asObservable();
 
   constructor(private http: HttpClient) { }
@@ -79,32 +79,90 @@ export class BhagavadGitaService {
     );
   }
 
-  // Get Bhagavad Gita chapters by category with caching
-  getBgChaptersByCategory(category: string = 'tamil'): Observable<BhagavadGitaChapterResponse[]> {
+  // Get all Bhagavad Gita chapters (all languages) with caching
+  getAllBgChapters(): Observable<BhagavadGitaChapterResponse[]> {
     // Return cached data if available
-    if (this.chapterCache) {
-      console.log('🔄 Returning cached BG chapters');
-      return of(this.chapterCache);
+    if (this.allChaptersCache) {
+      console.log('🔄 Returning cached BG chapters (all languages)');
+      return of(this.allChaptersCache);
     }
 
     // Fetch from API if not cached
-    const url = `${this.baseUrl}/bg-sloka-chapters/category/${category}`;
-    console.log('🌐 Fetching BG chapters from API:', url);
+    const url = `${this.baseUrl}/bg-sloka-chapters`;
+    console.log('🌐 Fetching ALL BG chapters from API:', url);
     
     return this.http.get<BhagavadGitaChapterResponse[]>(url).pipe(
       tap((chapters) => {
         // Cache the data
-        this.chapterCache = chapters;
-        this.chapterDataSubject.next(chapters);
-        console.log('✅ BG chapters cached successfully');
+        this.allChaptersCache = chapters;
+        this.allChaptersSubject.next(chapters);
+        console.log('✅ ALL BG chapters cached successfully');
+        console.log('📚 Available languages:', this.getAvailableLanguages());
       }),
       shareReplay(1) // Share the same response with multiple subscribers
     );
   }
 
-  // Get cached chapter data synchronously
-  getCachedChapterData(): BhagavadGitaChapterResponse[] | null {
-    return this.chapterCache;
+  // Get chapters filtered by language
+  getChaptersByLanguage(language: string = 'tamil'): Observable<BhagavadGitaChapterResponse[]> {
+    return this.getAllBgChapters().pipe(
+      map((allChapters) => {
+        const languageMap: { [key: string]: string } = {
+          'tamil': 'Bhagavad Gita Tamil',
+          'kannada': 'Bhagavad Gita Kannada',
+          'sanskrit': 'Bhagavad Gita Sanskrit'
+        };
+        
+        const targetCategoryName = languageMap[language] || 'Bhagavad Gita Tamil';
+        console.log(`🔍 Filtering chapters for language: ${language} (${targetCategoryName})`);
+        
+        const filteredChapters = allChapters.filter(chapter => 
+          chapter.categoryName === targetCategoryName
+        );
+        
+        console.log(`📖 Found ${filteredChapters.length} chapter groups for ${language}`);
+        return filteredChapters;
+      })
+    );
+  }
+
+  // Get available languages from cached data
+  getAvailableLanguages(): string[] {
+    if (!this.allChaptersCache) {
+      return ['tamil', 'kannada', 'sanskrit']; // Default fallback
+    }
+    
+    const languageMap: { [key: string]: string } = {
+      'Bhagavad Gita Tamil': 'tamil',
+      'Bhagavad Gita Kannada': 'kannada',
+      'Bhagavad Gita Sanskrit': 'sanskrit'
+    };
+    
+    const availableCategories = [...new Set(this.allChaptersCache.map(chapter => chapter.categoryName))];
+    const availableLanguages = availableCategories.map(cat => languageMap[cat]).filter(Boolean);
+    
+    console.log('🌐 Available languages:', availableLanguages);
+    return availableLanguages;
+  }
+
+  // Get cached chapter data for a specific language
+  getCachedChaptersByLanguage(language: string = 'tamil'): BhagavadGitaChapterResponse[] | null {
+    if (!this.allChaptersCache) {
+      return null;
+    }
+    
+    const languageMap: { [key: string]: string } = {
+      'tamil': 'Bhagavad Gita Tamil',
+      'kannada': 'Bhagavad Gita Kannada',
+      'sanskrit': 'Bhagavad Gita Sanskrit'
+    };
+    
+    const targetCategoryName = languageMap[language] || 'Bhagavad Gita Tamil';
+    const filteredChapters = this.allChaptersCache.filter(chapter => 
+      chapter.categoryName === targetCategoryName
+    );
+    
+    return filteredChapters.length > 0 ? filteredChapters : null;
   }
 
   // Get cached sloka data synchronously
@@ -112,13 +170,15 @@ export class BhagavadGitaService {
     return this.slokaCache;
   }
 
-  // Get a specific chapter by number from cache
-  getChapterByNumber(chapterNumber: string): BhagavadGitaChapterItem | null {
-    if (!this.chapterCache || this.chapterCache.length === 0) {
+  // Get a specific chapter by number from cache for a specific language
+  getChapterByNumber(chapterNumber: string, language: string = 'tamil'): BhagavadGitaChapterItem | null {
+    const cachedChapters = this.getCachedChaptersByLanguage(language);
+    
+    if (!cachedChapters || cachedChapters.length === 0) {
       return null;
     }
 
-    const chapterItem = this.chapterCache[0].cardItems.find(
+    const chapterItem = cachedChapters[0].cardItems.find(
       (item: BhagavadGitaChapterItem) => item.category === chapterNumber
     );
 
@@ -128,19 +188,19 @@ export class BhagavadGitaService {
   // Clear cache (useful for refresh scenarios)
   clearCache(): void {
     this.slokaCache = null;
-    this.chapterCache = null;
+    this.allChaptersCache = null;
     this.slokaDataSubject.next(null);
-    this.chapterDataSubject.next(null);
+    this.allChaptersSubject.next(null);
     console.log('🗑️ Cache cleared');
   }
 
   // Preload data (useful for app initialization)
   preloadData(): Promise<void> {
     return new Promise((resolve, reject) => {
-      // Load both slokas and chapters
+      // Load both slokas and all chapters
       Promise.all([
         this.getBgSlokas().toPromise(),
-        this.getBgChaptersByCategory('tamil').toPromise()
+        this.getAllBgChapters().toPromise()
       ]).then(() => {
         console.log('✅ All BG data preloaded and cached');
         resolve();

@@ -26,11 +26,11 @@ export class AppComponent {
     { title: 'Smaraṇa', url: '/smarana', icon: 'bulb' },
   ];
   public scripturePages = [
-    { title: 'Bhagavad Gītā', url: '/bhagavad-gita', icon: 'bookmarks' },
-    { title: 'Śrīmad Bhāgavatam', url: '/srimad-bhagavatam', icon: 'library' },
-    { title: 'Upadeshamrtam', url: '/upadeshamritam', icon: 'flower' },
-    { title: 'Ishopanishad', url: '/ishopanishad', icon: 'infinite' },
-    { title: 'Brahma-samhita', url: '/brahma-samhita', icon: 'planet' }
+    { title: 'Srimad Bhagavad Gītā', url: '/bhagavad-gita', icon: 'bookmarks' },
+    // { title: 'Śrīmad Bhāgavatam', url: '/srimad-bhagavatam', icon: 'library' },
+    // { title: 'Upadeshamrtam', url: '/upadeshamritam', icon: 'flower' },
+    // { title: 'Ishopanishad', url: '/ishopanishad', icon: 'infinite' },
+    // { title: 'Brahma-samhita', url: '/brahma-samhita', icon: 'planet' }
   ];
   constructor() {
     addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb, bookmarks, library, flower, infinite, planet });

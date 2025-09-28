@@ -17,12 +17,31 @@
   <!-- Welcome Section -->
   <div class="welcome-section">
     <ion-text color="primary">
-      <h1 class="welcome-title">🕉️ Bhagavad Gītā</h1>
+      <h1 class="welcome-title">🕉️Srimad Bhagavad Gītā</h1>
     </ion-text>
     <ion-text color="medium">
-      <p class="welcome-subtitle">Choose your learning path</p>
+      <p class="welcome-subtitle">Choose your Chapter to Learn</p>
     </ion-text>
+    
+    <!-- Language Selection -->
+    <div class="language-selection">
+      <ion-item lines="none" class="language-item">
+        <ion-label position="stacked" color="primary">Choose Language</ion-label>
+        <ion-select 
+          [(ngModel)]="selectedLanguage" 
+          (ionChange)="onLanguageChange()"
+          placeholder="Select Language"
+          interface="action-sheet"
+          class="language-select">
+          <!-- <ion-select-option value="english">English</ion-select-option> -->
+          <ion-select-option value="tamil">Tamil (தமிழ்)</ion-select-option>
+          <ion-select-option value="kannada">Kannada (ಕನ್ನಡ)</ion-select-option>
+          <ion-select-option value="sanskrit">Sanskrit (संस्कृत)</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
   </div>
+
 
   <!-- Loading State -->
   @if (loading) {
