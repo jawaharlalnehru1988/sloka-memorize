@@ -2129,18 +2129,182 @@
   font-size: 0.95rem;
 }
 
+/* Mobile-specific improvements for progressive steps */
+.progressive-steps.mobile-friendly {
+  @media (max-width: 768px) {
+    .step-container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      padding: 16px;
+    }
+    
+    .step-number {
+      margin-bottom: 8px;
+    }
+    
+    .step-content {
+      width: 100%;
+    }
+    
+    .line-example {
+      margin: 12px 0;
+    }
+    
+    .line-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      letter-spacing: 0.5px;
+      word-spacing: 0.1em;
+    }
+    
+    .line-roman {
+      font-size: 0.95rem;
+      margin-top: 8px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .step-container {
+      padding: 12px;
+    }
+    
+    .line-text {
+      font-size: 1rem;
+      line-height: 2;
+      letter-spacing: 0.3px;
+    }
+    
+    .line-roman {
+      font-size: 0.9rem;
+    }
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
-  .anuloma-container {
-    padding: 15px;
+  .anuloma-content {
+    padding: 16px;
   }
   
-  .hero-title {
-    font-size: 2rem;
+  /* Method Section Mobile Improvements */
+  .method-section {
+    padding: 20px;
+    margin-bottom: 20px;
   }
   
-  .hero-sanskrit {
+  .method-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .method-example {
+    padding: 20px;
+  }
+  
+  .sloka-header h3 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+  
+  .full-sloka {
+    padding: 16px;
+  }
+  
+  .sloka-devanagari {
     font-size: 1.4rem;
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+  
+  .sloka-meaning {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .progressive-steps {
+    margin-top: 20px;
+  }
+  
+  .step-container {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  
+  .step-number {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    align-self: center;
+  }
+  
+  .step-content {
+    text-align: center;
+  }
+  
+  .step-content h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .line-example {
+    padding: 12px 16px;
+    margin: 12px 0;
+  }
+  
+  .line-text {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  
+  .line-roman {
+    font-size: 1rem;
+  }
+  
+  .step-content p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .step-arrow {
+    margin: 12px 0;
+  }
+  
+  .step-arrow ion-icon {
+    font-size: 1.5rem;
+    padding: 6px;
+  }
+  
+  .mastery-badge {
+    padding: 12px 16px;
+    font-size: 1rem;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .mastery-badge ion-icon {
+    font-size: 1.3rem;
+  }
+  
+  .training-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .overall-progress {
+    text-align: center;
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .line-header {
+    flex-direction: column;
+    text-align: center;
   }
   
   .audio-controls {
@@ -2153,23 +2317,68 @@
     align-items: center;
   }
   
+  .navigation-controls {
+    flex-direction: column;
+  }
+  
   .completion-actions {
     flex-direction: column;
     align-items: center;
   }
   
-  .navigation-controls {
-    flex-direction: column;
-    gap: 15px;
+  .stages-grid, .tips-grid {
+    grid-template-columns: 1fr;
   }
   
-  .training-header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+  .sloka-cards {
+    grid-template-columns: 1fr;
   }
   
-  .progress-info {
-    text-align: center;
+  .lines-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Additional mobile improvements for better readability */
+@media (max-width: 480px) {
+  .anuloma-content {
+    padding: 12px;
+  }
+  
+  .method-section {
+    padding: 16px;
+  }
+  
+  .method-example {
+    padding: 16px;
+  }
+  
+  .sloka-devanagari {
+    font-size: 1.3rem;
+    line-height: 2;
+    word-spacing: 0.1em;
+  }
+  
+  .step-container {
+    padding: 16px;
+  }
+  
+  .step-number {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  
+  .line-text {
+    font-size: 1.1rem;
+    word-spacing: 0.05em;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-sanskrit {
+    font-size: 1.4rem;
   }
 }

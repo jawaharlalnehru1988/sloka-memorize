@@ -1,0 +1,530 @@
+// Dark theme with high contrast for clear visibility
+:host {
+  --background: #1a1a2e;
+  --color: #ffffff;
+  --ion-color-primary: #4facfe;
+  --ion-color-secondary: #43e97b;
+  --ion-color-tertiary: #ffb347;
+  --ion-color-success: #10dc60;
+  --ion-color-warning: #ffce00;
+  --ion-color-danger: #f04141;
+  --ion-color-medium: #989aa2;
+  --ion-color-light: #f4f5f8;
+}
+
+.anuloma-training-content {
+  --background: #1a1a2e;
+  --color: #ffffff;
+  padding: 0;
+  margin: 0;
+
+  * {
+    color: #ffffff !important;
+  }
+}
+
+// Back button section
+.back-button-section {
+  background: #16213e;
+  padding: 1rem;
+  border-bottom: 2px solid #4facfe;
+  
+  ion-button {
+    --color: #4facfe;
+    --background: transparent;
+    --border-color: #4facfe;
+    font-size: 1.1rem;
+    font-weight: 500;
+    
+    &:hover {
+      --background: rgba(79, 172, 254, 0.1);
+    }
+    
+    ion-icon {
+      color: #4facfe !important;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+// Enhanced header styling
+ion-header {
+  ion-toolbar {
+    --background: #16213e;
+    --color: #ffffff;
+    border-bottom: 2px solid #4facfe;
+    
+    ion-title {
+      color: #ffffff !important;
+      font-weight: 600;
+    }
+    
+    ion-back-button {
+      --color: #4facfe;
+      --background: transparent;
+      --border-radius: 8px;
+      --padding-start: 12px;
+      --padding-end: 12px;
+      margin: 4px;
+      
+      &:hover {
+        --background: rgba(79, 172, 254, 0.1);
+      }
+    }
+  }
+}
+
+// Training interface styles
+.training-interface {
+  background: #1a1a2e;
+  padding: 1.5rem;
+  margin: 0;
+}
+
+.training-header {
+  background: #16213e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #4facfe;
+  margin-bottom: 1.5rem;
+  
+  h3 {
+    color: #ffffff !important;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+}
+
+.overall-progress {
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    
+    span {
+      color: #ffffff !important;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .progress-percentage {
+      color: #43e97b !important;
+      font-weight: 600;
+    }
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #2d3748;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #4facfe;
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4facfe, #43e97b);
+      border-radius: 8px;
+      transition: width 0.5s ease;
+    }
+  }
+}
+
+.current-line-section {
+  background: #16213e;
+  border: 2px solid #4facfe;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.line-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  
+  h4 {
+    color: #4facfe !important;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .line-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    
+    ion-icon {
+      font-size: 1.2rem;
+    }
+    
+    &.status-mastered {
+      background: rgba(16, 220, 96, 0.2);
+      border: 1px solid #10dc60;
+      color: #10dc60 !important;
+      
+      ion-icon { color: #10dc60 !important; }
+    }
+    
+    &.status-ready {
+      background: rgba(255, 206, 0, 0.2);
+      border: 1px solid #ffce00;
+      color: #ffce00 !important;
+      
+      ion-icon { color: #ffce00 !important; }
+    }
+    
+    &.status-practicing {
+      background: rgba(79, 172, 254, 0.2);
+      border: 1px solid #4facfe;
+      color: #4facfe !important;
+      
+      ion-icon { color: #4facfe !important; }
+    }
+    
+    &.status-new {
+      background: rgba(152, 154, 162, 0.2);
+      border: 1px solid #989aa2;
+      color: #989aa2 !important;
+      
+      ion-icon { color: #989aa2 !important; }
+    }
+  }
+}
+
+.line-display {
+  .line-content {
+    background: #1a1a2e;
+    border: 1px solid #4facfe;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    
+    .line-devanagari {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #ffffff !important;
+      text-align: center;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+    
+    .line-roman {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #43e97b !important;
+      text-align: center;
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+    
+    .line-meaning {
+      font-size: 1rem;
+      font-style: italic;
+      color: #ffb347 !important;
+      text-align: center;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+  }
+  
+  .line-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    
+    .audio-controls, .practice-controls, .mastery-controls {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      
+      ion-button {
+        --border-radius: 8px;
+        font-weight: 500;
+        
+        ion-icon {
+          margin-right: 0.3rem;
+        }
+      }
+    }
+    
+    .practice-feedback, .combined-feedback {
+      .feedback-message {
+        padding: 0.8rem;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 1rem;
+        
+        &.feedback-excellent {
+          background: rgba(16, 220, 96, 0.2);
+          border: 1px solid #10dc60;
+          color: #10dc60 !important;
+        }
+        
+        &.feedback-good {
+          background: rgba(255, 206, 0, 0.2);
+          border: 1px solid #ffce00;
+          color: #ffce00 !important;
+        }
+        
+        &.feedback-needs-work {
+          background: rgba(240, 65, 65, 0.2);
+          border: 1px solid #f04141;
+          color: #f04141 !important;
+        }
+        
+        &.feedback-mastered {
+          background: rgba(16, 220, 96, 0.2);
+          border: 1px solid #10dc60;
+          color: #10dc60 !important;
+        }
+        
+        &.feedback-audio {
+          background: rgba(79, 172, 254, 0.2);
+          border: 1px solid #4facfe;
+          color: #4facfe !important;
+        }
+      }
+    }
+  }
+}
+
+.mastered-lines-section {
+  background: #16213e;
+  border: 2px solid #10dc60;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  h4 {
+    color: #10dc60 !important;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .mastered-lines-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    
+    .mastered-line-item {
+      display: flex;
+      align-items: center;
+      background: #1a1a2e;
+      border: 1px solid #10dc60;
+      border-radius: 8px;
+      padding: 0.8rem;
+      
+      .line-number {
+        background: #10dc60;
+        color: #1a1a2e !important;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-right: 0.8rem;
+      }
+      
+      .line-preview {
+        flex: 1;
+        
+        .line-text {
+          color: #ffffff !important;
+          font-size: 1rem;
+          font-weight: 500;
+          margin-bottom: 0.2rem;
+        }
+        
+        .line-roman {
+          color: #43e97b !important;
+          font-size: 0.85rem;
+          font-weight: 400;
+        }
+      }
+      
+      .mastery-badge {
+        ion-icon {
+          font-size: 1.5rem;
+          color: #10dc60 !important;
+        }
+      }
+    }
+  }
+}
+
+.combined-practice-section {
+  background: #16213e;
+  border: 2px solid #ffb347;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  h4 {
+    color: #ffb347 !important;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .combined-display {
+    .combined-content {
+      background: #1a1a2e;
+      border: 1px solid #ffb347;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      
+      .combined-line {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        
+        .line-number-small {
+          background: #ffb347;
+          color: #1a1a2e !important;
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 0.8rem;
+          margin-right: 0.8rem;
+        }
+        
+        .combined-devanagari {
+          color: #ffffff !important;
+          font-size: 1.1rem;
+          font-weight: 500;
+        }
+      }
+    }
+    
+    .combined-controls {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      
+      ion-button {
+        --border-radius: 8px;
+        font-weight: 500;
+        
+        ion-icon {
+          margin-right: 0.3rem;
+        }
+      }
+    }
+  }
+}
+
+.navigation-controls {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  
+  ion-button {
+    --border-radius: 8px;
+    font-weight: 500;
+    
+    ion-icon {
+      margin: 0 0.3rem;
+    }
+  }
+}
+
+.completion-section {
+  background: #16213e;
+  border: 2px solid #ffce00;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  
+  .completion-card {
+    .completion-animation {
+      margin-bottom: 1rem;
+      
+      ion-icon {
+        font-size: 3rem;
+        color: #ffce00 !important;
+      }
+      
+      .celebration-text {
+        font-size: 1.2rem;
+        color: #ffce00 !important;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+    }
+    
+    h3 {
+      color: #ffce00 !important;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 1rem 0;
+    }
+    
+    p {
+      color: #ffffff !important;
+      font-size: 1rem;
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+    }
+    
+    .completion-actions {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      
+      ion-button {
+        --border-radius: 8px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .line-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .audio-controls, .practice-controls, .mastery-controls, .combined-controls, .navigation-controls {
+    flex-direction: column;
+    
+    ion-button {
+      width: 100%;
+    }
+  }
+  
+  .completion-actions {
+    flex-direction: column;
+    
+    ion-button {
+      width: 100%;
+    }
+  }
+}

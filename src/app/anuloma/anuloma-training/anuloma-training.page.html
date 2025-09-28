@@ -1,0 +1,196 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/anuloma"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{selectedSloka?.title}} - Anuloma Training</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="anuloma-training-content">
+  <!-- Back Button Section -->
+  <div class="back-button-section">
+    <ion-button (click)="goBack()" fill="clear" size="large">
+      <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+      Back to Anuloma Pāṭha
+    </ion-button>
+  </div>
+
+  <!-- Training Interface -->
+  @if (selectedSloka) {
+    <div class="training-interface">
+      <div class="training-header">
+        <h3>🎓 Progressive Training: {{selectedSloka.title}}</h3>
+        <div class="overall-progress">
+          <div class="progress-info">
+            <span>Line {{currentLineIndex + 1}} of {{selectedSloka.lines.length}}</span>
+            <span class="progress-percentage">{{overallProgress}}% Complete</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="overallProgress"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Current Line Focus -->
+      <div class="current-line-section">
+        <div class="line-header">
+          <h4>Currently Learning: Line {{currentLineIndex + 1}}</h4>
+          <div class="line-status" [ngClass]="getLineStatusClass()">
+            <ion-icon [name]="getLineStatusIcon()"></ion-icon>
+            <span>{{getLineStatusText()}}</span>
+          </div>
+        </div>
+        <div class="line-display">
+          <div class="line-content">
+            <div class="line-devanagari">{{currentLine.devanagari}}</div>
+            <div class="line-roman">{{currentLine.roman}}</div>
+            <div class="line-meaning">{{currentLine.meaning}}</div>
+          </div>
+          <div class="line-controls">
+            <div class="audio-controls">
+              <ion-button (click)="playLineSlow()" color="primary">
+                <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+                Play Slow
+              </ion-button>
+              <ion-button (click)="playLineNormal()" color="secondary">
+                <ion-icon name="musical-notes-outline" slot="start"></ion-icon>
+                Play Normal
+              </ion-button>
+            </div>
+            <div class="practice-controls">
+              <ion-button
+                (click)="startRecording()"
+                [disabled]="isRecording || !hasHeardLine"
+                color="danger"
+                >
+                <ion-icon name="mic-outline" slot="start"></ion-icon>
+                {{isRecording ? 'Recording...' : 'Record Practice'}}
+              </ion-button>
+              @if (practiceeFeedback) {
+                <div class="practice-feedback">
+                  <div class="feedback-message" [ngClass]="feedbackClass">
+                    {{practiceeFeedback}}
+                  </div>
+                </div>
+              }
+            </div>
+            @if (currentLine.practiced >= 3) {
+              <div class="mastery-controls">
+                <ion-button
+                  (click)="markLineMastered()"
+                  [disabled]="currentLine.mastered"
+                  color="success"
+                  >
+                  <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                  {{currentLine.mastered ? 'Line Mastered!' : 'Mark as Mastered'}}
+                </ion-button>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <!-- Previous Lines Display (Mastered) -->
+      @if (hasMasteredLines()) {
+        <div class="mastered-lines-section">
+          <h4>📋 Previously Mastered Lines</h4>
+          <div class="mastered-lines-list">
+            @for (line of getMasteredLines(); track line; let i = $index) {
+              <div
+                class="mastered-line-item"
+                >
+                <div class="line-number">{{i + 1}}</div>
+                <div class="line-preview">
+                  <div class="line-text">{{line.devanagari}}</div>
+                  <div class="line-roman">{{line.roman}}</div>
+                </div>
+                <div class="mastery-badge">
+                  <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      <!-- Combined Practice Section -->
+      @if (hasMasteredLines() && currentLine.mastered) {
+        <div class="combined-practice-section">
+          <h4>🔗 Combined Practice: Lines 1-{{currentLineIndex + 1}}</h4>
+          <div class="combined-display">
+            <div class="combined-content">
+              @for (line of getCombinedLines(); track line; let i = $index) {
+                <div class="combined-line">
+                  <span class="line-number-small">{{i + 1}}</span>
+                  <span class="combined-devanagari">{{line.devanagari}}</span>
+                </div>
+              }
+            </div>
+            <div class="combined-controls">
+              <ion-button (click)="playCombinedLines()" color="tertiary">
+                <ion-icon name="play-forward-outline" slot="start"></ion-icon>
+                Play Combined (1-{{currentLineIndex + 1}})
+              </ion-button>
+              <ion-button
+                (click)="recordCombined()"
+                [disabled]="isRecordingCombined"
+                color="warning"
+                >
+                <ion-icon name="mic-outline" slot="start"></ion-icon>
+                {{isRecordingCombined ? 'Recording Combined...' : 'Record Combined'}}
+              </ion-button>
+            </div>
+            @if (combinedFeedback) {
+              <div class="combined-feedback">
+                <div class="feedback-message" [ngClass]="combinedFeedbackClass">
+                  {{combinedFeedback}}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      <!-- Navigation Controls -->
+      <div class="navigation-controls">
+        <ion-button
+          (click)="previousLine()"
+          [disabled]="currentLineIndex === 0"
+          fill="outline"
+          >
+          <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
+          Previous Line
+        </ion-button>
+        <ion-button
+          (click)="nextLine()"
+          [disabled]="!canProceedToNext()"
+          fill="outline"
+          >
+          Next Line
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+      <!-- Completion Section -->
+      @if (isSlokaCompleted()) {
+        <div class="completion-section">
+          <div class="completion-card">
+            <div class="completion-animation">
+              <ion-icon name="trophy" color="warning"></ion-icon>
+              <div class="celebration-text">🎉 Śloka Mastered! 🎉</div>
+            </div>
+            <h3>Congratulations!</h3>
+            <p>You've successfully learned all lines in forward sequence. You can now recite the entire śloka with perfect flow and rhythm!</p>
+            <div class="completion-actions">
+              <ion-button (click)="goBack()" color="success">
+                <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                Complete Training
+              </ion-button>
+              <ion-button (click)="goBack()" fill="outline">
+                <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+                Back to Anuloma
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</ion-content>

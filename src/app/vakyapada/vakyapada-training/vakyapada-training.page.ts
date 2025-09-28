@@ -10,11 +10,6 @@ import {
   IonBackButton,
   IonButtons,
   IonIcon,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
-  IonCardContent,
   IonButton
 } from '@ionic/angular/standalone';
 import { Line, VakyaPadaSloka, Vakyapda } from '../vakyapda';
@@ -45,11 +40,6 @@ interface Badge {
     IonBackButton,
     IonButtons,
     IonIcon,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    IonCardContent,
     IonButton,
     CommonModule, 
     FormsModule

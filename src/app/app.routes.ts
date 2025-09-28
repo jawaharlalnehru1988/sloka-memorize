@@ -87,4 +87,8 @@ export const routes: Routes = [
     path: 'vakyapada/training/:id',
     loadComponent: () => import('./vakyapada/vakyapada-training/vakyapada-training.page').then( m => m.VakyapadaTrainingPage)
   },
+  {
+    path: 'anuloma/training/:id',
+    loadComponent: () => import('./anuloma/anuloma-training/anuloma-training.page').then( m => m.AnulomaTrainingPage)
+  },
 ];
