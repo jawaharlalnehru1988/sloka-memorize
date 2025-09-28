@@ -1,0 +1,152 @@
+<!-- Training Interface Header -->
+<app-technique-header
+  title="Padapāṭha Training"
+  sanskrit="पदपाठ अभ्यास"
+  emoji="🕉️"
+  color="tertiary"
+  [translucent]="true"
+  [showMenuButton]="false">
+</app-technique-header>
+
+<ion-content [fullscreen]="true" class="training-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button (click)="goBack()" text="Back to Padapāṭha"></ion-back-button>
+      </ion-buttons>
+      <ion-title size="large">Training Mode</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Additional Back Button at Top -->
+  <div class="back-button-section">
+    <ion-button (click)="goBack()" fill="clear" class="main-back-button">
+      <ion-icon name="arrow-back" slot="start"></ion-icon>
+      Back to Padapāṭha
+    </ion-button>
+  </div>
+  @if (selectedSloka) {
+    <div class="training-interface">
+      <div class="training-header">
+        <h3>Practicing: {{selectedSloka.title}}</h3>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+        </div>
+        <p>Word {{currentWordIndex + 1}} of {{selectedSloka.words.length}}</p>
+      </div>
+      
+      <div class="word-display-panel">
+        <div class="current-word">
+          <div class="word-devanagari-large">{{currentWord.devanagari}}</div>
+          <div class="word-roman-large">{{currentWord.roman}}</div>
+          <div class="word-meaning-large">{{currentWord.meaning}}</div>
+        </div>
+        
+        <div class="audio-controls">
+          <ion-button (click)="playWordSlow()" color="primary">
+            <ion-icon name="volume-medium" slot="start"></ion-icon>
+            Play Slow
+          </ion-button>
+          <ion-button (click)="playWordNormal()" color="secondary">
+            <ion-icon name="volume-high" slot="start"></ion-icon>
+            Play Normal
+          </ion-button>
+        </div>
+        
+        <div class="practice-controls">
+          <ion-button (click)="startRecording()" [disabled]="isRecording" color="danger">
+            <ion-icon name="mic" slot="start"></ion-icon>
+            {{isRecording ? 'Recording...' : 'Record Yourself'}}
+          </ion-button>
+          @if (pronunciationFeedback) {
+            <div class="feedback-display">
+              <div class="feedback-score" [ngClass]="feedbackClass">
+                {{pronunciationFeedback}}
+              </div>
+            </div>
+          }
+        </div>
+        
+        <div class="navigation-controls">
+          <ion-button (click)="previousWord()" [disabled]="currentWordIndex === 0" fill="outline">
+            <ion-icon name="chevron-back" slot="start"></ion-icon>
+            Previous
+          </ion-button>
+          <ion-button (click)="nextWord()" [disabled]="currentWordIndex === selectedSloka.words.length - 1" fill="outline">
+            Next
+            <ion-icon name="chevron-forward" slot="end"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+      
+      <div class="word-progress">
+        <h4>Your Progress:</h4>
+        <div class="word-checkmarks">
+          @for (word of selectedSloka.words; track word; let i = $index) {
+            <div
+              class="word-status"
+              [ngClass]="{
+                'completed': word.practiced,
+                'current': i === currentWordIndex,
+                'pending': !word.practiced && i !== currentWordIndex
+              }">
+              <span class="word-index">{{i + 1}}</span>
+              <span class="word-text">{{word.roman}}</span>
+              @if (word.practiced) {
+                <ion-icon name="checkmark-circle" color="success"></ion-icon>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      
+      @if (isAllWordsPracticed()) {
+        <div class="completion-section">
+          <div class="completion-card">
+            <ion-icon name="trophy" color="warning"></ion-icon>
+            <h3>Excellent! All Words Mastered!</h3>
+            <p>You've practiced all individual words. Ready for the full śloka?</p>
+            <ion-button (click)="practiceFullSloka()" color="success">
+              <ion-icon name="play-circle" slot="start"></ion-icon>
+              Practice Full Śloka
+            </ion-button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="loading-section">
+      <ion-icon name="hourglass-outline" color="primary"></ion-icon>
+      <h3>Loading Śloka...</h3>
+      <p>Please wait while we load your training session.</p>
+    </div>
+  }
+
+  <!-- Training Tips Section -->
+  <div class="tips-section">
+    <h2>💡 Practice Tips</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <ion-icon name="ear-outline" color="primary"></ion-icon>
+        <h4>Listen Carefully</h4>
+        <p>Pay attention to each syllable and vowel sound</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="repeat-outline" color="secondary"></ion-icon>
+        <h4>Repeat Often</h4>
+        <p>Practice each word multiple times before moving forward</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="time-outline" color="tertiary"></ion-icon>
+        <h4>Take Your Time</h4>
+        <p>Don't rush - clarity is more important than speed</p>
+      </div>
+      <div class="tip-card">
+        <ion-icon name="heart-outline" color="danger"></ion-icon>
+        <h4>Practice Daily</h4>
+        <p>Consistent daily practice builds strong memory</p>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

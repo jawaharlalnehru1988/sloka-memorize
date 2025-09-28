@@ -1,0 +1,577 @@
+// Training Interface Styles
+.training-content {
+  background: #1a1a2e;
+  --color: #ffffff;
+  min-height: 100vh;
+  
+  .back-button-section {
+    padding: 1rem;
+    background: #0f1419;
+    border-bottom: 1px solid #2a3f5f;
+    
+    .main-back-button {
+      --color: #4facfe;
+      --background: transparent;
+      --background-hover: rgba(79, 172, 254, 0.1);
+      --background-activated: rgba(79, 172, 254, 0.2);
+      --border-radius: 8px;
+      --padding-start: 12px;
+      --padding-end: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      height: 40px;
+      
+      ion-icon {
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+      }
+      
+      &:hover {
+        --background: rgba(79, 172, 254, 0.15);
+      }
+    }
+  }
+  
+  .loading-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    text-align: center;
+    padding: 2rem;
+    
+    ion-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #4facfe;
+    }
+    
+    h3 {
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    p {
+      color: #b8b8b8;
+    }
+  }
+}
+
+.training-interface {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  
+  .training-header {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #2a3f5f;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
+    h3 {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    
+    .progress-bar {
+      background: #0f1419;
+      height: 8px;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      border: 1px solid #2a3f5f;
+      
+      .progress-fill {
+        background: linear-gradient(90deg, #00c851, #00a444);
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+      }
+    }
+    
+    p {
+      color: #b8b8b8;
+      text-align: center;
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  }
+  
+  .word-display-panel {
+    background: #16213e;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid #2a3f5f;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    
+    .current-word {
+      margin-bottom: 2rem;
+      
+      .word-devanagari-large {
+        font-size: 3rem;
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        font-family: 'Noto Sans Devanagari', serif;
+      }
+      
+      .word-roman-large {
+        font-size: 2rem;
+        color: #e8e8e8;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        font-style: italic;
+      }
+      
+      .word-meaning-large {
+        font-size: 1.2rem;
+        color: #ffffff;
+        font-weight: 400;
+        background: #0f1419;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        display: inline-block;
+        margin-top: 1rem;
+        border: 1px solid #2a3f5f;
+      }
+    }
+    
+    .audio-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      
+      ion-button {
+        --background: #4facfe;
+        --background-activated: #00a7ff;
+        --background-hover: #00a7ff;
+        --color: #ffffff;
+        --border-radius: 25px;
+        --padding-start: 20px;
+        --padding-end: 20px;
+        --box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        font-weight: 600;
+        text-transform: none;
+        height: 45px;
+        border: none;
+        
+        &[color="secondary"] {
+          --background: #00d4aa;
+          --background-activated: #00b894;
+          --background-hover: #00b894;
+          --box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+        }
+        
+        ion-icon {
+          font-size: 1.2rem;
+        }
+      }
+    }
+    
+    .practice-controls {
+      margin-bottom: 2rem;
+      
+      ion-button {
+        --background: #e74c3c;
+        --background-activated: #c0392b;
+        --background-hover: #c0392b;
+        --color: #ffffff;
+        --border-radius: 25px;
+        --padding-start: 24px;
+        --padding-end: 24px;
+        --box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        font-weight: 600;
+        text-transform: none;
+        height: 50px;
+        min-width: 200px;
+        border: none;
+        
+        &[disabled] {
+          --background: #7f8c8d;
+          --color: #bdc3c7;
+          --box-shadow: none;
+        }
+        
+        ion-icon {
+          font-size: 1.3rem;
+        }
+      }
+      
+      .feedback-display {
+        margin-top: 1rem;
+        
+        .feedback-score {
+          padding: 0.75rem 1.5rem;
+          border-radius: 12px;
+          font-weight: 600;
+          display: inline-block;
+          color: #ffffff;
+          
+          &.feedback-excellent {
+            background: #00c851;
+            box-shadow: 0 4px 15px rgba(0, 200, 81, 0.3);
+          }
+          
+          &.feedback-good {
+            background: #ffbb33;
+            box-shadow: 0 4px 15px rgba(255, 187, 51, 0.3);
+          }
+          
+          &.feedback-needs-work {
+            background: #e74c3c;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+          }
+          
+          &.feedback-audio {
+            background: #4facfe;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+          }
+        }
+      }
+    }
+    
+    .navigation-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      
+      ion-button {
+        --background: transparent;
+        --background-activated: rgba(255, 255, 255, 0.1);
+        --background-hover: rgba(255, 255, 255, 0.1);
+        --color: #ffffff;
+        --border-radius: 20px;
+        --padding-start: 16px;
+        --padding-end: 16px;
+        --box-shadow: none;
+        font-weight: 500;
+        text-transform: none;
+        height: 40px;
+        border: 1px solid #4facfe;
+        
+        &[disabled] {
+          --color: #7f8c8d;
+          border-color: #7f8c8d;
+        }
+        
+        ion-icon {
+          font-size: 1.1rem;
+        }
+      }
+    }
+  }
+  
+  .word-progress {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #2a3f5f;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
+    h4 {
+      color: #ffffff;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .word-checkmarks {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      
+      .word-status {
+        background: #0f1419;
+        border-radius: 8px;
+        padding: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 2px solid #2a3f5f;
+        transition: all 0.3s ease;
+        
+        &.completed {
+          background: #1a4332;
+          border-color: #00c851;
+          box-shadow: 0 2px 10px rgba(0, 200, 81, 0.2);
+        }
+        
+        &.current {
+          background: #1e3a5f;
+          border-color: #4facfe;
+          transform: scale(1.02);
+          box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+        
+        &.pending {
+          opacity: 0.6;
+        }
+        
+        .word-index {
+          background: #2a3f5f;
+          color: #ffffff;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.8rem;
+          font-weight: 600;
+          flex-shrink: 0;
+        }
+        
+        .word-text {
+          color: #ffffff;
+          font-weight: 500;
+          flex-grow: 1;
+        }
+        
+        ion-icon {
+          font-size: 1.2rem;
+          flex-shrink: 0;
+          color: #00c851;
+        }
+      }
+    }
+  }
+  
+  .completion-section {
+    margin-bottom: 2rem;
+    
+    .completion-card {
+      background: linear-gradient(135deg, #00c851 0%, #00a444 100%);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      color: #ffffff;
+      box-shadow: 0 8px 32px rgba(0, 200, 81, 0.4);
+      border: none;
+      
+      ion-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        color: #ffffff;
+      }
+      
+      h3 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ffffff;
+      }
+      
+      p {
+        margin-bottom: 1.5rem;
+        color: #ffffff;
+        font-size: 1rem;
+        opacity: 0.95;
+      }
+      
+      ion-button {
+        --background: #ffffff;
+        --background-activated: #f8f9fa;
+        --background-hover: #f8f9fa;
+        --color: #00c851;
+        --border-radius: 25px;
+        --padding-start: 24px;
+        --padding-end: 24px;
+        --box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        font-weight: 700;
+        text-transform: none;
+        height: 50px;
+        border: none;
+        
+        ion-icon {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }
+}
+
+.tips-section {
+  padding: 2rem 1rem;
+  background: #0f1419;
+  border-top: 1px solid #2a3f5f;
+  
+  h2 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    
+    .tip-card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid #2a3f5f;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      }
+      
+      ion-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        display: block;
+        
+        &[color="primary"] {
+          color: #4facfe;
+        }
+        
+        &[color="secondary"] {
+          color: #00d4aa;
+        }
+        
+        &[color="tertiary"] {
+          color: #9c88ff;
+        }
+        
+        &[color="danger"] {
+          color: #e74c3c;
+        }
+      }
+      
+      h4 {
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      
+      p {
+        color: #b8b8b8;
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .training-interface {
+    padding: 0.5rem;
+    
+    .word-display-panel {
+      padding: 1.5rem;
+      
+      .current-word {
+        .word-devanagari-large {
+          font-size: 2.5rem;
+        }
+        
+        .word-roman-large {
+          font-size: 1.5rem;
+        }
+        
+        .word-meaning-large {
+          font-size: 1rem;
+          padding: 0.6rem 1.2rem;
+        }
+      }
+      
+      .audio-controls,
+      .navigation-controls {
+        flex-direction: column;
+        align-items: center;
+        
+        ion-button {
+          width: 100%;
+          max-width: 250px;
+        }
+      }
+    }
+    
+    .word-progress {
+      .word-checkmarks {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+  
+  .tips-section {
+    padding: 1.5rem 0.5rem;
+    
+    .tips-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+}
+
+// Enhanced visibility adjustments
+ion-content {
+  --background: #1a1a2e;
+  --color: #ffffff;
+}
+
+ion-header {
+  ion-toolbar {
+    --background: #16213e;
+    --color: #ffffff;
+    
+    ion-title {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    
+    ion-back-button {
+      --color: #4facfe;
+      --icon-color: #4facfe;
+      --ripple-color: rgba(79, 172, 254, 0.2);
+      font-weight: 600;
+      font-size: 0.9rem;
+      
+      &::part(native) {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+      
+      &::part(text) {
+        font-weight: 600;
+      }
+      
+      &::part(icon) {
+        font-size: 1.1rem;
+      }
+    }
+    
+    ion-buttons {
+      &[slot="start"] {
+        margin-left: 4px;
+      }
+    }
+  }
+}

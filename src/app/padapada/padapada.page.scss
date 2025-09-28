@@ -293,6 +293,28 @@
           ion-card-content {
             color: #666;
             line-height: 1.5;
+            
+            .training-action {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+              margin-top: 1rem;
+              padding: 0.75rem;
+              background: rgba(102, 126, 234, 0.1);
+              border-radius: 8px;
+              font-weight: 600;
+              color: var(--ion-color-tertiary);
+              transition: all 0.3s ease;
+              
+              ion-icon {
+                font-size: 1.2rem;
+              }
+              
+              span {
+                font-size: 0.9rem;
+              }
+            }
           }
         }
       }

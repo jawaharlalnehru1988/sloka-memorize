@@ -20,6 +20,10 @@ export const routes: Routes = [
     loadComponent: () => import('./padapada/padapada.page').then( m => m.PadapadaPage)
   },
   {
+    path: 'padapada/training/:id',
+    loadComponent: () => import('./padapada/padapada-training/padapada-training.page').then( m => m.PadapadaTrainingPage)
+  },
+  {
     path: 'vakyapada',
     loadComponent: () => import('./vakyapada/vakyapada.page').then( m => m.VakyapadaPage)
   },
@@ -78,5 +82,9 @@ export const routes: Routes = [
   {
     path: 'bhagavad-gita-chapter/:chapterNumber',
     loadComponent: () => import('./bhagavad-gita-chapter/bhagavad-gita-chapter.page').then( m => m.BhagavadGitaChapterPage)
+  },
+  {
+    path: 'vakyapada/training/:id',
+    loadComponent: () => import('./vakyapada/vakyapada-training/vakyapada-training.page').then( m => m.VakyapadaTrainingPage)
   },
 ];
