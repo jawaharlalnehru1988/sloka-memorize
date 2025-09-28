@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule, NgIf, NgFor } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { 
@@ -98,15 +98,7 @@ interface ChallengeType {
   standalone: true,
   imports: [
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    IonButtons,
-    IonBackButton,
     IonIcon,
-    CommonModule,
-    NgIf,
-    NgFor,
     FormsModule,
     TechniqueHeaderComponent
 ]

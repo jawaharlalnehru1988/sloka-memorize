@@ -1,10 +1,10 @@
 
-<app-technique-header 
-  title="Ghana Pāṭha" 
-  sanskrit="भगवद् गीता" 
+<app-technique-header
+  title="Ghana Pāṭha"
+  sanskrit="भगवद् गीता"
   emoji="🕉️"
-  color="tertiary" 
-  [translucent]="true" 
+  color="tertiary"
+  [translucent]="true"
   [showMenuButton]="true">
 </app-technique-header>
 
@@ -29,7 +29,7 @@
       <ion-icon name="school-outline"></ion-icon>
       <h2>Prerequisites for Ghana Pāṭha</h2>
     </div>
-    
+
     <div class="prereq-content">
       <div class="warning-card">
         <h3>
@@ -37,7 +37,7 @@
           Advanced Technique Warning
         </h3>
         <p>
-          Ghana Pāṭha is the pinnacle of Vedic memorization. It requires complete mastery of all previous methods. 
+          Ghana Pāṭha is the pinnacle of Vedic memorization. It requires complete mastery of all previous methods.
           This technique should only be attempted after achieving excellence in Jatā Pāṭha.
         </p>
       </div>
@@ -74,7 +74,7 @@
       <ion-icon name="diamond-outline"></ion-icon>
       <h2>Understanding Ghana Pāṭha</h2>
     </div>
-    
+
     <div class="intro-content">
       <div class="definition-card">
         <h3>
@@ -82,11 +82,11 @@
           Definition & Etymology
         </h3>
         <p>
-          Ghana (घन) means "dense," "solid," "bell," or "mace." This method creates the most dense and intricate patterns, 
+          Ghana (घन) means "dense," "solid," "bell," or "mace." This method creates the most dense and intricate patterns,
           resembling the solid, resonant quality of a bell when struck.
         </p>
         <p>
-          Like a bell that produces pure, clear tones, Ghana Pāṭha creates perfect, error-free recitation through 
+          Like a bell that produces pure, clear tones, Ghana Pāṭha creates perfect, error-free recitation through
           the most complex interwoven patterns in Vedic tradition.
         </p>
       </div>
@@ -112,7 +112,7 @@
   <!-- Method Explanation Section -->
   <div class="method-section">
     <h2>The Dense Pattern Method</h2>
-    
+
     <div class="method-example">
       <div class="example-header">
         <h3>Example: Bhagavad Gītā 2.47 (First Line)</h3>
@@ -136,7 +136,7 @@
           <ion-icon name="diamond-outline"></ion-icon>
           <h4>Ghana Pattern Formula</h4>
         </div>
-        
+
         <div class="pattern-explanation">
           <div class="formula-card">
             <h4>The Ultimate Dense Formula</h4>
@@ -215,7 +215,7 @@
   <!-- Training Modes Section -->
   <div class="training-modes-section">
     <h2>Ghana Mastery Training</h2>
-    
+
     <div class="modes-grid">
       <ion-card class="mode-card" (click)="selectMode('foundation')" [disabled]="!canAccessMode('foundation')">
         <div class="mode-icon">
@@ -228,9 +228,11 @@
           <span>Slow progression</span>
           <span>Deep understanding</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('foundation')">
-          Requires Jatā Mastery
-        </div>
+        @if (!canAccessMode('foundation')) {
+          <div class="access-requirement">
+            Requires Jatā Mastery
+          </div>
+        }
       </ion-card>
 
       <ion-card class="mode-card" (click)="selectMode('intensive')" [disabled]="!canAccessMode('intensive')">
@@ -244,9 +246,11 @@
           <span>Traditional method</span>
           <span>Intensive practice</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('intensive')">
-          Requires Foundation Completion
-        </div>
+        @if (!canAccessMode('intensive')) {
+          <div class="access-requirement">
+            Requires Foundation Completion
+          </div>
+        }
       </ion-card>
 
       <ion-card class="mode-card" (click)="selectMode('perfection')" [disabled]="!canAccessMode('perfection')">
@@ -260,9 +264,11 @@
           <span>Speed mastery</span>
           <span>Spiritual resonance</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('perfection')">
-          Requires Intensive Mastery
-        </div>
+        @if (!canAccessMode('perfection')) {
+          <div class="access-requirement">
+            Requires Intensive Mastery
+          </div>
+        }
       </ion-card>
 
       <ion-card class="mode-card" (click)="selectMode('certification')" [disabled]="!canAccessMode('certification')">
@@ -276,230 +282,233 @@
           <span>Scholar recognition</span>
           <span>Certification award</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('certification')">
-          Requires Perfection Achievement
-        </div>
+        @if (!canAccessMode('certification')) {
+          <div class="access-requirement">
+            Requires Perfection Achievement
+          </div>
+        }
       </ion-card>
     </div>
   </div>
 
   <!-- Sloka Selection Section -->
-  <div class="sloka-selection-section" *ngIf="selectedMode">
-    <h2>Choose Your Ghana Practice</h2>
-    
-    <div class="sloka-cards">
-      <ion-card class="sloka-card" *ngFor="let sloka of availableSlokas" (click)="selectSloka(sloka)">
-        <ion-card-header>
-          <ion-card-title>{{ sloka.reference }}</ion-card-title>
-          <ion-card-subtitle>{{ sloka.title }}</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="sloka-info">
-            <div class="word-count">
-              <ion-icon name="text-outline"></ion-icon>
-              <span>{{ sloka.totalWords }} words</span>
-            </div>
-            <div class="complexity" [class]="sloka.complexity">
-              <ion-icon name="diamond-outline"></ion-icon>
-              <span>{{ sloka.complexity }}</span>
-            </div>
-          </div>
-          <p>{{ sloka.meaning }}</p>
-          <div class="ghana-preview">
-            <div class="pattern-count">{{ sloka.ghanaPatterns }} Dense Patterns</div>
-            <div class="estimated-time">~{{ sloka.estimatedTime }} training time</div>
-          </div>
-        </ion-card-content>
-      </ion-card>
+  @if (selectedMode) {
+    <div class="sloka-selection-section">
+      <h2>Choose Your Ghana Practice</h2>
+      <div class="sloka-cards">
+        @for (sloka of availableSlokas; track sloka) {
+          <ion-card class="sloka-card" (click)="selectSloka(sloka)">
+            <ion-card-header>
+              <ion-card-title>{{ sloka.reference }}</ion-card-title>
+              <ion-card-subtitle>{{ sloka.title }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="sloka-info">
+                <div class="word-count">
+                  <ion-icon name="text-outline"></ion-icon>
+                  <span>{{ sloka.totalWords }} words</span>
+                </div>
+                <div class="complexity" [class]="sloka.complexity">
+                  <ion-icon name="diamond-outline"></ion-icon>
+                  <span>{{ sloka.complexity }}</span>
+                </div>
+              </div>
+              <p>{{ sloka.meaning }}</p>
+              <div class="ghana-preview">
+                <div class="pattern-count">{{ sloka.ghanaPatterns }} Dense Patterns</div>
+                <div class="estimated-time">~{{ sloka.estimatedTime }} training time</div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Training Interface -->
-  <div class="training-interface" *ngIf="selectedSloka && !isCompleted">
-    <div class="training-header">
-      <h3>{{ selectedMode | titlecase }} Training</h3>
-      <div class="training-progress">
-        <div class="progress-info">
-          <span>Pattern {{ currentPatternIndex + 1 }} of {{ totalPatterns }}</span>
-          <span class="progress-percentage">{{ getProgressPercentage() }}% Complete</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Current Pattern Section -->
-    <div class="current-ghana-section">
-      <div class="ghana-header">
-        <h4>Current Dense Pattern</h4>
-        <div class="pattern-complexity" [class]="currentPattern?.complexity">
-          <ion-icon [name]="getComplexityIcon()"></ion-icon>
-          <span>{{ currentPattern?.complexity | titlecase }} Pattern</span>
-        </div>
-      </div>
-
-      <div class="ghana-display">
-        <div class="ghana-content">
-          <div class="pattern-instruction">{{ currentPattern?.instruction }}</div>
-          
-          <div class="current-recitation">
-            <div class="recitation-text">{{ currentPattern?.currentStep?.text }}</div>
-            <div class="recitation-roman">{{ currentPattern?.currentStep?.roman }}</div>
-            <div class="pattern-type-indicator">{{ currentPattern?.currentStep?.type | titlecase }}</div>
+  @if (selectedSloka && !isCompleted) {
+    <div class="training-interface">
+      <div class="training-header">
+        <h3>{{ selectedMode | titlecase }} Training</h3>
+        <div class="training-progress">
+          <div class="progress-info">
+            <span>Pattern {{ currentPatternIndex + 1 }} of {{ totalPatterns }}</span>
+            <span class="progress-percentage">{{ getProgressPercentage() }}% Complete</span>
           </div>
-
-          <div class="word-focus">
-            Dense Focus: <span class="focused-words">{{ currentPattern?.focusWords }}</span>
-          </div>
-        </div>
-
-        <div class="ghana-controls">
-          <div class="audio-controls">
-            <ion-button fill="outline" (click)="playAudio()" [disabled]="isPlayingAudio">
-              <ion-icon name="play-outline" slot="start"></ion-icon>
-              {{ isPlayingAudio ? 'Playing...' : 'Play Pattern' }}
-            </ion-button>
-            <ion-button fill="outline" (click)="playSlowMotion()" [disabled]="isPlayingAudio">
-              <ion-icon name="hourglass-outline" slot="start"></ion-icon>
-              Slow Motion
-            </ion-button>
-            <ion-button fill="outline" (click)="playResonance()" [disabled]="isPlayingAudio">
-              <ion-icon name="radio-outline" slot="start"></ion-icon>
-              Bell Resonance
-            </ion-button>
-          </div>
-
-          <div class="practice-controls">
-            <ion-button fill="solid" color="warning" (click)="practicePattern()" [disabled]="isPracticing">
-              <ion-icon name="mic-outline" slot="start"></ion-icon>
-              {{ isPracticing ? 'Listening...' : 'Practice Dense Pattern' }}
-            </ion-button>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Pattern Sequence Overview -->
-    <div class="sequence-overview">
-      <h4>Ghana Sequence Mastery</h4>
-      <div class="sequence-timeline">
-        <div class="timeline-step" 
-             *ngFor="let step of currentPattern?.steps; let i = index"
-             [class]="getStepStatus(i)"
-             (click)="goToStep(i)">
-          <div class="step-number">{{ i + 1 }}</div>
-          <div class="step-preview">
-            <div class="step-type-indicator" [class]="step.type">
-              {{ getGhanaTypeSymbol(step.type) }}
+      <!-- Current Pattern Section -->
+      <div class="current-ghana-section">
+        <div class="ghana-header">
+          <h4>Current Dense Pattern</h4>
+          <div class="pattern-complexity" [class]="currentPattern?.complexity">
+            <ion-icon [name]="getComplexityIcon()"></ion-icon>
+            <span>{{ currentPattern?.complexity | titlecase }} Pattern</span>
+          </div>
+        </div>
+        <div class="ghana-display">
+          <div class="ghana-content">
+            <div class="pattern-instruction">{{ currentPattern?.instruction }}</div>
+            <div class="current-recitation">
+              <div class="recitation-text">{{ currentPattern?.currentStep?.text }}</div>
+              <div class="recitation-roman">{{ currentPattern?.currentStep?.roman }}</div>
+              <div class="pattern-type-indicator">{{ currentPattern?.currentStep?.type | titlecase }}</div>
             </div>
-            <div class="step-text">{{ step.text }}</div>
+            <div class="word-focus">
+              Dense Focus: <span class="focused-words">{{ currentPattern?.focusWords }}</span>
+            </div>
           </div>
-          <div class="step-status">
-            <ion-icon [name]="getStepIcon(i)" [color]="getStepColor(i)"></ion-icon>
+          <div class="ghana-controls">
+            <div class="audio-controls">
+              <ion-button fill="outline" (click)="playAudio()" [disabled]="isPlayingAudio">
+                <ion-icon name="play-outline" slot="start"></ion-icon>
+                {{ isPlayingAudio ? 'Playing...' : 'Play Pattern' }}
+              </ion-button>
+              <ion-button fill="outline" (click)="playSlowMotion()" [disabled]="isPlayingAudio">
+                <ion-icon name="hourglass-outline" slot="start"></ion-icon>
+                Slow Motion
+              </ion-button>
+              <ion-button fill="outline" (click)="playResonance()" [disabled]="isPlayingAudio">
+                <ion-icon name="radio-outline" slot="start"></ion-icon>
+                Bell Resonance
+              </ion-button>
+            </div>
+            <div class="practice-controls">
+              <ion-button fill="solid" color="warning" (click)="practicePattern()" [disabled]="isPracticing">
+                <ion-icon name="mic-outline" slot="start"></ion-icon>
+                {{ isPracticing ? 'Listening...' : 'Practice Dense Pattern' }}
+              </ion-button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Practice Feedback -->
-    <div class="practice-feedback" *ngIf="practiceResult" [class]="practiceResult.rating">
-      <div class="feedback-content" [class]="practiceResult.rating">
-        <div class="feedback-icon">
-          <ion-icon [name]="getFeedbackIcon()"></ion-icon>
-        </div>
-        <div class="feedback-message">
-          <h4>{{ practiceResult.title }}</h4>
-          <p>{{ practiceResult.message }}</p>
+      <!-- Pattern Sequence Overview -->
+      <div class="sequence-overview">
+        <h4>Ghana Sequence Mastery</h4>
+        <div class="sequence-timeline">
+          @for (step of currentPattern?.steps; track step; let i = $index) {
+            <div class="timeline-step"
+              [class]="getStepStatus(i)"
+              (click)="goToStep(i)">
+              <div class="step-number">{{ i + 1 }}</div>
+              <div class="step-preview">
+                <div class="step-type-indicator" [class]="step.type">
+                  {{ getGhanaTypeSymbol(step.type) }}
+                </div>
+                <div class="step-text">{{ step.text }}</div>
+              </div>
+              <div class="step-status">
+                <ion-icon [name]="getStepIcon(i)" [color]="getStepColor(i)"></ion-icon>
+              </div>
+            </div>
+          }
         </div>
       </div>
-      <div class="feedback-actions">
-        <ion-button fill="outline" (click)="retryPattern()" *ngIf="practiceResult.rating !== 'perfect'">
+      <!-- Practice Feedback -->
+      @if (practiceResult) {
+        <div class="practice-feedback" [class]="practiceResult.rating">
+          <div class="feedback-content" [class]="practiceResult.rating">
+            <div class="feedback-icon">
+              <ion-icon [name]="getFeedbackIcon()"></ion-icon>
+            </div>
+            <div class="feedback-message">
+              <h4>{{ practiceResult.title }}</h4>
+              <p>{{ practiceResult.message }}</p>
+            </div>
+          </div>
+          <div class="feedback-actions">
+            @if (practiceResult.rating !== 'perfect') {
+              <ion-button fill="outline" (click)="retryPattern()">
+                <ion-icon name="refresh-outline" slot="start"></ion-icon>
+                Perfect the Pattern
+              </ion-button>
+            }
+            @if (practiceResult.rating === 'perfect') {
+              <ion-button fill="solid" color="warning" (click)="nextPattern()">
+                <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                Next Dense Pattern
+              </ion-button>
+            }
+          </div>
+        </div>
+      }
+      <!-- Navigation Controls -->
+      <div class="navigation-controls">
+        <ion-button fill="outline" (click)="previousPattern()" [disabled]="currentPatternIndex === 0">
+          <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
+          Previous
+        </ion-button>
+        <ion-button fill="outline" (click)="resetTraining()">
           <ion-icon name="refresh-outline" slot="start"></ion-icon>
-          Perfect the Pattern
+          Reset
         </ion-button>
-        <ion-button fill="solid" color="warning" (click)="nextPattern()" *ngIf="practiceResult.rating === 'perfect'">
-          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-          Next Dense Pattern
+        <ion-button fill="solid" color="warning" (click)="nextPattern()" [disabled]="!canProceed()">
+          Next
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
         </ion-button>
       </div>
     </div>
-
-    <!-- Navigation Controls -->
-    <div class="navigation-controls">
-      <ion-button fill="outline" (click)="previousPattern()" [disabled]="currentPatternIndex === 0">
-        <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
-        Previous
-      </ion-button>
-      <ion-button fill="outline" (click)="resetTraining()">
-        <ion-icon name="refresh-outline" slot="start"></ion-icon>
-        Reset
-      </ion-button>
-      <ion-button fill="solid" color="warning" (click)="nextPattern()" [disabled]="!canProceed()">
-        Next
-        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-      </ion-button>
-    </div>
-  </div>
+  }
 
   <!-- Completion Section -->
-  <div class="completion-section" *ngIf="isCompleted">
-    <ion-card class="completion-card">
-      <div class="completion-animation">
-        <ion-icon name="trophy-outline" color="warning"></ion-icon>
-        <div class="celebration-text">🏆 GHANA PĀṬHA MASTERY ACHIEVED! 🏆</div>
-      </div>
-      
-      <h3>Ultimate Vedic Mastery Complete!</h3>
-      <p>
-        Extraordinary achievement! You have mastered Ghana Pāṭha - the pinnacle of Vedic memorization. 
-        You are now recognized as a true Ghana Pāṭhī, capable of perfect preservation and transmission of sacred knowledge.
-      </p>
-
-      <div class="completion-stats">
-        <div class="stat-item">
-          <ion-icon name="diamond-outline"></ion-icon>
-          <span>{{ totalPatterns }} Dense Patterns Mastered</span>
+  @if (isCompleted) {
+    <div class="completion-section">
+      <ion-card class="completion-card">
+        <div class="completion-animation">
+          <ion-icon name="trophy-outline" color="warning"></ion-icon>
+          <div class="celebration-text">🏆 GHANA PĀṬHA MASTERY ACHIEVED! 🏆</div>
         </div>
-        <div class="stat-item">
-          <ion-icon name="time-outline"></ion-icon>
-          <span>{{ getCompletionTime() }} Total Training</span>
+        <h3>Ultimate Vedic Mastery Complete!</h3>
+        <p>
+          Extraordinary achievement! You have mastered Ghana Pāṭha - the pinnacle of Vedic memorization.
+          You are now recognized as a true Ghana Pāṭhī, capable of perfect preservation and transmission of sacred knowledge.
+        </p>
+        <div class="completion-stats">
+          <div class="stat-item">
+            <ion-icon name="diamond-outline"></ion-icon>
+            <span>{{ totalPatterns }} Dense Patterns Mastered</span>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>{{ getCompletionTime() }} Total Training</span>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="star-outline"></ion-icon>
+            <span>{{ getAccuracyScore() }}% Perfection Rate</span>
+          </div>
         </div>
-        <div class="stat-item">
-          <ion-icon name="star-outline"></ion-icon>
-          <span>{{ getAccuracyScore() }}% Perfection Rate</span>
+        <div class="certification-section">
+          <h4>Digital Certification</h4>
+          <ion-button fill="solid" color="warning" (click)="generateCertificate()">
+            <ion-icon name="download-outline" slot="start"></ion-icon>
+            Download Ghana Pāṭhī Certificate
+          </ion-button>
         </div>
-      </div>
-
-      <div class="certification-section">
-        <h4>Digital Certification</h4>
-        <ion-button fill="solid" color="warning" (click)="generateCertificate()">
-          <ion-icon name="download-outline" slot="start"></ion-icon>
-          Download Ghana Pāṭhī Certificate
-        </ion-button>
-      </div>
-
-      <div class="completion-actions">
-        <ion-button fill="outline" (click)="restartTraining()">
-          <ion-icon name="refresh-outline" slot="start"></ion-icon>
-          Perfect Further
-        </ion-button>
-        <ion-button fill="solid" color="success" routerLink="/uchcharana">
-          <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
-          Explore Pronunciation
-        </ion-button>
-        <ion-button fill="clear" routerLink="/home">
-          <ion-icon name="home-outline" slot="start"></ion-icon>
-          Return Home
-        </ion-button>
-      </div>
-    </ion-card>
-  </div>
+        <div class="completion-actions">
+          <ion-button fill="outline" (click)="restartTraining()">
+            <ion-icon name="refresh-outline" slot="start"></ion-icon>
+            Perfect Further
+          </ion-button>
+          <ion-button fill="solid" color="success" routerLink="/uchcharana">
+            <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+            Explore Pronunciation
+          </ion-button>
+          <ion-button fill="clear" routerLink="/home">
+            <ion-icon name="home-outline" slot="start"></ion-icon>
+            Return Home
+          </ion-button>
+        </div>
+      </ion-card>
+    </div>
+  }
 
   <!-- Master Tips Section -->
   <div class="tips-section">
     <h2>Secrets of Ghana Mastery</h2>
-    
+
     <div class="tips-grid">
       <div class="tip-card">
         <ion-icon name="diamond-outline" color="warning"></ion-icon>

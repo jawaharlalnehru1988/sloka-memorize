@@ -24,7 +24,7 @@ interface Badge {
   templateUrl: './vakyapada.page.html',
   styleUrls: ['./vakyapada.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, CommonModule, FormsModule, TechniqueHeaderComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, CommonModule, FormsModule, TechniqueHeaderComponent]
 })
 export class VakyapadaPage implements OnInit {
 

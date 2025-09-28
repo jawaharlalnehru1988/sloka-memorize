@@ -1,9 +1,9 @@
-<app-technique-header 
-  title="Ucchāraṇa Pāṭha" 
-  sanskrit="उच्चारण पाठ " 
+<app-technique-header
+  title="Ucchāraṇa Pāṭha"
+  sanskrit="उच्चारण पाठ "
   emoji="🕉️"
-  color="tertiary" 
-  [translucent]="true" 
+  color="tertiary"
+  [translucent]="true"
   [showMenuButton]="true">
 </app-technique-header>
 
@@ -15,7 +15,7 @@
     <h1 class="hero-title">Ucchāraṇa Pāṭha</h1>
     <h2 class="hero-sanskrit">उच्चारण पाठ</h2>
     <p class="hero-description">
-      Master perfect pronunciation through systematic phonetic training. 
+      Master perfect pronunciation through systematic phonetic training.
       Develop clarity, precision, and authentic Sanskrit articulation following traditional guidelines.
     </p>
     <div class="prestige-badge">
@@ -37,7 +37,7 @@
           Foundation Requirements
         </h3>
         <p>
-          Ucchāraṇa requires mastery of basic recitation patterns. 
+          Ucchāraṇa requires mastery of basic recitation patterns.
           Ensure completion of foundational techniques before proceeding with advanced pronunciation training.
         </p>
       </div>
@@ -80,11 +80,11 @@
           Definition
         </h3>
         <p>
-          <strong>Ucchāraṇa (उच्चारण)</strong> means "pronunciation" or "articulation" in Sanskrit. 
+          <strong>Ucchāraṇa (उच्चारण)</strong> means "pronunciation" or "articulation" in Sanskrit.
           This technique focuses on the precise phonetic delivery of each syllable, consonant, and vowel according to traditional Sanskrit pronunciation rules.
         </p>
         <p>
-          It emphasizes proper breath control, tongue placement, and vocal resonance to achieve 
+          It emphasizes proper breath control, tongue placement, and vocal resonance to achieve
           authentic Sanskrit articulation that preserves the sacred sound vibrations of the text.
         </p>
       </div>
@@ -117,7 +117,7 @@
         </h3>
         <p>Sanskrit follows a systematic phonetic arrangement based on the position and manner of articulation:</p>
       </div>
-      
+
       <div class="sound-categories">
         <div class="category-card vowels">
           <h4>
@@ -273,9 +273,11 @@
           <span>Breath control exercises</span>
           <span>Audio comparison</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('foundation')">
-          Complete Padapāṭha mastery required
-        </div>
+        @if (!canAccessMode('foundation')) {
+          <div class="access-requirement">
+            Complete Padapāṭha mastery required
+          </div>
+        }
       </div>
 
       <div class="mode-card intermediate" (click)="startPhoneticTraining('intermediate')" [class.disabled]="!canAccessMode('intermediate')">
@@ -290,9 +292,11 @@
           <span>Syllable flow</span>
           <span>Rhythm patterns</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('intermediate')">
-          Foundation phonetics mastery required
-        </div>
+        @if (!canAccessMode('intermediate')) {
+          <div class="access-requirement">
+            Foundation phonetics mastery required
+          </div>
+        }
       </div>
 
       <div class="mode-card advanced" (click)="startPhoneticTraining('advanced')" [class.disabled]="!canAccessMode('advanced')">
@@ -307,9 +311,11 @@
           <span>Difficult combinations</span>
           <span>Speed variations</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('advanced')">
-          Syllable combination mastery required
-        </div>
+        @if (!canAccessMode('advanced')) {
+          <div class="access-requirement">
+            Syllable combination mastery required
+          </div>
+        }
       </div>
 
       <div class="mode-card master" (click)="startPhoneticTraining('master')" [class.disabled]="!canAccessMode('master')">
@@ -324,184 +330,193 @@
           <span>Authentic rhythm</span>
           <span>Performance assessment</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('master')">
-          Word precision mastery required
-        </div>
+        @if (!canAccessMode('master')) {
+          <div class="access-requirement">
+            Word precision mastery required
+          </div>
+        }
       </div>
     </div>
   </div>
 
   <!-- Training Interface -->
-  <div class="training-interface" *ngIf="isTraining">
-    <div class="training-header">
-      <h3>{{ currentMode | titlecase }} Training</h3>
-      <div class="training-progress">
-        <div class="progress-info">
-          <span>Progress: {{ currentExercise }}/{{ totalExercises }}</span>
-          <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Current Exercise Section -->
-    <div class="current-exercise-section">
-      <div class="exercise-header">
-        <h4>Current Exercise</h4>
-        <div class="exercise-type" [ngClass]="currentExerciseType">
-          <ion-icon [name]="getExerciseIcon()"></ion-icon>
-          <span>{{ currentExerciseType | titlecase }}</span>
+  @if (isTraining) {
+    <div class="training-interface">
+      <div class="training-header">
+        <h3>{{ currentMode | titlecase }} Training</h3>
+        <div class="training-progress">
+          <div class="progress-info">
+            <span>Progress: {{ currentExercise }}/{{ totalExercises }}</span>
+            <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+          </div>
         </div>
       </div>
-      
-      <div class="exercise-display">
-        <div class="exercise-content">
-          <div class="instruction" *ngIf="currentInstruction">
-            <p>{{ currentInstruction }}</p>
+      <!-- Current Exercise Section -->
+      <div class="current-exercise-section">
+        <div class="exercise-header">
+          <h4>Current Exercise</h4>
+          <div class="exercise-type" [ngClass]="currentExerciseType">
+            <ion-icon [name]="getExerciseIcon()"></ion-icon>
+            <span>{{ currentExerciseType | titlecase }}</span>
           </div>
-          
-          <div class="target-pronunciation">
-            <div class="target-text">
-              <div class="devanagari-display">{{ currentExerciseData?.devanagari }}</div>
-              <div class="roman-display">{{ currentExerciseData?.roman }}</div>
-              <div class="phonetic-guide" *ngIf="currentExerciseData?.phoneticGuide">{{ currentExerciseData?.phoneticGuide }}</div>
-            </div>
-            
-            <div class="mouth-position" *ngIf="currentExerciseData?.mouthPosition">
-              <h5>
-                <ion-icon name="body"></ion-icon>
-                Mouth Position Guide
-              </h5>
-              <p>{{ currentExerciseData?.mouthPosition }}</p>
-            </div>
-          </div>
-
-          <div class="audio-controls">
-            <ion-button fill="outline" color="success" (click)="playModelPronunciation()">
-              <ion-icon name="play" slot="start"></ion-icon>
-              Model Pronunciation
-            </ion-button>
-            <ion-button fill="outline" color="warning" (click)="playSlowPronunciation()">
-              <ion-icon name="play-skip-forward" slot="start"></ion-icon>
-              Slow Practice
-            </ion-button>
-            <ion-button fill="solid" color="primary" (click)="startRecording()" [disabled]="isRecording">
-              <ion-icon [name]="isRecording ? 'stop' : 'mic'" slot="start"></ion-icon>
-              {{ isRecording ? 'Recording...' : 'Record Attempt' }}
-            </ion-button>
-          </div>
-
-          <div class="feedback-section" *ngIf="pronunciationFeedback">
-            <div class="feedback-header">
-              <h5>
-                <ion-icon name="analytics"></ion-icon>
-                Pronunciation Feedback
-              </h5>
-            </div>
-            <div class="accuracy-display">
-              <div class="accuracy-score" [ngClass]="getAccuracyClass()">
-                <span class="score">{{ pronunciationFeedback.accuracy }}%</span>
-                <span class="label">Accuracy</span>
+        </div>
+        <div class="exercise-display">
+          <div class="exercise-content">
+            @if (currentInstruction) {
+              <div class="instruction">
+                <p>{{ currentInstruction }}</p>
               </div>
-              <div class="accuracy-breakdown">
-                <div class="metric">
-                  <span class="metric-label">Vowel Clarity:</span>
-                  <span class="metric-value">{{ pronunciationFeedback.vowelClarity }}%</span>
-                </div>
-                <div class="metric">
-                  <span class="metric-label">Consonant Precision:</span>
-                  <span class="metric-value">{{ pronunciationFeedback.consonantPrecision }}%</span>
-                </div>
-                <div class="metric">
-                  <span class="metric-label">Rhythm & Flow:</span>
-                  <span class="metric-value">{{ pronunciationFeedback.rhythm }}%</span>
-                </div>
+            }
+            <div class="target-pronunciation">
+              <div class="target-text">
+                <div class="devanagari-display">{{ currentExerciseData?.devanagari }}</div>
+                <div class="roman-display">{{ currentExerciseData?.roman }}</div>
+                @if (currentExerciseData?.phoneticGuide) {
+                  <div class="phonetic-guide">{{ currentExerciseData?.phoneticGuide }}</div>
+                }
               </div>
+              @if (currentExerciseData?.mouthPosition) {
+                <div class="mouth-position">
+                  <h5>
+                    <ion-icon name="body"></ion-icon>
+                    Mouth Position Guide
+                  </h5>
+                  <p>{{ currentExerciseData?.mouthPosition }}</p>
+                </div>
+              }
             </div>
-            
-            <div class="improvement-suggestions" *ngIf="pronunciationFeedback.suggestions?.length">
-              <h6>
-                <ion-icon name="bulb"></ion-icon>
-                Improvement Suggestions
-              </h6>
-              <ul>
-                <li *ngFor="let suggestion of pronunciationFeedback.suggestions">{{ suggestion }}</li>
-              </ul>
+            <div class="audio-controls">
+              <ion-button fill="outline" color="success" (click)="playModelPronunciation()">
+                <ion-icon name="play" slot="start"></ion-icon>
+                Model Pronunciation
+              </ion-button>
+              <ion-button fill="outline" color="warning" (click)="playSlowPronunciation()">
+                <ion-icon name="play-skip-forward" slot="start"></ion-icon>
+                Slow Practice
+              </ion-button>
+              <ion-button fill="solid" color="primary" (click)="startRecording()" [disabled]="isRecording">
+                <ion-icon [name]="isRecording ? 'stop' : 'mic'" slot="start"></ion-icon>
+                {{ isRecording ? 'Recording...' : 'Record Attempt' }}
+              </ion-button>
             </div>
-          </div>
-
-          <div class="practice-controls">
-            <ion-button fill="outline" color="medium" (click)="repeatExercise()">
-              <ion-icon name="refresh" slot="start"></ion-icon>
-              Repeat
-            </ion-button>
-            <ion-button fill="solid" color="success" (click)="nextExercise()" [disabled]="!canProceed()">
-              <ion-icon name="arrow-forward" slot="end"></ion-icon>
-              Next Exercise
-            </ion-button>
+            @if (pronunciationFeedback) {
+              <div class="feedback-section">
+                <div class="feedback-header">
+                  <h5>
+                    <ion-icon name="analytics"></ion-icon>
+                    Pronunciation Feedback
+                  </h5>
+                </div>
+                <div class="accuracy-display">
+                  <div class="accuracy-score" [ngClass]="getAccuracyClass()">
+                    <span class="score">{{ pronunciationFeedback.accuracy }}%</span>
+                    <span class="label">Accuracy</span>
+                  </div>
+                  <div class="accuracy-breakdown">
+                    <div class="metric">
+                      <span class="metric-label">Vowel Clarity:</span>
+                      <span class="metric-value">{{ pronunciationFeedback.vowelClarity }}%</span>
+                    </div>
+                    <div class="metric">
+                      <span class="metric-label">Consonant Precision:</span>
+                      <span class="metric-value">{{ pronunciationFeedback.consonantPrecision }}%</span>
+                    </div>
+                    <div class="metric">
+                      <span class="metric-label">Rhythm & Flow:</span>
+                      <span class="metric-value">{{ pronunciationFeedback.rhythm }}%</span>
+                    </div>
+                  </div>
+                </div>
+                @if (pronunciationFeedback.suggestions.length) {
+                  <div class="improvement-suggestions">
+                    <h6>
+                      <ion-icon name="bulb"></ion-icon>
+                      Improvement Suggestions
+                    </h6>
+                    <ul>
+                      @for (suggestion of pronunciationFeedback.suggestions; track suggestion) {
+                        <li>{{ suggestion }}</li>
+                      }
+                    </ul>
+                  </div>
+                }
+              </div>
+            }
+            <div class="practice-controls">
+              <ion-button fill="outline" color="medium" (click)="repeatExercise()">
+                <ion-icon name="refresh" slot="start"></ion-icon>
+                Repeat
+              </ion-button>
+              <ion-button fill="solid" color="success" (click)="nextExercise()" [disabled]="!canProceed()">
+                <ion-icon name="arrow-forward" slot="end"></ion-icon>
+                Next Exercise
+              </ion-button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Mastery Progress -->
-    <div class="mastery-progress-section">
-      <h4>
-        <ion-icon name="trophy"></ion-icon>
-        Mastery Progress
-      </h4>
-      <div class="mastery-grid">
-        <div class="mastery-item" *ngFor="let category of masteryCategories" [ngClass]="category.status">
-          <ion-icon [name]="getMasteryStatusIcon(category.status)"></ion-icon>
-          <span>{{ category.name }}</span>
-          <div class="category-progress">{{ category.progress }}%</div>
+      <!-- Mastery Progress -->
+      <div class="mastery-progress-section">
+        <h4>
+          <ion-icon name="trophy"></ion-icon>
+          Mastery Progress
+        </h4>
+        <div class="mastery-grid">
+          @for (category of masteryCategories; track category) {
+            <div class="mastery-item" [ngClass]="category.status">
+              <ion-icon [name]="getMasteryStatusIcon(category.status)"></ion-icon>
+              <span>{{ category.name }}</span>
+              <div class="category-progress">{{ category.progress }}%</div>
+            </div>
+          }
         </div>
       </div>
     </div>
-  </div>
+  }
 
   <!-- Completion Section -->
-  <div class="completion-section" *ngIf="isCompleted">
-    <div class="completion-card">
-      <div class="completion-animation">
-        <ion-icon name="trophy" color="warning"></ion-icon>
-        <div class="celebration-text">Outstanding Achievement!</div>
-      </div>
-      <h3>Ucchāraṇa Pāṭha Mastered!</h3>
-      <p>
-        Congratulations! You have achieved mastery in Sanskrit pronunciation. 
-        Your articulation skills now meet traditional standards, enabling authentic recitation of sacred texts.
-      </p>
-      
-      <div class="completion-stats">
-        <div class="stat-item">
-          <ion-icon name="volume-high" color="success"></ion-icon>
-          <span>{{ completionStats.accuracy }}% Overall Accuracy</span>
+  @if (isCompleted) {
+    <div class="completion-section">
+      <div class="completion-card">
+        <div class="completion-animation">
+          <ion-icon name="trophy" color="warning"></ion-icon>
+          <div class="celebration-text">Outstanding Achievement!</div>
         </div>
-        <div class="stat-item">
-          <ion-icon name="time" color="primary"></ion-icon>
-          <span>{{ completionStats.practiceTime }} Practice Time</span>
+        <h3>Ucchāraṇa Pāṭha Mastered!</h3>
+        <p>
+          Congratulations! You have achieved mastery in Sanskrit pronunciation.
+          Your articulation skills now meet traditional standards, enabling authentic recitation of sacred texts.
+        </p>
+        <div class="completion-stats">
+          <div class="stat-item">
+            <ion-icon name="volume-high" color="success"></ion-icon>
+            <span>{{ completionStats.accuracy }}% Overall Accuracy</span>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="time" color="primary"></ion-icon>
+            <span>{{ completionStats.practiceTime }} Practice Time</span>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <span>{{ completionStats.exercisesCompleted }} Exercises Completed</span>
+          </div>
         </div>
-        <div class="stat-item">
-          <ion-icon name="checkmark-circle" color="success"></ion-icon>
-          <span>{{ completionStats.exercisesCompleted }} Exercises Completed</span>
+        <div class="completion-actions">
+          <ion-button fill="solid" color="success" (click)="proceedToNextTechnique()">
+            <ion-icon name="arrow-forward" slot="end"></ion-icon>
+            Continue to Likhita Pāṭha
+          </ion-button>
+          <ion-button fill="outline" color="primary" (click)="reviewPronunciation()">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            Review & Practice
+          </ion-button>
         </div>
-      </div>
-      
-      <div class="completion-actions">
-        <ion-button fill="solid" color="success" (click)="proceedToNextTechnique()">
-          <ion-icon name="arrow-forward" slot="end"></ion-icon>
-          Continue to Likhita Pāṭha
-        </ion-button>
-        <ion-button fill="outline" color="primary" (click)="reviewPronunciation()">
-          <ion-icon name="refresh" slot="start"></ion-icon>
-          Review & Practice
-        </ion-button>
       </div>
     </div>
-  </div>
+  }
 
   <!-- Tips Section -->
   <div class="tips-section">

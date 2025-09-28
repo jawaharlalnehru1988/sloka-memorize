@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { CommonModule, NgIf, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { 
@@ -99,16 +99,9 @@ interface DrawingStroke {
   standalone: true,
   imports: [
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     IonButton,
-    IonButtons,
-    IonBackButton,
     IonIcon,
     CommonModule,
-    NgIf,
-    NgFor,
     FormsModule,
     TechniqueHeaderComponent
 ]

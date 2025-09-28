@@ -1,10 +1,10 @@
 
-<app-technique-header 
-  title="Pratiloma Pāṭha" 
-  sanskrit="प्रतिलोम पाठ" 
+<app-technique-header
+  title="Pratiloma Pāṭha"
+  sanskrit="प्रतिलोम पाठ"
   emoji="🕉️"
-  color="tertiary" 
-  [translucent]="true" 
+  color="tertiary"
+  [translucent]="true"
   [showMenuButton]="true">
 </app-technique-header>
 
@@ -36,14 +36,14 @@
       <ion-icon name="library-outline"></ion-icon>
       Traditional Method & Benefits
     </h3>
-    
+
     <div class="example-verse">
       <div class="verse-title">📖 Example (Bhagavad Gītā 2.47)</div>
       <div class="original-verse">
         <div class="devanagari">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।</div>
         <div class="roman">karmaṇy evādhikāras te mā phaleṣu kadācana</div>
       </div>
-      
+
       <div class="comparison-section">
         <div class="normal-order">
           <h4>Normal Order (Anuloma):</h4>
@@ -57,7 +57,7 @@
             <span class="word-item">कदाचन</span>
           </div>
         </div>
-        
+
         <div class="reverse-order">
           <h4>Reverse Order (Pratiloma):</h4>
           <div class="word-sequence reverse">
@@ -87,272 +87,283 @@
   <!-- Training Levels -->
   <div class="training-levels">
     <h3 class="levels-title">🎯 Five Progressive Training Levels</h3>
-    
-    <div class="level-item" *ngFor="let level of trainingLevels; let i = index" 
-         [class.completed]="level.completed" [class.current]="currentLevel === i">
-      <div class="level-number">{{i + 1}}</div>
-      <div class="level-content">
-        <h4>{{level.title}}</h4>
-        <p>{{level.description}}</p>
-        <div class="level-status">
-          <ion-icon [name]="level.completed ? 'checkmark-circle-outline' : 'ellipse-outline'"></ion-icon>
-          <span>{{level.completed ? 'Completed' : level.current ? 'Current Level' : 'Locked'}}</span>
+
+    @for (level of trainingLevels; track level; let i = $index) {
+      <div class="level-item"
+        [class.completed]="level.completed" [class.current]="currentLevel === i">
+        <div class="level-number">{{i + 1}}</div>
+        <div class="level-content">
+          <h4>{{level.title}}</h4>
+          <p>{{level.description}}</p>
+          <div class="level-status">
+            <ion-icon [name]="level.completed ? 'checkmark-circle-outline' : 'ellipse-outline'"></ion-icon>
+            <span>{{level.completed ? 'Completed' : level.current ? 'Current Level' : 'Locked'}}</span>
+          </div>
         </div>
       </div>
-    </div>
+    }
   </div>
 
   <!-- Practice Selection -->
   <div class="practice-selection">
     <h3 class="selection-title">📚 Choose Your Practice Śloka</h3>
-    
-    <div class="sloka-card" *ngFor="let sloka of slokas" 
-         [class.selected]="selectedSloka?.id === sloka.id"
-         (click)="selectSloka(sloka.id)">
-      <div class="sloka-header">
-        <h4 class="sloka-title">{{sloka.title}}</h4>
-        <span class="difficulty-badge">{{sloka.difficulty}}</span>
+
+    @for (sloka of slokas; track sloka) {
+      <div class="sloka-card"
+        [class.selected]="selectedSloka?.id === sloka.id"
+        (click)="selectSloka(sloka.id)">
+        <div class="sloka-header">
+          <h4 class="sloka-title">{{sloka.title}}</h4>
+          <span class="difficulty-badge">{{sloka.difficulty}}</span>
+        </div>
+        <div class="sloka-subtitle">{{sloka.subtitle}}</div>
+        <div class="sloka-description">{{sloka.description}}</div>
       </div>
-      <div class="sloka-subtitle">{{sloka.subtitle}}</div>
-      <div class="sloka-description">{{sloka.description}}</div>
-    </div>
+    }
   </div>
 
   <!-- Training Interface -->
-  <div class="training-interface" *ngIf="selectedSloka && currentMode">
-    <div class="training-header">
-      <h3 class="training-title">{{currentMode.title}}</h3>
-      <div class="progress-info">
-        <div class="progress-bar">
-          <div class="progress-fill" [style.width.%]="getTrainingProgress()"></div>
-        </div>
-        <div class="progress-text">{{getTrainingProgress()}}% Complete</div>
-      </div>
-    </div>
-
-    <!-- Flashcard Mode -->
-    <div *ngIf="currentMode.type === 'flashcard'" class="flashcard-mode">
-      <div class="flashcard-container">
-        <div class="word-position">Word {{currentWordIndex + 1}} of {{getReverseWords().length}}</div>
-        <div class="flashcard">
-          <div class="current-word">
-            <div class="word-devanagari">{{getCurrentWord().devanagari}}</div>
-            <div class="word-roman">{{getCurrentWord().roman}}</div>
-            <div class="word-meaning">{{getCurrentWord().meaning}}</div>
+  @if (selectedSloka && currentMode) {
+    <div class="training-interface">
+      <div class="training-header">
+        <h3 class="training-title">{{currentMode.title}}</h3>
+        <div class="progress-info">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getTrainingProgress()"></div>
           </div>
-          <div class="position-indicator">
-            <span class="original-position">Original position: {{getCurrentWord().originalIndex + 1}}</span>
-            <span class="reverse-position">Reverse position: {{currentWordIndex + 1}}</span>
-          </div>
-        </div>
-        
-        <div class="flashcard-controls">
-          <ion-button class="nav-btn" (click)="previousWord()" [disabled]="currentWordIndex === 0">
-            <ion-icon name="chevron-back-outline"></ion-icon>
-            Previous
-          </ion-button>
-          
-          <div class="audio-controls">
-            <ion-button class="audio-btn" (click)="playCurrentWord()">
-              <ion-icon name="volume-high-outline"></ion-icon>
-              Play Word
-            </ion-button>
-          </div>
-          
-          <ion-button class="nav-btn" (click)="nextWord()" [disabled]="currentWordIndex >= getReverseWords().length - 1">
-            Next
-            <ion-icon name="chevron-forward-outline"></ion-icon>
-          </ion-button>
+          <div class="progress-text">{{getTrainingProgress()}}% Complete</div>
         </div>
       </div>
-    </div>
-
-    <!-- Audio Practice Mode -->
-    <div *ngIf="currentMode.type === 'audio'" class="audio-mode">
-      <div class="audio-practice-container">
-        <h4>🎵 Listen and Repeat (Reverse Order)</h4>
-        <div class="reverse-sequence-display">
-          <div class="word-item" *ngFor="let word of getReverseWords(); let i = index"
-               [class.current]="i === currentWordIndex"
-               [class.completed]="i < currentWordIndex">
-            <span class="word-text">{{word.devanagari}}</span>
-            <span class="word-roman">{{word.roman}}</span>
-          </div>
-        </div>
-        
-        <div class="audio-controls-section">
-          <ion-button class="play-btn" (click)="playReverseSequence()">
-            <ion-icon name="play-outline"></ion-icon>
-            Play Reverse Sequence
-          </ion-button>
-          
-          <ion-button class="record-btn" [class.recording]="isRecording" 
-                      (click)="startRecording()" [disabled]="!hasHeardSequence">
-            <ion-icon [name]="isRecording ? 'recording-outline' : 'mic-outline'"></ion-icon>
-            {{isRecording ? 'Recording...' : 'Practice Recitation'}}
-          </ion-button>
-        </div>
-        
-        <div class="practice-feedback" *ngIf="practiceFeedback" [class]="feedbackClass">
-          {{practiceFeedback}}
-        </div>
-        
-        <div class="audio-hint">
-          💡 Listen to the complete reverse sequence, then try to repeat it from memory
-        </div>
-      </div>
-    </div>
-
-    <!-- Challenge Mode -->
-    <div *ngIf="currentMode.type === 'challenge'" class="challenge-mode">
-      <div class="challenge-container">
-        <h4>🧩 Reverse Arrangement Challenge</h4>
-        <div class="challenge-instruction">
-          Arrange the words in reverse order by clicking them in the correct sequence:
-        </div>
-        
-        <div class="original-verse-display">
-          <h5>Original Verse:</h5>
-          <div class="verse-text">
-            <div class="devanagari">{{selectedSloka.lines[0].devanagari}}</div>
-            <div class="roman">{{selectedSloka.lines[0].roman}}</div>
-          </div>
-        </div>
-        
-        <div class="word-pool">
-          <div class="available-words">
-            <h5>Available Words (click in reverse order):</h5>
-            <div class="word-grid">
-              <div class="word-option" *ngFor="let word of getShuffledWords(); let i = index"
-                   [class.used]="word.used" [class.correct]="word.correct"
-                   (click)="selectWordForChallenge(word)">
-                <div class="word-devanagari">{{word.devanagari}}</div>
-                <div class="word-roman">{{word.roman}}</div>
+      <!-- Flashcard Mode -->
+      @if (currentMode.type === 'flashcard') {
+        <div class="flashcard-mode">
+          <div class="flashcard-container">
+            <div class="word-position">Word {{currentWordIndex + 1}} of {{getReverseWords().length}}</div>
+            <div class="flashcard">
+              <div class="current-word">
+                <div class="word-devanagari">{{getCurrentWord().devanagari}}</div>
+                <div class="word-roman">{{getCurrentWord().roman}}</div>
+                <div class="word-meaning">{{getCurrentWord().meaning}}</div>
+              </div>
+              <div class="position-indicator">
+                <span class="original-position">Original position: {{getCurrentWord().originalIndex + 1}}</span>
+                <span class="reverse-position">Reverse position: {{currentWordIndex + 1}}</span>
               </div>
             </div>
-          </div>
-          
-          <div class="selected-sequence">
-            <h5>Your Reverse Sequence:</h5>
-            <div class="sequence-display">
-              <div class="selected-word" *ngFor="let word of selectedSequence; let i = index">
-                <span class="word-devanagari">{{word.devanagari}}</span>
-                <span class="word-roman">{{word.roman}}</span>
-                <ion-button size="small" fill="clear" (click)="removeFromSequence(i)">
-                  <ion-icon name="close-outline"></ion-icon>
+            <div class="flashcard-controls">
+              <ion-button class="nav-btn" (click)="previousWord()" [disabled]="currentWordIndex === 0">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+                Previous
+              </ion-button>
+              <div class="audio-controls">
+                <ion-button class="audio-btn" (click)="playCurrentWord()">
+                  <ion-icon name="volume-high-outline"></ion-icon>
+                  Play Word
                 </ion-button>
               </div>
+              <ion-button class="nav-btn" (click)="nextWord()" [disabled]="currentWordIndex >= getReverseWords().length - 1">
+                Next
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+              </ion-button>
             </div>
           </div>
         </div>
-        
-        <div class="challenge-controls">
-          <ion-button class="reset-btn" (click)="resetChallenge()">
-            <ion-icon name="refresh-outline"></ion-icon>
-            Reset
-          </ion-button>
-          
-          <ion-button class="check-btn" (click)="checkChallengeAnswer()" 
-                      [disabled]="selectedSequence.length !== getOriginalWords().length">
-            <ion-icon name="checkmark-outline"></ion-icon>
-            Check Answer
-          </ion-button>
+      }
+      <!-- Audio Practice Mode -->
+      @if (currentMode.type === 'audio') {
+        <div class="audio-mode">
+          <div class="audio-practice-container">
+            <h4>🎵 Listen and Repeat (Reverse Order)</h4>
+            <div class="reverse-sequence-display">
+              @for (word of getReverseWords(); track word; let i = $index) {
+                <div class="word-item"
+                  [class.current]="i === currentWordIndex"
+                  [class.completed]="i < currentWordIndex">
+                  <span class="word-text">{{word.devanagari}}</span>
+                  <span class="word-roman">{{word.roman}}</span>
+                </div>
+              }
+            </div>
+            <div class="audio-controls-section">
+              <ion-button class="play-btn" (click)="playReverseSequence()">
+                <ion-icon name="play-outline"></ion-icon>
+                Play Reverse Sequence
+              </ion-button>
+              <ion-button class="record-btn" [class.recording]="isRecording"
+                (click)="startRecording()" [disabled]="!hasHeardSequence">
+                <ion-icon [name]="isRecording ? 'recording-outline' : 'mic-outline'"></ion-icon>
+                {{isRecording ? 'Recording...' : 'Practice Recitation'}}
+              </ion-button>
+            </div>
+            @if (practiceFeedback) {
+              <div class="practice-feedback" [class]="feedbackClass">
+                {{practiceFeedback}}
+              </div>
+            }
+            <div class="audio-hint">
+              💡 Listen to the complete reverse sequence, then try to repeat it from memory
+            </div>
+          </div>
         </div>
-        
-        <div class="challenge-feedback" *ngIf="challengeFeedback" [class]="challengeFeedbackClass">
-          {{challengeFeedback}}
+      }
+      <!-- Challenge Mode -->
+      @if (currentMode.type === 'challenge') {
+        <div class="challenge-mode">
+          <div class="challenge-container">
+            <h4>🧩 Reverse Arrangement Challenge</h4>
+            <div class="challenge-instruction">
+              Arrange the words in reverse order by clicking them in the correct sequence:
+            </div>
+            <div class="original-verse-display">
+              <h5>Original Verse:</h5>
+              <div class="verse-text">
+                <div class="devanagari">{{selectedSloka.lines[0].devanagari}}</div>
+                <div class="roman">{{selectedSloka.lines[0].roman}}</div>
+              </div>
+            </div>
+            <div class="word-pool">
+              <div class="available-words">
+                <h5>Available Words (click in reverse order):</h5>
+                <div class="word-grid">
+                  @for (word of getShuffledWords(); track word; let i = $index) {
+                    <div class="word-option"
+                      [class.used]="word.used" [class.correct]="word.correct"
+                      (click)="selectWordForChallenge(word)">
+                      <div class="word-devanagari">{{word.devanagari}}</div>
+                      <div class="word-roman">{{word.roman}}</div>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="selected-sequence">
+                <h5>Your Reverse Sequence:</h5>
+                <div class="sequence-display">
+                  @for (word of selectedSequence; track word; let i = $index) {
+                    <div class="selected-word">
+                      <span class="word-devanagari">{{word.devanagari}}</span>
+                      <span class="word-roman">{{word.roman}}</span>
+                      <ion-button size="small" fill="clear" (click)="removeFromSequence(i)">
+                        <ion-icon name="close-outline"></ion-icon>
+                      </ion-button>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="challenge-controls">
+              <ion-button class="reset-btn" (click)="resetChallenge()">
+                <ion-icon name="refresh-outline"></ion-icon>
+                Reset
+              </ion-button>
+              <ion-button class="check-btn" (click)="checkChallengeAnswer()"
+                [disabled]="selectedSequence.length !== getOriginalWords().length">
+                <ion-icon name="checkmark-outline"></ion-icon>
+                Check Answer
+              </ion-button>
+            </div>
+            @if (challengeFeedback) {
+              <div class="challenge-feedback" [class]="challengeFeedbackClass">
+                {{challengeFeedback}}
+              </div>
+            }
+          </div>
+        </div>
+      }
+      <!-- Memory Recall Mode -->
+      @if (currentMode.type === 'memory') {
+        <div class="memory-mode">
+          <div class="memory-container">
+            <h4>🧠 Memory Recall Challenge</h4>
+            <div class="memory-instruction">
+              Recite the complete śloka in reverse order from memory (no text hints):
+            </div>
+            @if (!showMemoryHints) {
+              <div class="memory-display">
+                <div class="verse-info">
+                  <h5>{{selectedSloka.title}}</h5>
+                  <p>Recite in reverse word order</p>
+                </div>
+                <div class="memory-controls">
+                  <ion-button class="hint-btn" (click)="showMemoryHints = true">
+                    <ion-icon name="help-outline"></ion-icon>
+                    Show Hints
+                  </ion-button>
+                  <ion-button class="record-btn" [class.recording]="isRecording" (click)="startMemoryRecording()">
+                    <ion-icon [name]="isRecording ? 'recording-outline' : 'mic-outline'"></ion-icon>
+                    {{isRecording ? 'Recording...' : 'Start Recitation'}}
+                  </ion-button>
+                </div>
+              </div>
+            }
+            @if (showMemoryHints) {
+              <div class="memory-hints">
+                <h5>💡 Reverse Word Sequence:</h5>
+                <div class="hint-words">
+                  @for (word of getReverseWords(); track word; let i = $index) {
+                    <span class="hint-word">
+                      {{word.devanagari}}
+                    </span>
+                  }
+                </div>
+                <ion-button class="hide-hints-btn" (click)="showMemoryHints = false">
+                  <ion-icon name="eye-off-outline"></ion-icon>
+                  Hide Hints
+                </ion-button>
+              </div>
+            }
+            @if (memoryFeedback) {
+              <div class="memory-feedback" [class]="memoryFeedbackClass">
+                {{memoryFeedback}}
+              </div>
+            }
+          </div>
+        </div>
+      }
+      <!-- Mode Navigation -->
+      <div class="mode-navigation">
+        <h4>Training Modes:</h4>
+        <div class="mode-tabs">
+          @for (mode of trainingModes; track mode; let i = $index) {
+            <div class="mode-tab"
+              [class.active]="currentMode.type === mode.type"
+              [class.locked]="mode.locked"
+              (click)="switchMode(mode)">
+              <ion-icon [name]="mode.icon"></ion-icon>
+              <span>{{mode.title}}</span>
+              @if (mode.completed) {
+                <ion-icon name="checkmark-circle" class="completed-icon"></ion-icon>
+              }
+            </div>
+          }
         </div>
       </div>
     </div>
-
-    <!-- Memory Recall Mode -->
-    <div *ngIf="currentMode.type === 'memory'" class="memory-mode">
-      <div class="memory-container">
-        <h4>🧠 Memory Recall Challenge</h4>
-        <div class="memory-instruction">
-          Recite the complete śloka in reverse order from memory (no text hints):
-        </div>
-        
-        <div class="memory-display" *ngIf="!showMemoryHints">
-          <div class="verse-info">
-            <h5>{{selectedSloka.title}}</h5>
-            <p>Recite in reverse word order</p>
-          </div>
-          
-          <div class="memory-controls">
-            <ion-button class="hint-btn" (click)="showMemoryHints = true">
-              <ion-icon name="help-outline"></ion-icon>
-              Show Hints
-            </ion-button>
-            
-            <ion-button class="record-btn" [class.recording]="isRecording" (click)="startMemoryRecording()">
-              <ion-icon [name]="isRecording ? 'recording-outline' : 'mic-outline'"></ion-icon>
-              {{isRecording ? 'Recording...' : 'Start Recitation'}}
-            </ion-button>
-          </div>
-        </div>
-        
-        <div class="memory-hints" *ngIf="showMemoryHints">
-          <h5>💡 Reverse Word Sequence:</h5>
-          <div class="hint-words">
-            <span class="hint-word" *ngFor="let word of getReverseWords(); let i = index">
-              {{word.devanagari}}
-            </span>
-          </div>
-          
-          <ion-button class="hide-hints-btn" (click)="showMemoryHints = false">
-            <ion-icon name="eye-off-outline"></ion-icon>
-            Hide Hints
-          </ion-button>
-        </div>
-        
-        <div class="memory-feedback" *ngIf="memoryFeedback" [class]="memoryFeedbackClass">
-          {{memoryFeedback}}
-        </div>
-      </div>
-    </div>
-
-    <!-- Mode Navigation -->
-    <div class="mode-navigation">
-      <h4>Training Modes:</h4>
-      <div class="mode-tabs">
-        <div class="mode-tab" *ngFor="let mode of trainingModes; let i = index"
-             [class.active]="currentMode.type === mode.type"
-             [class.locked]="mode.locked"
-             (click)="switchMode(mode)">
-          <ion-icon [name]="mode.icon"></ion-icon>
-          <span>{{mode.title}}</span>
-          <ion-icon *ngIf="mode.completed" name="checkmark-circle" class="completed-icon"></ion-icon>
-        </div>
-      </div>
-    </div>
-  </div>
+  }
 
   <!-- Completion Section -->
-  <div class="completion-section" *ngIf="selectedSloka && isTrainingCompleted()">
-    <div class="completion-icon">🏆</div>
-    <h3 class="completion-title">Pratiloma Pāṭha Mastered!</h3>
-    <p class="completion-message">
-      Excellent! You have mastered the reverse recitation technique. Your memory and concentration have been significantly strengthened through this ancient Vedic method.
-    </p>
-    
-    <div class="completion-actions">
-      <ion-button class="completion-btn badge-btn" (click)="claimMasteryBadge()">
-        <ion-icon name="ribbon-outline"></ion-icon>
-        Claim Master Badge
-      </ion-button>
-      
-      <ion-button class="completion-btn next-btn" (click)="selectNextSloka()">
-        <ion-icon name="library-outline"></ion-icon>
-        Practice Next Śloka
-      </ion-button>
+  @if (selectedSloka && isTrainingCompleted()) {
+    <div class="completion-section">
+      <div class="completion-icon">🏆</div>
+      <h3 class="completion-title">Pratiloma Pāṭha Mastered!</h3>
+      <p class="completion-message">
+        Excellent! You have mastered the reverse recitation technique. Your memory and concentration have been significantly strengthened through this ancient Vedic method.
+      </p>
+      <div class="completion-actions">
+        <ion-button class="completion-btn badge-btn" (click)="claimMasteryBadge()">
+          <ion-icon name="ribbon-outline"></ion-icon>
+          Claim Master Badge
+        </ion-button>
+        <ion-button class="completion-btn next-btn" (click)="selectNextSloka()">
+          <ion-icon name="library-outline"></ion-icon>
+          Practice Next Śloka
+        </ion-button>
+      </div>
+      <div class="saraswati-blessing">
+        <h4>🪷 Blessing of Goddess Sarasvatī</h4>
+        <p>"May your memory be as vast as the ocean and as clear as crystal. Through reverse recitation, you have invoked the divine grace of learning."</p>
+      </div>
     </div>
-    
-    <div class="saraswati-blessing">
-      <h4>🪷 Blessing of Goddess Sarasvatī</h4>
-      <p>"May your memory be as vast as the ocean and as clear as crystal. Through reverse recitation, you have invoked the divine grace of learning."</p>
-    </div>
-  </div>
+  }
 
   <!-- Tips Section -->
   <div class="tips-section">
@@ -360,7 +371,7 @@
       <ion-icon name="bulb-outline"></ion-icon>
       Mastery Tips for Pratiloma Pāṭha
     </h3>
-    
+
     <div class="tip-item">
       <div class="tip-icon">🧘</div>
       <div class="tip-content">
@@ -368,7 +379,7 @@
         <p>Before starting, take a few deep breaths and invoke Goddess Sarasvatī for clarity of mind and sharp memory.</p>
       </div>
     </div>
-    
+
     <div class="tip-item">
       <div class="tip-icon">🔄</div>
       <div class="tip-content">
@@ -376,7 +387,7 @@
         <p>Begin with the flashcard mode to familiarize yourself with each word's position in the reverse sequence.</p>
       </div>
     </div>
-    
+
     <div class="tip-item">
       <div class="tip-icon">🎵</div>
       <div class="tip-content">
@@ -384,7 +395,7 @@
         <p>Maintain the original verse's rhythm even when reciting in reverse. This helps with memorization.</p>
       </div>
     </div>
-    
+
     <div class="tip-item">
       <div class="tip-icon">🎯</div>
       <div class="tip-content">
@@ -392,7 +403,7 @@
         <p>Dedicate 10-15 minutes daily to reverse recitation. Consistency is key to developing this advanced skill.</p>
       </div>
     </div>
-    
+
     <div class="tip-item">
       <div class="tip-icon">📿</div>
       <div class="tip-content">

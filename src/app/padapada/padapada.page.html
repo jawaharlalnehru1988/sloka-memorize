@@ -1,9 +1,9 @@
-<app-technique-header 
-  title="Padapāṭha" 
-  sanskrit="पदपाठ" 
+<app-technique-header
+  title="Padapāṭha"
+  sanskrit="पदपाठ"
   emoji="🕉️"
-  color="tertiary" 
-  [translucent]="true" 
+  color="tertiary"
+  [translucent]="true"
   [showMenuButton]="true">
 </app-technique-header>
 
@@ -21,7 +21,7 @@
       <ion-icon name="text-outline" color="primary"></ion-icon>
       <h2>What is Padapāṭha (पदपाठ)?</h2>
     </div>
-    
+
     <div class="intro-content">
       <div class="definition-card">
         <h3>📖 Definition</h3>
@@ -44,7 +44,7 @@
   <!-- Example Section -->
   <div class="example-section">
     <h2>📚 Bhagavad Gītā Example</h2>
-    
+
     <div class="sloka-example">
       <div class="continuous-sloka">
         <h3>Continuous Recitation:</h3>
@@ -81,7 +81,7 @@
   <!-- Training Section -->
   <div class="training-section">
     <h2>🎓 Interactive Training Method</h2>
-    
+
     <div class="training-flow">
       <div class="step-card">
         <div class="step-number">1</div>
@@ -120,110 +120,113 @@
   <!-- Practice Section -->
   <div class="practice-section">
     <h2>🎯 Start Your Practice</h2>
-    
+
     <div class="sloka-selection">
       <h3>Select a Śloka to Practice:</h3>
       <div class="sloka-cards">
-        <ion-card class="sloka-card" *ngFor="let sloka of slokas" (click)="selectSloka(sloka.id)">
+        @for (sloka of slokas; track sloka) {
+          <ion-card class="sloka-card" (click)="selectSloka(sloka.id)">
             <ion-card-header>
-            <ion-card-title style="color: white; display: flex; justify-content: space-between; align-items: center;">
-              <span>{{sloka.title}}</span>
-              <span>{{sloka.subtitle}}</span>
-            </ion-card-title>
+              <ion-card-title style="color: white; display: flex; justify-content: space-between; align-items: center;">
+                <span>{{sloka.title}}</span>
+                <span>{{sloka.subtitle}}</span>
+              </ion-card-title>
             </ion-card-header>
-          <ion-card-content>
-            {{sloka.meaning}}
-          </ion-card-content>
-        </ion-card>
+            <ion-card-content>
+              {{sloka.meaning}}
+            </ion-card-content>
+          </ion-card>
+        }
       </div>
     </div>
   </div>
 
   <!-- Training Interface (Hidden initially) -->
-  <div class="training-interface" *ngIf="selectedSloka">
-    <div class="training-header">
-      <h3>Practicing: {{selectedSloka.title}}</h3>
-      <div class="progress-bar">
-        <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+  @if (selectedSloka) {
+    <div class="training-interface">
+      <div class="training-header">
+        <h3>Practicing: {{selectedSloka.title}}</h3>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+        </div>
+        <p>Word {{currentWordIndex + 1}} of {{selectedSloka.words.length}}</p>
       </div>
-      <p>Word {{currentWordIndex + 1}} of {{selectedSloka.words.length}}</p>
-    </div>
-
-    <div class="word-display-panel">
-      <div class="current-word">
-        <div class="word-devanagari-large">{{currentWord.devanagari}}</div>
-        <div class="word-roman-large">{{currentWord.roman}}</div>
-        <div class="word-meaning-large">{{currentWord.meaning}}</div>
-      </div>
-
-      <div class="audio-controls">
-        <ion-button (click)="playWordSlow()" color="primary">
-          <ion-icon name="volume-medium" slot="start"></ion-icon>
-          Play Slow
-        </ion-button>
-        <ion-button (click)="playWordNormal()" color="secondary">
-          <ion-icon name="volume-high" slot="start"></ion-icon>
-          Play Normal
-        </ion-button>
-      </div>
-
-      <div class="practice-controls">
-        <ion-button (click)="startRecording()" [disabled]="isRecording" color="danger">
-          <ion-icon name="mic" slot="start"></ion-icon>
-          {{isRecording ? 'Recording...' : 'Record Yourself'}}
-        </ion-button>
-        
-        <div class="feedback-display" *ngIf="pronunciationFeedback">
-          <div class="feedback-score" [ngClass]="feedbackClass">
-            {{pronunciationFeedback}}
-          </div>
+      <div class="word-display-panel">
+        <div class="current-word">
+          <div class="word-devanagari-large">{{currentWord.devanagari}}</div>
+          <div class="word-roman-large">{{currentWord.roman}}</div>
+          <div class="word-meaning-large">{{currentWord.meaning}}</div>
+        </div>
+        <div class="audio-controls">
+          <ion-button (click)="playWordSlow()" color="primary">
+            <ion-icon name="volume-medium" slot="start"></ion-icon>
+            Play Slow
+          </ion-button>
+          <ion-button (click)="playWordNormal()" color="secondary">
+            <ion-icon name="volume-high" slot="start"></ion-icon>
+            Play Normal
+          </ion-button>
+        </div>
+        <div class="practice-controls">
+          <ion-button (click)="startRecording()" [disabled]="isRecording" color="danger">
+            <ion-icon name="mic" slot="start"></ion-icon>
+            {{isRecording ? 'Recording...' : 'Record Yourself'}}
+          </ion-button>
+          @if (pronunciationFeedback) {
+            <div class="feedback-display">
+              <div class="feedback-score" [ngClass]="feedbackClass">
+                {{pronunciationFeedback}}
+              </div>
+            </div>
+          }
+        </div>
+        <div class="navigation-controls">
+          <ion-button (click)="previousWord()" [disabled]="currentWordIndex === 0" fill="outline">
+            <ion-icon name="chevron-back" slot="start"></ion-icon>
+            Previous
+          </ion-button>
+          <ion-button (click)="nextWord()" [disabled]="currentWordIndex === selectedSloka.words.length - 1" fill="outline">
+            Next
+            <ion-icon name="chevron-forward" slot="end"></ion-icon>
+          </ion-button>
         </div>
       </div>
-
-      <div class="navigation-controls">
-        <ion-button (click)="previousWord()" [disabled]="currentWordIndex === 0" fill="outline">
-          <ion-icon name="chevron-back" slot="start"></ion-icon>
-          Previous
-        </ion-button>
-        
-        <ion-button (click)="nextWord()" [disabled]="currentWordIndex === selectedSloka.words.length - 1" fill="outline">
-          Next
-          <ion-icon name="chevron-forward" slot="end"></ion-icon>
-        </ion-button>
-      </div>
-    </div>
-
-    <div class="word-progress">
-      <h4>Your Progress:</h4>
-      <div class="word-checkmarks">
-        <div 
-          *ngFor="let word of selectedSloka.words; let i = index" 
-          class="word-status"
+      <div class="word-progress">
+        <h4>Your Progress:</h4>
+        <div class="word-checkmarks">
+          @for (word of selectedSloka.words; track word; let i = $index) {
+            <div
+              class="word-status"
           [ngClass]="{
             'completed': word.practiced,
             'current': i === currentWordIndex,
             'pending': !word.practiced && i !== currentWordIndex
           }"
-        >
-          <span class="word-index">{{i + 1}}</span>
-          <span class="word-text">{{word.roman}}</span>
-          <ion-icon *ngIf="word.practiced" name="checkmark-circle" color="success"></ion-icon>
+              >
+              <span class="word-index">{{i + 1}}</span>
+              <span class="word-text">{{word.roman}}</span>
+              @if (word.practiced) {
+                <ion-icon name="checkmark-circle" color="success"></ion-icon>
+              }
+            </div>
+          }
         </div>
       </div>
+      @if (isAllWordsPracticed()) {
+        <div class="completion-section">
+          <div class="completion-card">
+            <ion-icon name="trophy" color="warning"></ion-icon>
+            <h3>Excellent! All Words Mastered!</h3>
+            <p>You've practiced all individual words. Ready for the full śloka?</p>
+            <ion-button (click)="practiceFullSloka()" color="success">
+              <ion-icon name="play-circle" slot="start"></ion-icon>
+              Practice Full Śloka
+            </ion-button>
+          </div>
+        </div>
+      }
     </div>
-
-    <div class="completion-section" *ngIf="isAllWordsPracticed()">
-      <div class="completion-card">
-        <ion-icon name="trophy" color="warning"></ion-icon>
-        <h3>Excellent! All Words Mastered!</h3>
-        <p>You've practiced all individual words. Ready for the full śloka?</p>
-        <ion-button (click)="practiceFullSloka()" color="success">
-          <ion-icon name="play-circle" slot="start"></ion-icon>
-          Practice Full Śloka
-        </ion-button>
-      </div>
-    </div>
-  </div>
+  }
 
   <!-- Tips Section -->
   <div class="tips-section">

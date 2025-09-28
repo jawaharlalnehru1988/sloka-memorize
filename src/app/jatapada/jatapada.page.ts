@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton, 
-         IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
+import { IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
          IonButton, IonIcon } from '@ionic/angular/standalone';
 import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
@@ -64,7 +63,7 @@ type TrainingMode = 'guided' | 'pattern-practice' | 'speed-building' | 'memory-c
   templateUrl: './jatapada.page.html',
   styleUrls: ['./jatapada.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton,
+  imports: [IonContent,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
     IonButton, IonIcon, CommonModule, FormsModule, RouterModule, TechniqueHeaderComponent]
 })

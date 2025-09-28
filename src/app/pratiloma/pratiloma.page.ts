@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -52,7 +52,7 @@ interface TrainingLevel {
   templateUrl: './pratiloma.page.html',
   styleUrls: ['./pratiloma.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon, IonButton, CommonModule, FormsModule, TechniqueHeaderComponent]
+  imports: [IonContent, IonIcon, IonButton, FormsModule, TechniqueHeaderComponent]
 })
 export class PratilomaPage implements OnInit {
 

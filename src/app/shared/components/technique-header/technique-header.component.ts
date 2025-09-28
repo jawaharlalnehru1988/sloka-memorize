@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { 
   IonHeader, 
   IonToolbar, 
@@ -14,13 +14,12 @@ import {
   styleUrls: ['./technique-header.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonButtons,
     IonMenuButton
-  ]
+]
 })
 export class TechniqueHeaderComponent {
   @Input() title: string = '';

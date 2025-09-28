@@ -1,9 +1,9 @@
-<app-technique-header 
-  title="Smaraṇa Pāṭha" 
-  sanskrit="स्मरण पाठ " 
+<app-technique-header
+  title="Smaraṇa Pāṭha"
+  sanskrit="स्मरण पाठ "
   emoji="🕉️"
-  color="tertiary" 
-  [translucent]="true" 
+  color="tertiary"
+  [translucent]="true"
   [showMenuButton]="true">
 </app-technique-header>
 
@@ -15,7 +15,7 @@
     <h1 class="hero-title">Smaraṇa Pāṭha</h1>
     <h2 class="hero-sanskrit">स्मरण पाठ</h2>
     <p class="hero-description">
-      The Ultimate Memory Mastery Technique - Test and perfect your complete memorization 
+      The Ultimate Memory Mastery Technique - Test and perfect your complete memorization
       through systematic recall challenges, random verse selection, and comprehensive memory evaluation.
     </p>
     <div class="prestige-badge">
@@ -30,7 +30,7 @@
       <ion-icon name="school"></ion-icon>
       <h2>Prerequisites for Smaraṇa Pāṭha</h2>
     </div>
-    
+
     <div class="prereq-content">
       <div class="warning-card">
         <h3>
@@ -38,8 +38,8 @@
           Master-Level Technique
         </h3>
         <p>
-          Smaraṇa Pāṭha is the ultimate test of memorization mastery. It requires complete proficiency 
-          in all previous techniques, as it randomly tests your ability to recall any verse, pattern, 
+          Smaraṇa Pāṭha is the ultimate test of memorization mastery. It requires complete proficiency
+          in all previous techniques, as it randomly tests your ability to recall any verse, pattern,
           or technique without external cues or prompts.
         </p>
       </div>
@@ -88,13 +88,13 @@
           Definition
         </h3>
         <p>
-          <strong>Smaraṇa Pāṭha (स्मरण पाठ)</strong> means "memory recitation" in Sanskrit. 
-          This is the ultimate technique that tests complete memorization mastery through 
+          <strong>Smaraṇa Pāṭha (स्मरण पाठ)</strong> means "memory recitation" in Sanskrit.
+          This is the ultimate technique that tests complete memorization mastery through
           random recall challenges, verse identification, and comprehensive memory evaluation.
         </p>
         <p>
-          It validates that the student has internalized the text so thoroughly that they can 
-          recall any portion instantly, identify verses from fragments, and demonstrate 
+          It validates that the student has internalized the text so thoroughly that they can
+          recall any portion instantly, identify verses from fragments, and demonstrate
           perfect retention under various challenging conditions.
         </p>
       </div>
@@ -117,464 +117,513 @@
   </div>
 
   <!-- Memory Challenge Types -->
-  <div class="challenge-types" *ngIf="!isInChallenge">
-    <div class="types-header">
-      <ion-icon name="fitness"></ion-icon>
-      <h2>Memory Challenge Types</h2>
+  @if (!isInChallenge) {
+    <div class="challenge-types">
+      <div class="types-header">
+        <ion-icon name="fitness"></ion-icon>
+        <h2>Memory Challenge Types</h2>
+      </div>
+      <div class="types-grid">
+        <div class="challenge-card" [class.locked]="!canAccessChallenge('random')" (click)="startChallenge('random')">
+          <div class="challenge-header">
+            <div class="challenge-icon">
+              <ion-icon name="shuffle"></ion-icon>
+            </div>
+            <div class="challenge-info">
+              <h3 class="challenge-title">Random Recall</h3>
+              <p class="challenge-level">BEGINNER → MASTER</p>
+            </div>
+          </div>
+          <p class="challenge-description">
+            Recite randomly selected verses from memory without any cues or references.
+            Tests instant recall ability and confidence.
+          </p>
+          <div class="challenge-features">
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Random verse selection</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>No visual cues provided</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Accuracy evaluation</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Progressive difficulty</span>
+            </div>
+          </div>
+          @if (!canAccessChallenge('random')) {
+            <div class="access-requirement">
+              <ion-icon name="lock-closed"></ion-icon>
+              <span>Complete Likhita Pāṭha to unlock</span>
+            </div>
+          }
+          <button class="challenge-button" [disabled]="!canAccessChallenge('random')">
+            Start Random Recall
+          </button>
+        </div>
+        <div class="challenge-card" [class.locked]="!canAccessChallenge('identification')" (click)="startChallenge('identification')">
+          <div class="challenge-header">
+            <div class="challenge-icon">
+              <ion-icon name="search"></ion-icon>
+            </div>
+            <div class="challenge-info">
+              <h3 class="challenge-title">Verse Identification</h3>
+              <p class="challenge-level">INTERMEDIATE → EXPERT</p>
+            </div>
+          </div>
+          <p class="challenge-description">
+            Identify complete verses from given fragments, first words, or contextual clues.
+            Tests deep text familiarity and associative memory.
+          </p>
+          <div class="challenge-features">
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Fragment-based identification</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Context-based clues</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Multiple choice options</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Advanced pattern recognition</span>
+            </div>
+          </div>
+          @if (!canAccessChallenge('identification')) {
+            <div class="access-requirement">
+              <ion-icon name="lock-closed"></ion-icon>
+              <span>Master Random Recall first</span>
+            </div>
+          }
+          <button class="challenge-button" [disabled]="!canAccessChallenge('identification')">
+            Start Identification
+          </button>
+        </div>
+        <div class="challenge-card" [class.locked]="!canAccessChallenge('speed')" (click)="startChallenge('speed')">
+          <div class="challenge-header">
+            <div class="challenge-icon">
+              <ion-icon name="flash"></ion-icon>
+            </div>
+            <div class="challenge-info">
+              <h3 class="challenge-title">Speed Recall</h3>
+              <p class="challenge-level">ADVANCED → MASTER</p>
+            </div>
+          </div>
+          <p class="challenge-description">
+            Rapid-fire memory challenges with time constraints. Tests fluency,
+            confidence, and ability to access memory under pressure.
+          </p>
+          <div class="challenge-features">
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Timed recitation challenges</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Rapid sequence completion</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Performance metrics</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Pressure simulation</span>
+            </div>
+          </div>
+          @if (!canAccessChallenge('speed')) {
+            <div class="access-requirement">
+              <ion-icon name="lock-closed"></ion-icon>
+              <span>Master Verse Identification first</span>
+            </div>
+          }
+          <button class="challenge-button" [disabled]="!canAccessChallenge('speed')">
+            Start Speed Challenge
+          </button>
+        </div>
+        <div class="challenge-card" [class.locked]="!canAccessChallenge('comprehensive')" (click)="startChallenge('comprehensive')">
+          <div class="challenge-header">
+            <div class="challenge-icon">
+              <ion-icon name="medal"></ion-icon>
+            </div>
+            <div class="challenge-info">
+              <h3 class="challenge-title">Comprehensive Exam</h3>
+              <p class="challenge-level">MASTER LEVEL</p>
+            </div>
+          </div>
+          <p class="challenge-description">
+            Ultimate mastery examination combining all memory techniques.
+            The final test to achieve complete Smaraṇa Pāṭha certification.
+          </p>
+          <div class="challenge-features">
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>All technique integration</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Random pattern switching</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Complete evaluation</span>
+            </div>
+            <div class="feature-item">
+              <ion-icon name="checkmark"></ion-icon>
+              <span>Certification eligibility</span>
+            </div>
+          </div>
+          @if (!canAccessChallenge('comprehensive')) {
+            <div class="access-requirement">
+              <ion-icon name="lock-closed"></ion-icon>
+              <span>Master all previous challenges</span>
+            </div>
+          }
+          <button class="challenge-button" [disabled]="!canAccessChallenge('comprehensive')">
+            Take Final Exam
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="types-grid">
-      <div class="challenge-card" [class.locked]="!canAccessChallenge('random')" (click)="startChallenge('random')">
-        <div class="challenge-header">
-          <div class="challenge-icon">
-            <ion-icon name="shuffle"></ion-icon>
-          </div>
-          <div class="challenge-info">
-            <h3 class="challenge-title">Random Recall</h3>
-            <p class="challenge-level">BEGINNER → MASTER</p>
-          </div>
-        </div>
-        <p class="challenge-description">
-          Recite randomly selected verses from memory without any cues or references. 
-          Tests instant recall ability and confidence.
-        </p>
-        <div class="challenge-features">
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Random verse selection</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>No visual cues provided</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Accuracy evaluation</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Progressive difficulty</span>
-          </div>
-        </div>
-        <div class="access-requirement" *ngIf="!canAccessChallenge('random')">
-          <ion-icon name="lock-closed"></ion-icon>
-          <span>Complete Likhita Pāṭha to unlock</span>
-        </div>
-        <button class="challenge-button" [disabled]="!canAccessChallenge('random')">
-          Start Random Recall
-        </button>
-      </div>
-
-      <div class="challenge-card" [class.locked]="!canAccessChallenge('identification')" (click)="startChallenge('identification')">
-        <div class="challenge-header">
-          <div class="challenge-icon">
-            <ion-icon name="search"></ion-icon>
-          </div>
-          <div class="challenge-info">
-            <h3 class="challenge-title">Verse Identification</h3>
-            <p class="challenge-level">INTERMEDIATE → EXPERT</p>
-          </div>
-        </div>
-        <p class="challenge-description">
-          Identify complete verses from given fragments, first words, or contextual clues. 
-          Tests deep text familiarity and associative memory.
-        </p>
-        <div class="challenge-features">
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Fragment-based identification</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Context-based clues</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Multiple choice options</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Advanced pattern recognition</span>
-          </div>
-        </div>
-        <div class="access-requirement" *ngIf="!canAccessChallenge('identification')">
-          <ion-icon name="lock-closed"></ion-icon>
-          <span>Master Random Recall first</span>
-        </div>
-        <button class="challenge-button" [disabled]="!canAccessChallenge('identification')">
-          Start Identification
-        </button>
-      </div>
-
-      <div class="challenge-card" [class.locked]="!canAccessChallenge('speed')" (click)="startChallenge('speed')">
-        <div class="challenge-header">
-          <div class="challenge-icon">
-            <ion-icon name="flash"></ion-icon>
-          </div>
-          <div class="challenge-info">
-            <h3 class="challenge-title">Speed Recall</h3>
-            <p class="challenge-level">ADVANCED → MASTER</p>
-          </div>
-        </div>
-        <p class="challenge-description">
-          Rapid-fire memory challenges with time constraints. Tests fluency, 
-          confidence, and ability to access memory under pressure.
-        </p>
-        <div class="challenge-features">
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Timed recitation challenges</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Rapid sequence completion</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Performance metrics</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Pressure simulation</span>
-          </div>
-        </div>
-        <div class="access-requirement" *ngIf="!canAccessChallenge('speed')">
-          <ion-icon name="lock-closed"></ion-icon>
-          <span>Master Verse Identification first</span>
-        </div>
-        <button class="challenge-button" [disabled]="!canAccessChallenge('speed')">
-          Start Speed Challenge
-        </button>
-      </div>
-
-      <div class="challenge-card" [class.locked]="!canAccessChallenge('comprehensive')" (click)="startChallenge('comprehensive')">
-        <div class="challenge-header">
-          <div class="challenge-icon">
-            <ion-icon name="medal"></ion-icon>
-          </div>
-          <div class="challenge-info">
-            <h3 class="challenge-title">Comprehensive Exam</h3>
-            <p class="challenge-level">MASTER LEVEL</p>
-          </div>
-        </div>
-        <p class="challenge-description">
-          Ultimate mastery examination combining all memory techniques. 
-          The final test to achieve complete Smaraṇa Pāṭha certification.
-        </p>
-        <div class="challenge-features">
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>All technique integration</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Random pattern switching</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Complete evaluation</span>
-          </div>
-          <div class="feature-item">
-            <ion-icon name="checkmark"></ion-icon>
-            <span>Certification eligibility</span>
-          </div>
-        </div>
-        <div class="access-requirement" *ngIf="!canAccessChallenge('comprehensive')">
-          <ion-icon name="lock-closed"></ion-icon>
-          <span>Master all previous challenges</span>
-        </div>
-        <button class="challenge-button" [disabled]="!canAccessChallenge('comprehensive')">
-          Take Final Exam
-        </button>
-      </div>
-    </div>
-  </div>
+  }
 
   <!-- Memory Challenge Interface -->
-  <div class="challenge-interface" *ngIf="isInChallenge">
-    <div class="challenge-header">
-      <div class="challenge-info">
-        <h2 class="challenge-title">{{ getCurrentChallengeTitle() }}</h2>
-        <div class="challenge-progress">
-          Challenge {{ currentQuestion }}/{{ totalQuestions }}
-        </div>
-      </div>
-      <div class="challenge-stats">
-        <div class="stat-item">
-          <span class="stat-label">Accuracy</span>
-          <span class="stat-value">{{ getAccuracyPercentage() }}%</span>
-        </div>
-        <div class="stat-item" *ngIf="currentChallengeType === 'speed'">
-          <span class="stat-label">Time</span>
-          <span class="stat-value">{{ formatTime(timeRemaining) }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="question-area">
-      <div class="question-card">
-        <div class="question-type">
-          <ion-icon [name]="getQuestionIcon()"></ion-icon>
-          <span>{{ getQuestionTypeLabel() }}</span>
-        </div>
-        <div class="question-content">
-          <div class="question-prompt">{{ currentQuestionData?.prompt }}</div>
-          <div class="question-context" *ngIf="currentQuestionData?.context">
-            {{ currentQuestionData?.context }}
-          </div>
-          <div class="question-hint" *ngIf="currentQuestionData?.hint && showHint">
-            <ion-icon name="bulb"></ion-icon>
-            {{ currentQuestionData?.hint }}
+  @if (isInChallenge) {
+    <div class="challenge-interface">
+      <div class="challenge-header">
+        <div class="challenge-info">
+          <h2 class="challenge-title">{{ getCurrentChallengeTitle() }}</h2>
+          <div class="challenge-progress">
+            Challenge {{ currentQuestion }}/{{ totalQuestions }}
           </div>
         </div>
+        <div class="challenge-stats">
+          <div class="stat-item">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value">{{ getAccuracyPercentage() }}%</span>
+          </div>
+          @if (currentChallengeType === 'speed') {
+            <div class="stat-item">
+              <span class="stat-label">Time</span>
+              <span class="stat-value">{{ formatTime(timeRemaining) }}</span>
+            </div>
+          }
+        </div>
       </div>
+      <div class="question-area">
+        <div class="question-card">
+          <div class="question-type">
+            <ion-icon [name]="getQuestionIcon()"></ion-icon>
+            <span>{{ getQuestionTypeLabel() }}</span>
+          </div>
+          <div class="question-content">
+            <div class="question-prompt">{{ currentQuestionData?.prompt }}</div>
+            @if (currentQuestionData?.context) {
+              <div class="question-context">
+                {{ currentQuestionData?.context }}
+              </div>
+            }
+            @if (currentQuestionData?.hint && showHint) {
+              <div class="question-hint">
+                <ion-icon name="bulb"></ion-icon>
+                {{ currentQuestionData?.hint }}
+              </div>
+            }
+          </div>
+        </div>
+        <div class="response-area">
+          @switch (currentQuestionData?.type) {
+            <!-- Text Input Response -->
+            @case ('text') {
+              <div class="text-response">
+                <textarea
+                  [(ngModel)]="userResponse"
+                  placeholder="Enter your recitation here..."
+                  class="response-input"
+                  [disabled]="questionAnswered">
+                </textarea>
+                <div class="input-help">
+                  <span>Type your complete recitation of the verse</span>
+                  @if (currentQuestionData?.hint) {
+                    <button class="hint-button" (click)="toggleHint()">
+                      <ion-icon name="bulb"></ion-icon>
+                      {{ showHint ? 'Hide' : 'Show' }} Hint
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+            <!-- Multiple Choice Response -->
+            @case ('choice') {
+              <div class="choice-response">
+                <div class="choice-options">
+                  @for (option of currentQuestionData?.options; track option; let i = $index) {
+                    <div
+                      class="choice-option"
+                      [class.selected]="selectedChoice === i"
+                      [class.correct]="questionAnswered && option.isCorrect"
+                      [class.incorrect]="questionAnswered && selectedChoice === i && !option.isCorrect"
+                      (click)="selectChoice(i)"
+                      [class.disabled]="questionAnswered">
+                      <div class="option-marker">{{ getOptionLetter(i) }}</div>
+                      <div class="option-content">
+                        <div class="option-text">{{ option.text }}</div>
+                        @if (option.sanskrit) {
+                          <div class="option-sanskrit">{{ option.sanskrit }}</div>
+                        }
+                      </div>
+                      @if (questionAnswered) {
+                        <div class="option-indicator">
+                          @if (option.isCorrect) {
+                            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                          }
+                          @if (selectedChoice === i && !option.isCorrect) {
+                            <ion-icon name="close-circle" color="danger"></ion-icon>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+            <!-- Speed Challenge Response -->
+            @case ('speed') {
+              <div class="speed-response">
+                <div class="speed-input">
+                  <input
+                    [(ngModel)]="userResponse"
+                    placeholder="Quick answer..."
+                    class="speed-input-field"
+                    [disabled]="questionAnswered"
+                    (keyup.enter)="submitSpeedAnswer()">
+                    <button class="speed-submit" (click)="submitSpeedAnswer()" [disabled]="questionAnswered">
+                      <ion-icon name="flash"></ion-icon>
+                    </button>
+                  </div>
+                  <div class="speed-timer">
+                    <div class="timer-bar">
+                      <div class="timer-fill" [style.width.%]="getTimerPercentage()"></div>
+                    </div>
+                    <span class="timer-text">{{ formatTime(timeRemaining) }}</span>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+          <div class="question-actions">
+            @if (!questionAnswered && currentChallengeType !== 'comprehensive') {
+              <button
+                class="action-button secondary"
+                (click)="skipQuestion()"
+                >
+                <ion-icon name="play-forward"></ion-icon>
+                Skip Question
+              </button>
+            }
+            @if (!questionAnswered && currentQuestionData?.type !== 'speed') {
+              <button
+                class="action-button primary"
+                (click)="submitAnswer()"
+                [disabled]="!canSubmitAnswer()"
+                >
+                <ion-icon name="checkmark"></ion-icon>
+                Submit Answer
+              </button>
+            }
+            @if (questionAnswered) {
+              <button
+                class="action-button primary"
+                (click)="nextQuestion()"
+                >
+                <ion-icon name="arrow-forward"></ion-icon>
+                {{ isLastQuestion() ? 'Finish Challenge' : 'Next Question' }}
+              </button>
+            }
+          </div>
+        </div>
+        <!-- Feedback Panel -->
+        @if (questionAnswered && questionFeedback) {
+          <div class="feedback-panel">
+            <div class="feedback-header">
+              <ion-icon [name]="questionFeedback.isCorrect ? 'checkmark-circle' : 'close-circle'"
+              [color]="questionFeedback.isCorrect ? 'success' : 'danger'"></ion-icon>
+              <h3>{{ questionFeedback.isCorrect ? 'Correct!' : 'Incorrect' }}</h3>
+            </div>
+            <div class="feedback-content">
+              @if (!questionFeedback.isCorrect) {
+                <div class="correct-answer">
+                  <strong>Correct Answer:</strong>
+                  <div class="answer-text">{{ questionFeedback.correctAnswer }}</div>
+                </div>
+              }
+              @if (questionFeedback.explanation) {
+                <div class="explanation">
+                  <strong>Explanation:</strong>
+                  <p>{{ questionFeedback.explanation }}</p>
+                </div>
+              }
+              @if (questionFeedback.verseContext) {
+                <div class="verse-context">
+                  <strong>Verse Context:</strong>
+                  <p>{{ questionFeedback.verseContext }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
 
-      <div class="response-area" [ngSwitch]="currentQuestionData?.type">
-        <!-- Text Input Response -->
-        <div *ngSwitchCase="'text'" class="text-response">
-          <textarea 
-            [(ngModel)]="userResponse" 
-            placeholder="Enter your recitation here..."
-            class="response-input"
-            [disabled]="questionAnswered">
-          </textarea>
-          <div class="input-help">
-            <span>Type your complete recitation of the verse</span>
-            <button class="hint-button" (click)="toggleHint()" *ngIf="currentQuestionData?.hint">
-              <ion-icon name="bulb"></ion-icon>
-              {{ showHint ? 'Hide' : 'Show' }} Hint
+    <!-- Challenge Completion -->
+    @if (challengeCompleted) {
+      <div class="completion-section">
+        <div class="completion-icon">🏆</div>
+        <h2 class="completion-title">Challenge Completed!</h2>
+        <p class="completion-message">
+          {{ getCompletionMessage() }}
+        </p>
+        <div class="results-summary">
+          <div class="result-metric">
+            <div class="metric-value">{{ challengeResults?.score }}%</div>
+            <div class="metric-label">Final Score</div>
+          </div>
+          <div class="result-metric">
+            <div class="metric-value">{{ challengeResults?.correct }}/{{ challengeResults?.total }}</div>
+            <div class="metric-label">Questions Correct</div>
+          </div>
+          @if (currentChallengeType === 'speed') {
+            <div class="result-metric">
+              <div class="metric-value">{{ formatTime(challengeResults?.totalTime || 0) }}</div>
+              <div class="metric-label">Total Time</div>
+            </div>
+          }
+          <div class="result-metric">
+            <div class="metric-value">{{ challengeResults?.grade }}</div>
+            <div class="metric-label">Grade</div>
+          </div>
+        </div>
+        @if (challengeResults?.masteryGained) {
+          <div class="mastery-progress">
+            <h3>
+              <ion-icon name="trending-up"></ion-icon>
+              Mastery Progress
+            </h3>
+            <div class="progress-items">
+              @for (progress of challengeResults?.masteryProgress; track progress) {
+                <div class="progress-item">
+                  <span class="progress-skill">{{ progress.skill }}</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="progress.percentage"></div>
+                  </div>
+                  <span class="progress-percentage">{{ progress.percentage }}%</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+        <div class="completion-actions">
+          <button class="completion-button secondary" (click)="reviewChallenge()">
+            <ion-icon name="eye"></ion-icon>
+            Review Answers
+          </button>
+          <button class="completion-button secondary" (click)="retryChallenge()">
+            <ion-icon name="refresh"></ion-icon>
+            Try Again
+          </button>
+          <button class="completion-button primary" (click)="returnToMenu()">
+            <ion-icon name="home"></ion-icon>
+            Return to Menu
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Final Mastery Achievement -->
+    @if (hasAchievedFinalMastery) {
+      <div class="final-mastery">
+        <div class="mastery-celebration">
+          <div class="celebration-icon">🌟</div>
+          <h1 class="mastery-title">Smaraṇa Pāṭha Mastery Achieved!</h1>
+          <p class="mastery-message">
+            Congratulations! You have achieved complete mastery of all traditional Vedic memorization techniques.
+            You are now qualified to teach and guide others in this ancient wisdom.
+          </p>
+          <div class="achievement-stats">
+            <div class="achievement-item">
+              <ion-icon name="medal"></ion-icon>
+              <span>10/10 Techniques Mastered</span>
+            </div>
+            <div class="achievement-item">
+              <ion-icon name="star"></ion-icon>
+              <span>Traditional Scholar Status</span>
+            </div>
+            <div class="achievement-item">
+              <ion-icon name="school"></ion-icon>
+              <span>Teaching Qualification</span>
+            </div>
+            <div class="achievement-item">
+              <ion-icon name="heart"></ion-icon>
+              <span>Spiritual Transformation</span>
+            </div>
+          </div>
+          <div class="certificate-section">
+            <button class="certificate-button" (click)="generateCertificate()">
+              <ion-icon name="document-text"></ion-icon>
+              Generate Completion Certificate
             </button>
           </div>
         </div>
+      </div>
+    }
 
-        <!-- Multiple Choice Response -->
-        <div *ngSwitchCase="'choice'" class="choice-response">
-          <div class="choice-options">
-            <div 
-              class="choice-option" 
-              *ngFor="let option of currentQuestionData?.options; let i = index"
-              [class.selected]="selectedChoice === i"
-              [class.correct]="questionAnswered && option.isCorrect"
-              [class.incorrect]="questionAnswered && selectedChoice === i && !option.isCorrect"
-              (click)="selectChoice(i)"
-              [class.disabled]="questionAnswered">
-              <div class="option-marker">{{ getOptionLetter(i) }}</div>
-              <div class="option-content">
-                <div class="option-text">{{ option.text }}</div>
-                <div class="option-sanskrit" *ngIf="option.sanskrit">{{ option.sanskrit }}</div>
-              </div>
-              <div class="option-indicator" *ngIf="questionAnswered">
-                <ion-icon *ngIf="option.isCorrect" name="checkmark-circle" color="success"></ion-icon>
-                <ion-icon *ngIf="selectedChoice === i && !option.isCorrect" name="close-circle" color="danger"></ion-icon>
-              </div>
-            </div>
-          </div>
+    <!-- Study Tips Section -->
+    @if (!isInChallenge && !challengeCompleted) {
+      <div class="tips-section">
+        <div class="section-title">
+          <ion-icon name="bulb"></ion-icon>
+          Memory Mastery Tips
         </div>
-
-        <!-- Speed Challenge Response -->
-        <div *ngSwitchCase="'speed'" class="speed-response">
-          <div class="speed-input">
-            <input 
-              [(ngModel)]="userResponse" 
-              placeholder="Quick answer..."
-              class="speed-input-field"
-              [disabled]="questionAnswered"
-              (keyup.enter)="submitSpeedAnswer()">
-            <button class="speed-submit" (click)="submitSpeedAnswer()" [disabled]="questionAnswered">
-              <ion-icon name="flash"></ion-icon>
-            </button>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <h3 class="tip-title">Regular Practice</h3>
+            <p class="tip-content">
+              Practice memory recall daily, even if just for 10-15 minutes.
+              Consistency is more important than duration for maintaining sharp memory.
+            </p>
           </div>
-          <div class="speed-timer">
-            <div class="timer-bar">
-              <div class="timer-fill" [style.width.%]="getTimerPercentage()"></div>
-            </div>
-            <span class="timer-text">{{ formatTime(timeRemaining) }}</span>
+          <div class="tip-card">
+            <h3 class="tip-title">Confidence Building</h3>
+            <p class="tip-content">
+              Start with verses you know well to build confidence, then gradually
+              attempt more challenging selections as your comfort level increases.
+            </p>
+          </div>
+          <div class="tip-card">
+            <h3 class="tip-title">Stress Management</h3>
+            <p class="tip-content">
+              Memory performance can be affected by stress. Practice relaxation
+              techniques and maintain a calm, focused state during recall challenges.
+            </p>
+          </div>
+          <div class="tip-card">
+            <h3 class="tip-title">Progressive Challenge</h3>
+            <p class="tip-content">
+              Gradually increase difficulty levels. Master basic recall before
+              attempting speed challenges or comprehensive examinations.
+            </p>
           </div>
         </div>
       </div>
+    }
 
-      <div class="question-actions">
-        <button 
-          class="action-button secondary" 
-          (click)="skipQuestion()" 
-          *ngIf="!questionAnswered && currentChallengeType !== 'comprehensive'">
-          <ion-icon name="play-forward"></ion-icon>
-          Skip Question
-        </button>
-        <button 
-          class="action-button primary" 
-          (click)="submitAnswer()" 
-          [disabled]="!canSubmitAnswer()"
-          *ngIf="!questionAnswered && currentQuestionData?.type !== 'speed'">
-          <ion-icon name="checkmark"></ion-icon>
-          Submit Answer
-        </button>
-        <button 
-          class="action-button primary" 
-          (click)="nextQuestion()" 
-          *ngIf="questionAnswered">
-          <ion-icon name="arrow-forward"></ion-icon>
-          {{ isLastQuestion() ? 'Finish Challenge' : 'Next Question' }}
-        </button>
-      </div>
-    </div>
-
-    <!-- Feedback Panel -->
-    <div class="feedback-panel" *ngIf="questionAnswered && questionFeedback">
-      <div class="feedback-header">
-        <ion-icon [name]="questionFeedback.isCorrect ? 'checkmark-circle' : 'close-circle'" 
-                  [color]="questionFeedback.isCorrect ? 'success' : 'danger'"></ion-icon>
-        <h3>{{ questionFeedback.isCorrect ? 'Correct!' : 'Incorrect' }}</h3>
-      </div>
-      <div class="feedback-content">
-        <div class="correct-answer" *ngIf="!questionFeedback.isCorrect">
-          <strong>Correct Answer:</strong>
-          <div class="answer-text">{{ questionFeedback.correctAnswer }}</div>
-        </div>
-        <div class="explanation" *ngIf="questionFeedback.explanation">
-          <strong>Explanation:</strong>
-          <p>{{ questionFeedback.explanation }}</p>
-        </div>
-        <div class="verse-context" *ngIf="questionFeedback.verseContext">
-          <strong>Verse Context:</strong>
-          <p>{{ questionFeedback.verseContext }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Challenge Completion -->
-  <div class="completion-section" *ngIf="challengeCompleted">
-    <div class="completion-icon">🏆</div>
-    <h2 class="completion-title">Challenge Completed!</h2>
-    <p class="completion-message">
-      {{ getCompletionMessage() }}
-    </p>
-    
-    <div class="results-summary">
-      <div class="result-metric">
-        <div class="metric-value">{{ challengeResults?.score }}%</div>
-        <div class="metric-label">Final Score</div>
-      </div>
-      <div class="result-metric">
-        <div class="metric-value">{{ challengeResults?.correct }}/{{ challengeResults?.total }}</div>
-        <div class="metric-label">Questions Correct</div>
-      </div>
-      <div class="result-metric" *ngIf="currentChallengeType === 'speed'">
-        <div class="metric-value">{{ formatTime(challengeResults?.totalTime || 0) }}</div>
-        <div class="metric-label">Total Time</div>
-      </div>
-      <div class="result-metric">
-        <div class="metric-value">{{ challengeResults?.grade }}</div>
-        <div class="metric-label">Grade</div>
-      </div>
-    </div>
-
-    <div class="mastery-progress" *ngIf="challengeResults?.masteryGained">
-      <h3>
-        <ion-icon name="trending-up"></ion-icon>
-        Mastery Progress
-      </h3>
-      <div class="progress-items">
-        <div class="progress-item" *ngFor="let progress of challengeResults?.masteryProgress">
-          <span class="progress-skill">{{ progress.skill }}</span>
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="progress.percentage"></div>
-          </div>
-          <span class="progress-percentage">{{ progress.percentage }}%</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="completion-actions">
-      <button class="completion-button secondary" (click)="reviewChallenge()">
-        <ion-icon name="eye"></ion-icon>
-        Review Answers
-      </button>
-      <button class="completion-button secondary" (click)="retryChallenge()">
-        <ion-icon name="refresh"></ion-icon>
-        Try Again
-      </button>
-      <button class="completion-button primary" (click)="returnToMenu()">
-        <ion-icon name="home"></ion-icon>
-        Return to Menu
-      </button>
-    </div>
-  </div>
-
-  <!-- Final Mastery Achievement -->
-  <div class="final-mastery" *ngIf="hasAchievedFinalMastery">
-    <div class="mastery-celebration">
-      <div class="celebration-icon">🌟</div>
-      <h1 class="mastery-title">Smaraṇa Pāṭha Mastery Achieved!</h1>
-      <p class="mastery-message">
-        Congratulations! You have achieved complete mastery of all traditional Vedic memorization techniques. 
-        You are now qualified to teach and guide others in this ancient wisdom.
-      </p>
-      
-      <div class="achievement-stats">
-        <div class="achievement-item">
-          <ion-icon name="medal"></ion-icon>
-          <span>10/10 Techniques Mastered</span>
-        </div>
-        <div class="achievement-item">
-          <ion-icon name="star"></ion-icon>
-          <span>Traditional Scholar Status</span>
-        </div>
-        <div class="achievement-item">
-          <ion-icon name="school"></ion-icon>
-          <span>Teaching Qualification</span>
-        </div>
-        <div class="achievement-item">
-          <ion-icon name="heart"></ion-icon>
-          <span>Spiritual Transformation</span>
-        </div>
-      </div>
-
-      <div class="certificate-section">
-        <button class="certificate-button" (click)="generateCertificate()">
-          <ion-icon name="document-text"></ion-icon>
-          Generate Completion Certificate
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Study Tips Section -->
-  <div class="tips-section" *ngIf="!isInChallenge && !challengeCompleted">
-    <div class="section-title">
-      <ion-icon name="bulb"></ion-icon>
-      Memory Mastery Tips
-    </div>
-    <div class="tips-grid">
-      <div class="tip-card">
-        <h3 class="tip-title">Regular Practice</h3>
-        <p class="tip-content">
-          Practice memory recall daily, even if just for 10-15 minutes. 
-          Consistency is more important than duration for maintaining sharp memory.
-        </p>
-      </div>
-      <div class="tip-card">
-        <h3 class="tip-title">Confidence Building</h3>
-        <p class="tip-content">
-          Start with verses you know well to build confidence, then gradually 
-          attempt more challenging selections as your comfort level increases.
-        </p>
-      </div>
-      <div class="tip-card">
-        <h3 class="tip-title">Stress Management</h3>
-        <p class="tip-content">
-          Memory performance can be affected by stress. Practice relaxation 
-          techniques and maintain a calm, focused state during recall challenges.
-        </p>
-      </div>
-      <div class="tip-card">
-        <h3 class="tip-title">Progressive Challenge</h3>
-        <p class="tip-content">
-          Gradually increase difficulty levels. Master basic recall before 
-          attempting speed challenges or comprehensive examinations.
-        </p>
-      </div>
-    </div>
-  </div>
-
-</ion-content>
+  </ion-content>

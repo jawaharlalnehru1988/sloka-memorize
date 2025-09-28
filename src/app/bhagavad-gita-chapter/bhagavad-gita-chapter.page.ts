@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -25,9 +25,9 @@ import { addIcons } from 'ionicons';
   styleUrls: ['./bhagavad-gita-chapter.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
+    IonContent,
+    IonHeader,
+    IonTitle,
     IonToolbar,
     IonButton,
     IonIcon,
@@ -35,9 +35,8 @@ import { addIcons } from 'ionicons';
     IonSpinner,
     IonBackButton,
     IonButtons,
-    CommonModule, 
     FormsModule
-  ]
+]
 })
 export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   chapterData: BhagavadGitaChapterItem | null = null;

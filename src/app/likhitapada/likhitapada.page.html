@@ -1,10 +1,10 @@
 
-<app-technique-header 
-  title="Likhita Pāṭha" 
-  sanskrit="लिखित पाठ" 
+<app-technique-header
+  title="Likhita Pāṭha"
+  sanskrit="लिखित पाठ"
   emoji="🕉️"
-  color="tertiary" 
-  [translucent]="true" 
+  color="tertiary"
+  [translucent]="true"
   [showMenuButton]="true">
 </app-technique-header>
 
@@ -16,7 +16,7 @@
     <h1 class="hero-title">Likhita Pāṭha</h1>
     <h2 class="hero-sanskrit">लिखित पाठ</h2>
     <p class="hero-description">
-      Master sacred texts through traditional written practice. 
+      Master sacred texts through traditional written practice.
       Develop deep connection and memory through mindful writing of Sanskrit ślokas in multiple scripts.
     </p>
     <div class="prestige-badge">
@@ -38,7 +38,7 @@
           Foundation Requirements
         </h3>
         <p>
-          Likhita Pāṭha requires proficiency in pronunciation and basic recitation methods. 
+          Likhita Pāṭha requires proficiency in pronunciation and basic recitation methods.
           Written practice enhances memory through kinesthetic learning and visual reinforcement.
         </p>
       </div>
@@ -81,11 +81,11 @@
           Definition
         </h3>
         <p>
-          <strong>Likhita Pāṭha (लिखित पाठ)</strong> means "written recitation" in Sanskrit. 
+          <strong>Likhita Pāṭha (लिखित पाठ)</strong> means "written recitation" in Sanskrit.
           This ancient technique involves mindful writing of sacred texts to enhance memory, concentration, and spiritual connection.
         </p>
         <p>
-          The practice engages multiple senses - visual, kinesthetic, and cognitive - creating stronger neural pathways 
+          The practice engages multiple senses - visual, kinesthetic, and cognitive - creating stronger neural pathways
           for memorization and deeper understanding of the text's meaning and rhythm.
         </p>
       </div>
@@ -113,7 +113,7 @@
     <div class="script-explanation">
       <p>Practice writing in traditional and modern scripts to deepen your connection with the text:</p>
     </div>
-    
+
     <div class="script-cards">
       <div class="script-card devanagari" (click)="selectScript('devanagari')">
         <div class="script-sample">
@@ -175,9 +175,11 @@
           <span>Speed control</span>
           <span>Real-time feedback</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('tracing')">
-          Complete Ucchāraṇa mastery required
-        </div>
+        @if (!canAccessMode('tracing')) {
+          <div class="access-requirement">
+            Complete Ucchāraṇa mastery required
+          </div>
+        }
       </div>
 
       <div class="mode-card copying" (click)="startWritingPractice('copying')" [class.disabled]="!canAccessMode('copying')">
@@ -192,9 +194,11 @@
           <span>Rhythm awareness</span>
           <span>Aesthetic presentation</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('copying')">
-          Guided tracing mastery required
-        </div>
+        @if (!canAccessMode('copying')) {
+          <div class="access-requirement">
+            Guided tracing mastery required
+          </div>
+        }
       </div>
 
       <div class="mode-card composition" (click)="startWritingPractice('composition')" [class.disabled]="!canAccessMode('composition')">
@@ -209,9 +213,11 @@
           <span>Progressive difficulty</span>
           <span>Accuracy assessment</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('composition')">
-          Mindful copying mastery required
-        </div>
+        @if (!canAccessMode('composition')) {
+          <div class="access-requirement">
+            Mindful copying mastery required
+          </div>
+        }
       </div>
 
       <div class="mode-card manuscript" (click)="startWritingPractice('manuscript')" [class.disabled]="!canAccessMode('manuscript')">
@@ -226,243 +232,254 @@
           <span>Decorative elements</span>
           <span>Portfolio creation</span>
         </div>
-        <div class="access-requirement" *ngIf="!canAccessMode('manuscript')">
-          Memory writing mastery required
-        </div>
+        @if (!canAccessMode('manuscript')) {
+          <div class="access-requirement">
+            Memory writing mastery required
+          </div>
+        }
       </div>
     </div>
   </div>
 
   <!-- Writing Interface -->
-  <div class="writing-interface" *ngIf="isWriting">
-    <div class="writing-header">
-      <h3>{{ currentMode | titlecase }} Practice</h3>
-      <div class="writing-progress">
-        <div class="progress-info">
-          <span>Exercise: {{ currentExercise }}/{{ totalExercises }}</span>
-          <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+  @if (isWriting) {
+    <div class="writing-interface">
+      <div class="writing-header">
+        <h3>{{ currentMode | titlecase }} Practice</h3>
+        <div class="writing-progress">
+          <div class="progress-info">
+            <span>Exercise: {{ currentExercise }}/{{ totalExercises }}</span>
+            <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Current Writing Exercise -->
-    <div class="current-writing-section">
-      <div class="exercise-header">
-        <h4>Current Exercise</h4>
-        <div class="exercise-type" [ngClass]="currentExerciseType">
-          <ion-icon [name]="getExerciseIcon()"></ion-icon>
-          <span>{{ currentExerciseType | titlecase }}</span>
-        </div>
-      </div>
-      
-      <div class="exercise-display">
-        <div class="reference-text">
-          <h5>
-            <ion-icon name="book-outline"></ion-icon>
-            Reference Text
-          </h5>
-          <div class="text-display">
-            <div class="devanagari-reference" *ngIf="selectedScript === 'devanagari' || selectedScript === 'combined'">
-              {{ currentExerciseData?.devanagari }}
-            </div>
-            <div class="roman-reference" *ngIf="selectedScript === 'roman' || selectedScript === 'combined'">
-              {{ currentExerciseData?.roman }}
-            </div>
-            <div class="meaning-reference" *ngIf="currentExerciseData?.meaning">
-              <strong>Meaning:</strong> {{ currentExerciseData?.meaning }}
-            </div>
+      <!-- Current Writing Exercise -->
+      <div class="current-writing-section">
+        <div class="exercise-header">
+          <h4>Current Exercise</h4>
+          <div class="exercise-type" [ngClass]="currentExerciseType">
+            <ion-icon [name]="getExerciseIcon()"></ion-icon>
+            <span>{{ currentExerciseType | titlecase }}</span>
           </div>
         </div>
-
-        <div class="writing-canvas-container">
-          <div class="writing-instructions">
-            <p>{{ currentInstruction }}</p>
-          </div>
-          
-          <div class="writing-canvas" #writingCanvas>
-            <div class="canvas-header">
-              <h6>
-                <ion-icon name="create"></ion-icon>
-                Writing Area
-              </h6>
-              <div class="canvas-controls">
-                <ion-button fill="clear" size="small" (click)="clearCanvas()">
-                  <ion-icon name="refresh" slot="icon-only"></ion-icon>
-                </ion-button>
-                <ion-button fill="clear" size="small" (click)="undoLastStroke()">
-                  <ion-icon name="arrow-undo" slot="icon-only"></ion-icon>
-                </ion-button>
-                <ion-button fill="clear" size="small" (click)="toggleGuidelines()">
-                  <ion-icon name="grid" slot="icon-only"></ion-icon>
-                </ion-button>
-              </div>
-            </div>
-            
-            <div class="canvas-workspace" [ngClass]="{ 'guidelines-active': showGuidelines }">
-              <!-- Dynamic canvas area for touch/stylus writing -->
-              <canvas #drawingCanvas 
-                      width="800" 
-                      height="400"
-                      (touchstart)="startDrawing($event)"
-                      (touchmove)="draw($event)"
-                      (touchend)="stopDrawing($event)"
-                      (mousedown)="startDrawing($event)"
-                      (mousemove)="draw($event)"
-                      (mouseup)="stopDrawing($event)">
-              </canvas>
-              
-              <!-- Guidelines overlay -->
-              <div class="guidelines-overlay" *ngIf="showGuidelines">
-                <div class="guideline baseline"></div>
-                <div class="guideline midline"></div>
-                <div class="guideline topline"></div>
-                <div class="guideline margin-left"></div>
-                <div class="guideline margin-right"></div>
-              </div>
+        <div class="exercise-display">
+          <div class="reference-text">
+            <h5>
+              <ion-icon name="book-outline"></ion-icon>
+              Reference Text
+            </h5>
+            <div class="text-display">
+              @if (selectedScript === 'devanagari' || selectedScript === 'combined') {
+                <div class="devanagari-reference">
+                  {{ currentExerciseData?.devanagari }}
+                </div>
+              }
+              @if (selectedScript === 'roman' || selectedScript === 'combined') {
+                <div class="roman-reference">
+                  {{ currentExerciseData?.roman }}
+                </div>
+              }
+              @if (currentExerciseData?.meaning) {
+                <div class="meaning-reference">
+                  <strong>Meaning:</strong> {{ currentExerciseData?.meaning }}
+                </div>
+              }
             </div>
           </div>
-
-          <div class="writing-feedback" *ngIf="writingFeedback">
-            <div class="feedback-header">
-              <h6>
-                <ion-icon name="analytics"></ion-icon>
-                Writing Assessment
-              </h6>
+          <div class="writing-canvas-container">
+            <div class="writing-instructions">
+              <p>{{ currentInstruction }}</p>
             </div>
-            <div class="feedback-content">
-              <div class="accuracy-metrics">
-                <div class="metric-item">
-                  <span class="metric-label">Character Formation:</span>
-                  <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.characterFormation)">
-                    {{ writingFeedback.characterFormation }}%
-                  </span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-label">Stroke Order:</span>
-                  <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.strokeOrder)">
-                    {{ writingFeedback.strokeOrder }}%
-                  </span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-label">Spacing & Alignment:</span>
-                  <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.spacing)">
-                    {{ writingFeedback.spacing }}%
-                  </span>
-                </div>
-                <div class="metric-item">
-                  <span class="metric-label">Overall Quality:</span>
-                  <span class="metric-value overall" [ngClass]="getAccuracyClass(writingFeedback.overall)">
-                    {{ writingFeedback.overall }}%
-                  </span>
-                </div>
-              </div>
-              
-              <div class="improvement-tips" *ngIf="writingFeedback.suggestions?.length">
+            <div class="writing-canvas" #writingCanvas>
+              <div class="canvas-header">
                 <h6>
-                  <ion-icon name="bulb"></ion-icon>
-                  Improvement Tips
+                  <ion-icon name="create"></ion-icon>
+                  Writing Area
                 </h6>
-                <ul>
-                  <li *ngFor="let tip of writingFeedback.suggestions">{{ tip }}</li>
-                </ul>
+                <div class="canvas-controls">
+                  <ion-button fill="clear" size="small" (click)="clearCanvas()">
+                    <ion-icon name="refresh" slot="icon-only"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" size="small" (click)="undoLastStroke()">
+                    <ion-icon name="arrow-undo" slot="icon-only"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" size="small" (click)="toggleGuidelines()">
+                    <ion-icon name="grid" slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+              <div class="canvas-workspace" [ngClass]="{ 'guidelines-active': showGuidelines }">
+                <!-- Dynamic canvas area for touch/stylus writing -->
+                <canvas #drawingCanvas
+                  width="800"
+                  height="400"
+                  (touchstart)="startDrawing($event)"
+                  (touchmove)="draw($event)"
+                  (touchend)="stopDrawing($event)"
+                  (mousedown)="startDrawing($event)"
+                  (mousemove)="draw($event)"
+                  (mouseup)="stopDrawing($event)">
+                </canvas>
+                <!-- Guidelines overlay -->
+                @if (showGuidelines) {
+                  <div class="guidelines-overlay">
+                    <div class="guideline baseline"></div>
+                    <div class="guideline midline"></div>
+                    <div class="guideline topline"></div>
+                    <div class="guideline margin-left"></div>
+                    <div class="guideline margin-right"></div>
+                  </div>
+                }
               </div>
             </div>
-          </div>
-
-          <div class="writing-controls">
-            <ion-button fill="outline" color="medium" (click)="repeatExercise()">
-              <ion-icon name="refresh" slot="start"></ion-icon>
-              Repeat
-            </ion-button>
-            <ion-button fill="outline" color="warning" (click)="getWritingHelp()">
-              <ion-icon name="help-circle" slot="start"></ion-icon>
-              Help
-            </ion-button>
-            <ion-button fill="solid" color="primary" (click)="evaluateWriting()">
-              <ion-icon name="checkmark-circle" slot="start"></ion-icon>
-              Evaluate
-            </ion-button>
-            <ion-button fill="solid" color="success" (click)="nextExercise()" [disabled]="!canProceed()">
-              <ion-icon name="arrow-forward" slot="end"></ion-icon>
-              Next
-            </ion-button>
+            @if (writingFeedback) {
+              <div class="writing-feedback">
+                <div class="feedback-header">
+                  <h6>
+                    <ion-icon name="analytics"></ion-icon>
+                    Writing Assessment
+                  </h6>
+                </div>
+                <div class="feedback-content">
+                  <div class="accuracy-metrics">
+                    <div class="metric-item">
+                      <span class="metric-label">Character Formation:</span>
+                      <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.characterFormation)">
+                        {{ writingFeedback.characterFormation }}%
+                      </span>
+                    </div>
+                    <div class="metric-item">
+                      <span class="metric-label">Stroke Order:</span>
+                      <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.strokeOrder)">
+                        {{ writingFeedback.strokeOrder }}%
+                      </span>
+                    </div>
+                    <div class="metric-item">
+                      <span class="metric-label">Spacing & Alignment:</span>
+                      <span class="metric-value" [ngClass]="getAccuracyClass(writingFeedback.spacing)">
+                        {{ writingFeedback.spacing }}%
+                      </span>
+                    </div>
+                    <div class="metric-item">
+                      <span class="metric-label">Overall Quality:</span>
+                      <span class="metric-value overall" [ngClass]="getAccuracyClass(writingFeedback.overall)">
+                        {{ writingFeedback.overall }}%
+                      </span>
+                    </div>
+                  </div>
+                  @if (writingFeedback.suggestions.length) {
+                    <div class="improvement-tips">
+                      <h6>
+                        <ion-icon name="bulb"></ion-icon>
+                        Improvement Tips
+                      </h6>
+                      <ul>
+                        @for (tip of writingFeedback.suggestions; track tip) {
+                          <li>{{ tip }}</li>
+                        }
+                      </ul>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+            <div class="writing-controls">
+              <ion-button fill="outline" color="medium" (click)="repeatExercise()">
+                <ion-icon name="refresh" slot="start"></ion-icon>
+                Repeat
+              </ion-button>
+              <ion-button fill="outline" color="warning" (click)="getWritingHelp()">
+                <ion-icon name="help-circle" slot="start"></ion-icon>
+                Help
+              </ion-button>
+              <ion-button fill="solid" color="primary" (click)="evaluateWriting()">
+                <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+                Evaluate
+              </ion-button>
+              <ion-button fill="solid" color="success" (click)="nextExercise()" [disabled]="!canProceed()">
+                <ion-icon name="arrow-forward" slot="end"></ion-icon>
+                Next
+              </ion-button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Writing Progress Overview -->
-    <div class="writing-progress-section">
-      <h4>
-        <ion-icon name="trophy"></ion-icon>
-        Writing Mastery Progress
-      </h4>
-      <div class="progress-categories">
-        <div class="category-item" *ngFor="let category of writingCategories" [ngClass]="category.status">
-          <ion-icon [name]="getMasteryStatusIcon(category.status)"></ion-icon>
-          <span>{{ category.name }}</span>
-          <div class="category-progress">{{ category.progress }}%</div>
+      <!-- Writing Progress Overview -->
+      <div class="writing-progress-section">
+        <h4>
+          <ion-icon name="trophy"></ion-icon>
+          Writing Mastery Progress
+        </h4>
+        <div class="progress-categories">
+          @for (category of writingCategories; track category) {
+            <div class="category-item" [ngClass]="category.status">
+              <ion-icon [name]="getMasteryStatusIcon(category.status)"></ion-icon>
+              <span>{{ category.name }}</span>
+              <div class="category-progress">{{ category.progress }}%</div>
+            </div>
+          }
         </div>
       </div>
     </div>
-  </div>
+  }
 
   <!-- Completion Section -->
-  <div class="completion-section" *ngIf="isCompleted">
-    <div class="completion-card">
-      <div class="completion-animation">
-        <ion-icon name="trophy" color="warning"></ion-icon>
-        <div class="celebration-text">Exceptional Achievement!</div>
-      </div>
-      <h3>Likhita Pāṭha Mastered!</h3>
-      <p>
-        Congratulations! You have mastered the art of sacred writing. 
-        Your written practice has deepened your connection with the texts and enhanced your memorization abilities through mindful engagement.
-      </p>
-      
-      <div class="completion-stats">
-        <div class="stat-item">
-          <ion-icon name="create" color="success"></ion-icon>
-          <span>{{ completionStats.charactersWritten }} Characters Written</span>
+  @if (isCompleted) {
+    <div class="completion-section">
+      <div class="completion-card">
+        <div class="completion-animation">
+          <ion-icon name="trophy" color="warning"></ion-icon>
+          <div class="celebration-text">Exceptional Achievement!</div>
         </div>
-        <div class="stat-item">
-          <ion-icon name="document-text" color="primary"></ion-icon>
-          <span>{{ completionStats.exercisesCompleted }} Exercises Completed</span>
+        <h3>Likhita Pāṭha Mastered!</h3>
+        <p>
+          Congratulations! You have mastered the art of sacred writing.
+          Your written practice has deepened your connection with the texts and enhanced your memorization abilities through mindful engagement.
+        </p>
+        <div class="completion-stats">
+          <div class="stat-item">
+            <ion-icon name="create" color="success"></ion-icon>
+            <span>{{ completionStats.charactersWritten }} Characters Written</span>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="document-text" color="primary"></ion-icon>
+            <span>{{ completionStats.exercisesCompleted }} Exercises Completed</span>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <span>{{ completionStats.accuracy }}% Average Accuracy</span>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="time" color="warning"></ion-icon>
+            <span>{{ completionStats.practiceTime }} Practice Time</span>
+          </div>
         </div>
-        <div class="stat-item">
-          <ion-icon name="checkmark-circle" color="success"></ion-icon>
-          <span>{{ completionStats.accuracy }}% Average Accuracy</span>
+        @if (completionStats.manuscriptsCreated > 0) {
+          <div class="manuscript-showcase">
+            <h4>Your Manuscripts</h4>
+            <p>You have created {{ completionStats.manuscriptsCreated }} beautiful manuscript(s) during your practice.</p>
+            <ion-button fill="outline" color="tertiary" (click)="viewManuscripts()">
+              <ion-icon name="library" slot="start"></ion-icon>
+              View Your Manuscripts
+            </ion-button>
+          </div>
+        }
+        <div class="completion-actions">
+          <ion-button fill="solid" color="success" (click)="proceedToNextTechnique()">
+            <ion-icon name="arrow-forward" slot="end"></ion-icon>
+            Continue to Smaraṇa Pāṭha
+          </ion-button>
+          <ion-button fill="outline" color="primary" (click)="reviewWriting()">
+            <ion-icon name="refresh" slot="start"></ion-icon>
+            Review & Practice More
+          </ion-button>
         </div>
-        <div class="stat-item">
-          <ion-icon name="time" color="warning"></ion-icon>
-          <span>{{ completionStats.practiceTime }} Practice Time</span>
-        </div>
-      </div>
-      
-      <div class="manuscript-showcase" *ngIf="completionStats.manuscriptsCreated > 0">
-        <h4>Your Manuscripts</h4>
-        <p>You have created {{ completionStats.manuscriptsCreated }} beautiful manuscript(s) during your practice.</p>
-        <ion-button fill="outline" color="tertiary" (click)="viewManuscripts()">
-          <ion-icon name="library" slot="start"></ion-icon>
-          View Your Manuscripts
-        </ion-button>
-      </div>
-      
-      <div class="completion-actions">
-        <ion-button fill="solid" color="success" (click)="proceedToNextTechnique()">
-          <ion-icon name="arrow-forward" slot="end"></ion-icon>
-          Continue to Smaraṇa Pāṭha
-        </ion-button>
-        <ion-button fill="outline" color="primary" (click)="reviewWriting()">
-          <ion-icon name="refresh" slot="start"></ion-icon>
-          Review & Practice More
-        </ion-button>
       </div>
     </div>
-  </div>
+  }
 
   <!-- Tips Section -->
   <div class="tips-section">
