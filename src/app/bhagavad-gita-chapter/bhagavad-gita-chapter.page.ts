@@ -236,7 +236,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     
     // Clean up audio
     if (this.currentAudio) {
-      this.currentAudio.pause();
+      this.stopCurrentAudio(true); // Reset when cleaning up
       this.currentAudio = null;
     }
   }
@@ -247,6 +247,23 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
       this.pauseAudio();
     } else {
       // If no audio is playing or it's paused, start/resume playing
+      this.resumeOrStartAudio(audioUrl);
+    }
+  }
+
+  private resumeOrStartAudio(audioUrl: string): void {
+    // If audio is already initialized and just paused, resume it
+    if (this.currentAudio && this.currentAudio.src.includes(audioUrl)) {
+      console.log('Resuming audio from current position:', this.currentTime);
+      this.currentAudio.play().then(() => {
+        this.isPlaying = true;
+        console.log('Audio resumed successfully');
+      }).catch(error => {
+        console.error('Error resuming audio:', error);
+        this.isPlaying = false;
+      });
+    } else {
+      // If no audio or different audio, start fresh
       this.startAudio(audioUrl);
     }
   }
@@ -254,20 +271,37 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   private startAudio(audioUrl: string): void {
     console.log(`Starting audio: ${audioUrl}`);
     
-    // Stop any currently playing audio
-    this.stopCurrentAudio();
+    // Store current position if audio exists
+    const savedTime = this.currentAudio ? this.currentAudio.currentTime : 0;
     
-    // Initialize audio if not already done
-    if (!this.currentAudio) {
+    // Only stop current audio if it's a different source
+    if (this.currentAudio && !this.currentAudio.src.includes(audioUrl)) {
+      this.stopCurrentAudio(true); // Reset time for different audio
+    }
+    
+    // Initialize audio if not already done or if it's a different source
+    if (!this.currentAudio || !this.currentAudio.src.includes(audioUrl)) {
       this.initializeAudio(audioUrl);
     }
     
     // Wait for metadata to be loaded before playing
     if (this.duration <= 0) {
       this.currentAudio!.addEventListener('loadedmetadata', () => {
+        // Restore saved position if any
+        if (savedTime > 0 && this.currentAudio) {
+          this.currentAudio.currentTime = savedTime;
+          this.currentTime = savedTime;
+          this.progress = (savedTime / this.duration) * 100;
+        }
         this.playLoadedAudio();
       }, { once: true });
     } else {
+      // Restore saved position if any
+      if (savedTime > 0 && this.currentAudio) {
+        this.currentAudio.currentTime = savedTime;
+        this.currentTime = savedTime;
+        this.progress = (savedTime / this.duration) * 100;
+      }
       this.playLoadedAudio();
     }
   }
@@ -292,13 +326,15 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     }
   }
 
-  private stopCurrentAudio(): void {
+  private stopCurrentAudio(resetTime: boolean = true): void {
     if (this.currentAudio) {
       this.currentAudio.pause();
-      this.currentAudio.currentTime = 0;
+      if (resetTime) {
+        this.currentAudio.currentTime = 0;
+        this.progress = 0;
+        this.currentTime = 0;
+      }
       this.isPlaying = false;
-      this.progress = 0;
-      this.currentTime = 0;
     }
   }
 
