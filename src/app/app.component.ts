@@ -3,7 +3,18 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb, bookmarks, library, flower, infinite, planet } from 'ionicons/icons';
+import { 
+  mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, 
+  archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, 
+  bookmarkOutline, bookmarkSharp, home, homeOutline, homeSharp, text, textOutline, textSharp,
+  documentText, documentTextOutline, documentTextSharp, arrowForward, arrowForwardOutline, arrowForwardSharp,
+  arrowBack, arrowBackOutline, arrowBackSharp, swapHorizontal, swapHorizontalOutline, swapHorizontalSharp,
+  gitBranch, gitBranchOutline, gitBranchSharp, layers, layersOutline, layersSharp, 
+  volumeHigh, volumeHighOutline, volumeHighSharp, create, createOutline, createSharp,
+  bulb, bulbOutline, bulbSharp, bookmarks, bookmarksOutline, bookmarksSharp,
+  library, libraryOutline, librarySharp, flower, flowerOutline, flowerSharp,
+  infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +44,17 @@ export class AppComponent {
     // { title: 'Brahma-samhita', url: '/brahma-samhita', icon: 'planet' }
   ];
   constructor() {
-    addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, home, text, documentText, arrowForward, arrowBack, swapHorizontal, gitBranch, layers, volumeHigh, create, bulb, bookmarks, library, flower, infinite, planet });
+    addIcons({ 
+      mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, 
+      archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, 
+      bookmarkOutline, bookmarkSharp, home, homeOutline, homeSharp, text, textOutline, textSharp,
+      documentText, documentTextOutline, documentTextSharp, arrowForward, arrowForwardOutline, arrowForwardSharp,
+      arrowBack, arrowBackOutline, arrowBackSharp, swapHorizontal, swapHorizontalOutline, swapHorizontalSharp,
+      gitBranch, gitBranchOutline, gitBranchSharp, layers, layersOutline, layersSharp, 
+      volumeHigh, volumeHighOutline, volumeHighSharp, create, createOutline, createSharp,
+      bulb, bulbOutline, bulbSharp, bookmarks, bookmarksOutline, bookmarksSharp,
+      library, libraryOutline, librarySharp, flower, flowerOutline, flowerSharp,
+      infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp
+    });
   }
 }

@@ -65,9 +65,18 @@
           <!-- Custom Audio Player -->
           <div class="custom-audio-player">
             <!-- Progress Bar -->
-            <div class="audio-progress-container" (click)="onProgressBarClick($event)">
+            <div class="audio-progress-container" 
+                 (click)="onProgressBarClick($event)"
+                 (touchstart)="onTouchStart($event)"
+                 (touchmove)="onTouchMove($event)"
+                 (touchend)="onTouchEnd($event)"
+                 (mousedown)="onMouseDown($event)"
+                 (mousemove)="onMouseMove($event)"
+                 (mouseup)="onMouseUp($event)"
+                 (mouseleave)="onMouseUp($event)">
               <div class="audio-progress-bar">
                 <div class="audio-progress-fill" [style.width.%]="progress"></div>
+                <div class="audio-progress-thumb" [style.left.%]="progress"></div>
               </div>
             </div>
             

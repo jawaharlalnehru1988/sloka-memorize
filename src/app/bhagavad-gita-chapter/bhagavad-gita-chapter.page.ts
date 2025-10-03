@@ -55,6 +55,10 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   
   // Floating control visibility
   showFloatingControl: boolean = false;
+  
+  // Touch/drag support for progress bar
+  private isDragging: boolean = false;
+  private progressContainer: HTMLElement | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -95,6 +99,12 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
       this.loading = false;
       this.setupScrollDetection();
       this.setupMetaTags();
+      
+      // Initialize audio for seeking (load metadata without playing)
+      if (this.chapterData.audioData?.audioSrc) {
+        this.initializeAudio(this.chapterData.audioData.audioSrc);
+      }
+      
       return;
     }
     
@@ -113,6 +123,11 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
             this.chapterData = chapter;
             console.log('📖 Found chapter:', this.chapterData);
             this.setupMetaTags();
+            
+            // Initialize audio for seeking (load metadata without playing)
+            if (this.chapterData.audioData?.audioSrc) {
+              this.initializeAudio(this.chapterData.audioData.audioSrc);
+            }
           } else {
             this.error = `Chapter ${this.chapterNumber} not found`;
           }
@@ -242,34 +257,28 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     // Stop any currently playing audio
     this.stopCurrentAudio();
     
-    // Create new audio instance
-    this.currentAudio = new Audio(audioUrl);
-    this.currentAudio.playbackRate = this.playbackSpeed;
+    // Initialize audio if not already done
+    if (!this.currentAudio) {
+      this.initializeAudio(audioUrl);
+    }
     
-    // Set up event listeners
-    this.currentAudio.addEventListener('loadedmetadata', () => {
-      this.duration = this.currentAudio!.duration;
-    });
-    
-    this.currentAudio.addEventListener('timeupdate', () => {
-      this.currentTime = this.currentAudio!.currentTime;
-      this.progress = (this.currentTime / this.duration) * 100;
-    });
-    
-    this.currentAudio.addEventListener('ended', () => {
-      this.isPlaying = false;
-      this.progress = 0;
-      this.currentTime = 0;
-    });
-    
-    this.currentAudio.addEventListener('error', (error) => {
-      console.error('Error playing audio:', error);
-      this.isPlaying = false;
-    });
+    // Wait for metadata to be loaded before playing
+    if (this.duration <= 0) {
+      this.currentAudio!.addEventListener('loadedmetadata', () => {
+        this.playLoadedAudio();
+      }, { once: true });
+    } else {
+      this.playLoadedAudio();
+    }
+  }
+  
+  private playLoadedAudio(): void {
+    if (!this.currentAudio) return;
     
     // Play the audio
     this.currentAudio.play().then(() => {
       this.isPlaying = true;
+      console.log('Audio started playing successfully');
     }).catch(error => {
       console.error('Error playing audio:', error);
       this.isPlaying = false;
@@ -302,16 +311,169 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
 
   // Handle progress bar click to seek
   onProgressBarClick(event: any): void {
-    if (this.currentAudio && this.duration > 0) {
-      const clickX = event.offsetX;
-      const totalWidth = event.target.offsetWidth;
-      const clickPercentage = clickX / totalWidth;
-      const newTime = clickPercentage * this.duration;
-      
-      this.currentAudio.currentTime = newTime;
-      this.currentTime = newTime;
-      this.progress = clickPercentage * 100;
+    if (this.isDragging) return; // Don't handle click if we're dragging
+    
+    this.seekToPosition(event);
+  }
+  
+  // Touch event handlers for mobile devices
+  onTouchStart(event: TouchEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+    this.progressContainer = event.target as HTMLElement;
+    this.addDraggingClass();
+    this.seekToPosition(event);
+  }
+  
+  onTouchMove(event: TouchEvent): void {
+    if (!this.isDragging) return;
+    event.preventDefault();
+    this.seekToPosition(event);
+  }
+  
+  onTouchEnd(event: TouchEvent): void {
+    if (!this.isDragging) return;
+    event.preventDefault();
+    this.isDragging = false;
+    this.removeDraggingClass();
+    this.progressContainer = null;
+  }
+  
+  // Mouse event handlers for desktop devices
+  onMouseDown(event: MouseEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+    this.progressContainer = event.target as HTMLElement;
+    this.addDraggingClass();
+    this.seekToPosition(event);
+  }
+  
+  onMouseMove(event: MouseEvent): void {
+    if (!this.isDragging) return;
+    event.preventDefault();
+    this.seekToPosition(event);
+  }
+  
+  onMouseUp(event: MouseEvent): void {
+    if (!this.isDragging) return;
+    event.preventDefault();
+    this.isDragging = false;
+    this.removeDraggingClass();
+    this.progressContainer = null;
+  }
+  
+  // Helper methods for visual feedback
+  private addDraggingClass(): void {
+    const container = document.querySelector('.audio-progress-container');
+    if (container) {
+      container.classList.add('dragging');
     }
+  }
+  
+  private removeDraggingClass(): void {
+    const container = document.querySelector('.audio-progress-container');
+    if (container) {
+      container.classList.remove('dragging');
+    }
+  }
+  
+  // Common seek function for both touch and mouse events
+  private seekToPosition(event: TouchEvent | MouseEvent | any): void {
+    // If no audio is loaded yet, create it first
+    if (!this.currentAudio && this.chapterData?.audioData?.audioSrc) {
+      this.initializeAudio(this.chapterData.audioData.audioSrc);
+    }
+    
+    if (!this.currentAudio) return;
+    
+    // If duration is not available yet, wait for metadata to load
+    if (this.duration <= 0) {
+      this.currentAudio.addEventListener('loadedmetadata', () => {
+        this.performSeek(event);
+      }, { once: true });
+      
+      // Force load metadata if not already loading
+      if (this.currentAudio.readyState === 0) {
+        this.currentAudio.load();
+      }
+      return;
+    }
+    
+    this.performSeek(event);
+  }
+  
+  private performSeek(event: TouchEvent | MouseEvent | any): void {
+    if (!this.currentAudio || this.duration <= 0) return;
+    
+    let clientX: number;
+    
+    // Get the appropriate clientX based on event type
+    if (event.type.startsWith('touch')) {
+      const touchEvent = event as TouchEvent;
+      if (touchEvent.touches && touchEvent.touches.length > 0) {
+        clientX = touchEvent.touches[0].clientX;
+      } else if (touchEvent.changedTouches && touchEvent.changedTouches.length > 0) {
+        clientX = touchEvent.changedTouches[0].clientX;
+      } else {
+        return;
+      }
+    } else {
+      clientX = (event as MouseEvent).clientX || event.offsetX;
+    }
+    
+    // Find the progress container element
+    let progressElement = event.target as HTMLElement;
+    while (progressElement && !progressElement.classList.contains('audio-progress-container')) {
+      progressElement = progressElement.parentElement!;
+    }
+    
+    if (!progressElement) return;
+    
+    const rect = progressElement.getBoundingClientRect();
+    const clickX = clientX - rect.left;
+    const totalWidth = rect.width;
+    const clickPercentage = Math.max(0, Math.min(1, clickX / totalWidth));
+    const newTime = clickPercentage * this.duration;
+    
+    this.currentAudio.currentTime = newTime;
+    this.currentTime = newTime;
+    this.progress = clickPercentage * 100;
+  }
+  
+  // Initialize audio without playing (for seeking when not yet started)
+  private initializeAudio(audioUrl: string): void {
+    if (this.currentAudio) return; // Already initialized
+    
+    console.log(`Initializing audio for seeking: ${audioUrl}`);
+    
+    // Create new audio instance
+    this.currentAudio = new Audio(audioUrl);
+    this.currentAudio.preload = 'metadata'; // Load metadata immediately
+    this.currentAudio.playbackRate = this.playbackSpeed;
+    
+    // Set up event listeners
+    this.currentAudio.addEventListener('loadedmetadata', () => {
+      this.duration = this.currentAudio!.duration;
+      console.log(`Audio metadata loaded, duration: ${this.duration} seconds`);
+    });
+    
+    this.currentAudio.addEventListener('timeupdate', () => {
+      this.currentTime = this.currentAudio!.currentTime;
+      this.progress = (this.currentTime / this.duration) * 100;
+    });
+    
+    this.currentAudio.addEventListener('ended', () => {
+      this.isPlaying = false;
+      this.progress = 0;
+      this.currentTime = 0;
+    });
+    
+    this.currentAudio.addEventListener('error', (error) => {
+      console.error('Error loading audio:', error);
+    });
+    
+    // Force load metadata
+    this.currentAudio.load();
   }
 
   // Change playback speed
