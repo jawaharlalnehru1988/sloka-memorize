@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,8 @@ import {
   IonCard, IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/angular/standalone';
 import { TechniqueHeaderComponent } from "../../shared/components/technique-header/technique-header.component";
+import { addIcons } from 'ionicons';
+import { checkmarkCircleOutline, checkmarkOutline, chevronBackOutline, chevronForwardOutline, cogOutline, hourglassOutline, linkOutline, playOutline } from 'ionicons/icons';
 
 // Define interfaces for the training data
 interface KramaStep {
@@ -62,7 +64,8 @@ interface Recording {
     CommonModule, FormsModule, TechniqueHeaderComponent
   ]
 })
-export class KramapadaTrainingPage implements OnInit {
+export class KramapadaTrainingPage implements OnInit, AfterViewInit {
+  @ViewChild(IonContent, { static: false }) content!: IonContent;
   selectedSloka: Sloka | null = null;
   selectedMode: 'guided' | 'interactive' | 'challenge' | 'custom' = 'guided';
   currentStep: number = 0;
@@ -79,7 +82,11 @@ export class KramapadaTrainingPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+
+    addIcons({
+      cogOutline, checkmarkOutline, hourglassOutline, playOutline,linkOutline, chevronBackOutline, chevronForwardOutline,checkmarkCircleOutline})
+  }
 
   ngOnInit() {
     // Get sloka ID from route parameters
@@ -98,6 +105,20 @@ export class KramapadaTrainingPage implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    // Ensure content is properly initialized after view is ready
+    setTimeout(() => {
+      if (this.content) {
+        // Force content to recalculate dimensions
+        this.content.getScrollElement().then(() => {
+          // Content is now ready
+        }).catch(err => {
+          console.warn('Content initialization warning:', err);
+        });
+      }
+    }, 100);
+  }
+
   loadSloka(slokaId: number) {
     // Try to get sloka data from navigation state
     const navigation = this.router.getCurrentNavigation();
@@ -105,7 +126,10 @@ export class KramapadaTrainingPage implements OnInit {
     
     if (slokaData) {
       this.selectedSloka = slokaData;
-      this.generateKramaSequence();
+      // Use setTimeout to ensure DOM is ready before generating sequence
+      setTimeout(() => {
+        this.generateKramaSequence();
+      }, 50);
     } else {
       // If no data in state, redirect back to main page
       console.log('No sloka data found, redirecting to main page');
@@ -114,30 +138,49 @@ export class KramapadaTrainingPage implements OnInit {
   }
 
   generateKramaSequence() {
-    if (!this.selectedSloka) return;
+    if (!this.selectedSloka || !this.selectedSloka.words) {
+      console.warn('Cannot generate sequence: missing sloka or words data');
+      return;
+    }
 
     this.kramaSequence = [];
     const words = this.selectedSloka.words;
 
+    // Validate words array
+    if (!Array.isArray(words) || words.length === 0) {
+      console.warn('Cannot generate sequence: invalid words array');
+      return;
+    }
+
     for (let i = 0; i < words.length; i++) {
+      // Validate word structure
+      const word = words[i];
+      if (!word || !word.devanagari || !word.roman) {
+        console.warn(`Skipping invalid word at index ${i}:`, word);
+        continue;
+      }
+
       // Single word step
       this.kramaSequence.push({
         type: 'single',
-        text: words[i].devanagari,
-        roman: words[i].roman,
+        text: word.devanagari,
+        roman: word.roman,
         wordIndices: [i],
         instruction: `Recite word ${i + 1} alone`
       });
 
       // Pair step (except for the last word)
       if (i < words.length - 1) {
-        this.kramaSequence.push({
-          type: 'pair',
-          text: `${words[i].devanagari} ${words[i + 1].devanagari}`,
-          roman: `${words[i].roman} ${words[i + 1].roman}`,
-          wordIndices: [i, i + 1],
-          instruction: `Recite words ${i + 1} and ${i + 2} together`
-        });
+        const nextWord = words[i + 1];
+        if (nextWord && nextWord.devanagari && nextWord.roman) {
+          this.kramaSequence.push({
+            type: 'pair',
+            text: `${word.devanagari} ${nextWord.devanagari}`,
+            roman: `${word.roman} ${nextWord.roman}`,
+            wordIndices: [i, i + 1],
+            instruction: `Recite words ${i + 1} and ${i + 2} together`
+          });
+        }
       }
     }
 
@@ -164,8 +207,10 @@ export class KramapadaTrainingPage implements OnInit {
   }
 
   getCurrentStepType(): string {
-    if (!this.kramaSequence[this.currentStep]) return '';
-    return this.kramaSequence[this.currentStep].type;
+    if (!this.kramaSequence || this.currentStep >= this.kramaSequence.length || this.currentStep < 0) {
+      return '';
+    }
+    return this.kramaSequence[this.currentStep]?.type || '';
   }
 
   getStepIcon(): string {
@@ -179,14 +224,23 @@ export class KramapadaTrainingPage implements OnInit {
   }
 
   getCurrentInstruction(): string {
+    if (!this.kramaSequence || this.currentStep >= this.kramaSequence.length || this.currentStep < 0) {
+      return '';
+    }
     return this.kramaSequence[this.currentStep]?.instruction || '';
   }
 
   getCurrentRecitationText(): string {
+    if (!this.kramaSequence || this.currentStep >= this.kramaSequence.length || this.currentStep < 0) {
+      return '';
+    }
     return this.kramaSequence[this.currentStep]?.text || '';
   }
 
   getCurrentRecitationRoman(): string {
+    if (!this.kramaSequence || this.currentStep >= this.kramaSequence.length || this.currentStep < 0) {
+      return '';
+    }
     return this.kramaSequence[this.currentStep]?.roman || '';
   }
 
@@ -195,12 +249,25 @@ export class KramapadaTrainingPage implements OnInit {
   }
 
   getHighlightedWords(): string {
-    const step = this.kramaSequence[this.currentStep];
-    if (!step || !this.selectedSloka) return '';
+    if (!this.kramaSequence || this.currentStep >= this.kramaSequence.length || this.currentStep < 0) {
+      return '';
+    }
     
-    return step.wordIndices
-      .map(index => this.selectedSloka!.words[index].devanagari)
-      .join(' + ');
+    const step = this.kramaSequence[this.currentStep];
+    if (!step || !this.selectedSloka || !this.selectedSloka.words) {
+      return '';
+    }
+    
+    try {
+      return step.wordIndices
+        .filter(index => index >= 0 && index < this.selectedSloka!.words.length)
+        .map(index => this.selectedSloka!.words[index]?.devanagari || '')
+        .filter(word => word.length > 0)
+        .join(' + ');
+    } catch (error) {
+      console.warn('Error getting highlighted words:', error);
+      return '';
+    }
   }
 
   playCurrentStep() {
