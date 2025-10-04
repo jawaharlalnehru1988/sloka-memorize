@@ -8,7 +8,11 @@
           @for (scripture of scripturePages; track scripture) {
             <ion-menu-toggle auto-hide="false">
               <ion-item routerDirection="root" [routerLink]="[scripture.url]" lines="none" detail="false" routerLinkActive="selected">
-                <ion-icon aria-hidden="true" slot="start" [ios]="scripture.icon + '-outline'" [md]="scripture.icon + '-sharp'"></ion-icon>
+                @if (scripture.image) {
+                  <img [src]="scripture.image" [alt]="scripture.title" slot="start" class="scripture-image" />
+                } @else {
+                  <ion-icon aria-hidden="true" slot="start" [ios]="scripture.icon + '-outline'" [md]="scripture.icon + '-sharp'"></ion-icon>
+                }
                 <ion-label>{{ scripture.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>

@@ -120,3 +120,33 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+// Scripture image styling
+.scripture-image {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+  margin-right: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  // iOS specific adjustments
+  ion-menu.ios & {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+  
+  // Material Design specific adjustments
+  ion-menu.md & {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+  }
+  
+  // Selected state styling
+  ion-item.selected & {
+    box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+    border: 1px solid rgba(var(--ion-color-primary-rgb), 0.2);
+  }
+}

@@ -37,7 +37,7 @@ export class AppComponent {
     { title: 'Smaraṇa', url: '/smarana', icon: 'bulb' },
   ];
   public scripturePages = [
-    { title: 'Srimad Bhagavad Gītā', url: '/bhagavad-gita', icon: 'bookmarks' },
+    { title: 'Srimad Bhagavad Gītā', url: '/bhagavad-gita', icon: 'bookmarks', image: '/assets/Bhagavadgita.png' },
     // { title: 'Śrīmad Bhāgavatam', url: '/srimad-bhagavatam', icon: 'library' },
     // { title: 'Upadeshamrtam', url: '/upadeshamritam', icon: 'flower' },
     // { title: 'Ishopanishad', url: '/ishopanishad', icon: 'infinite' },

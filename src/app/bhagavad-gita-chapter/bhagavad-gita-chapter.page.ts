@@ -16,7 +16,7 @@ import {
   IonButtons
 } from '@ionic/angular/standalone';
 import { BhagavadGitaService, BhagavadGitaChapterItem } from '../bhagavad-gita/bhagavad-gita.service';
-import { play, pause, arrowBack, download, speedometer, share } from 'ionicons/icons';
+import { play, pause, arrowBack, download, speedometer, share, personCircle, call, logoYoutube, globe, logoWhatsapp } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 
 @Component({
@@ -67,7 +67,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     private meta: Meta,
     private titleService: Title
   ) {
-    addIcons({ play, pause, arrowBack, download, speedometer, share });
+    addIcons({arrowBack,speedometer,download,share,personCircle,call,logoWhatsapp,logoYoutube,globe,play,pause});
   }
 
   ngOnInit() {
