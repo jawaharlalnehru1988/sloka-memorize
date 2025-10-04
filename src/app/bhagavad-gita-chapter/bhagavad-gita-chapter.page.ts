@@ -158,7 +158,8 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     if (!this.chapterData) return;
 
     // Set page title
-    const pageTitle = `Chapter ${this.chapterNumber}: ${this.chapterData.title}`;
+    const tamilChapterNum = this.getTamilChapterNumber(this.chapterNumber);
+    const pageTitle = `${tamilChapterNum} அத்தியாயம்: ${this.chapterData.title}`;
     this.titleService.setTitle(pageTitle);
 
     // Set Open Graph meta tags for social media sharing
@@ -560,18 +561,23 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   // Share chapter functionality
   shareChapter(): void {
     if (this.chapterData) {
-      const shareText = `🕉️ இதோ இந்த பகவத் கீதை அத்தியாயத்தினை அர்த்தத்துடன் கேளுங்கள்: "${this.chapterData.title}" - அத்தியாயம் ${this.chapterNumber}
+      const tamilChapterNum = this.getTamilChapterNumber(this.chapterNumber);
+      const shareText = `🕉️ ஹரே கிருஷ்ணா!  ஸ்ரீமத் பகவத் கீதையின் ${tamilChapterNum} அத்தியாயத்தினை தமிழ் அர்த்தத்துடன் கேளுங்கள்: "${this.chapterData.title}"
 
-தமிழ் அர்த்தத்தையும் கேட்டு, இந்தப் புனித நூலின் ஆன்மீக போதனைகளைக் மனதில் பதிய வைக்கவும்.
+        அவ்வாறு கேட்டு, இந்தப் புனித நூலின் ஆன்மீக போதனைகளைக் மனதில் பதிய வைக்கவும்.
+        இந்த அத்தியாயத்தை உங்கள் நண்பர்களுடனும் குடும்பத்தினருடனும் பகிர்ந்து கொள்ளுங்கள் 🙏
 
-#BhagavadGita #SpiritualLearning #HareKrishnaTamil #HareKrishnaSloka`;
+        எல்லா புகழும் பகவான் ஸ்ரீ கிருஷ்ணர் மற்றும்  ஸ்ரீல பிரபுபாதருக்கே! 🙏
+
+        #BhagavadGita #SpiritualLearning #HareKrishnaTamil #HareKrishnaSloka`;
 
       const shareUrl = window.location.href;
 
       // Check if Web Share API is supported
       if (navigator.share) {
+        const tamilChapterNum = this.getTamilChapterNumber(this.chapterNumber);
         navigator.share({
-          title: `${this.chapterData.title} - Bhagavad Gita Chapter ${this.chapterNumber}`,
+          title: `${this.chapterData.title} - பகவத் கீதை ${tamilChapterNum} அத்தியாயம்`,
           text: shareText,
           url: shareUrl
         }).then(() => {
@@ -641,6 +647,34 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['/bhagavad-gita']);
+  }
+
+  // Convert chapter number to Tamil ordinal
+  getTamilChapterNumber(chapterNum: string | number): string {
+    const num = typeof chapterNum === 'string' ? parseInt(chapterNum) : chapterNum;
+    
+    const tamilOrdinals: { [key: number]: string } = {
+      1: 'முதலாம்',
+      2: 'இரண்டாம்',
+      3: 'மூன்றாம்',
+      4: 'நான்காம்',
+      5: 'ஐந்தாம்',
+      6: 'ஆறாம்',
+      7: 'ஏழாம்',
+      8: 'எட்டாம்',
+      9: 'ஒன்பதாம்',
+      10: 'பத்தாம்',
+      11: 'பதினொன்றாம்',
+      12: 'பன்னிரண்டாம்',
+      13: 'பதிமூன்றாம்',
+      14: 'பதினான்காம்',
+      15: 'பதினைந்தாம்',
+      16: 'பதினாறாம்',
+      17: 'பதினேழாம்',
+      18: 'பதினெட்டாம்'
+    };
+
+    return tamilOrdinals[num] || num.toString();
   }
 
   retryLoading(): void {
