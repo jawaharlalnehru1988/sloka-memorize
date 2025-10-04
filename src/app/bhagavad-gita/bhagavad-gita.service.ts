@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, shareReplay, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 
 export interface BhagavadGitaSloka {
   _id: string;
@@ -60,44 +59,33 @@ export class BhagavadGitaService {
   getBgSlokas(): Observable<BhagavadGitaSloka[]> {
     // Return cached data if available
     if (this.slokaCache) {
-      console.log('🔄 Returning cached BG slokas');
       return of(this.slokaCache);
     }
 
     // Fetch from API if not cached
     const url = `${this.baseUrl}/bg-sloka`;
-    console.log('🌐 Fetching BG slokas from API:', url);
     
     return this.http.get<BhagavadGitaSloka[]>(url).pipe(
       tap((slokas) => {
-        // Cache the data
         this.slokaCache = slokas;
         this.slokaDataSubject.next(slokas);
         console.log('✅ BG slokas cached successfully');
       }),
-      shareReplay(1) // Share the same response with multiple subscribers
+      shareReplay(1)
     );
   }
 
-  // Get all Bhagavad Gita chapters (all languages) with caching
   getAllBgChapters(): Observable<BhagavadGitaChapterResponse[]> {
-    // Return cached data if available
     if (this.allChaptersCache) {
-      console.log('🔄 Returning cached BG chapters (all languages)');
       return of(this.allChaptersCache);
     }
 
-    // Fetch from API if not cached
     const url = `${this.baseUrl}/bg-sloka-chapters`;
-    console.log('🌐 Fetching ALL BG chapters from API:', url);
     
     return this.http.get<BhagavadGitaChapterResponse[]>(url).pipe(
       tap((chapters) => {
-        // Cache the data
         this.allChaptersCache = chapters;
         this.allChaptersSubject.next(chapters);
-        console.log('✅ ALL BG chapters cached successfully');
-        console.log('📚 Available languages:', this.getAvailableLanguages());
       }),
       shareReplay(1) // Share the same response with multiple subscribers
     );
@@ -114,13 +102,11 @@ export class BhagavadGitaService {
         };
         
         const targetCategoryName = languageMap[language] || 'Bhagavad Gita Tamil';
-        console.log(`🔍 Filtering chapters for language: ${language} (${targetCategoryName})`);
         
         const filteredChapters = allChapters.filter(chapter => 
           chapter.categoryName === targetCategoryName
         );
-        
-        console.log(`📖 Found ${filteredChapters.length} chapter groups for ${language}`);
+
         return filteredChapters;
       })
     );
@@ -141,7 +127,6 @@ export class BhagavadGitaService {
     const availableCategories = [...new Set(this.allChaptersCache.map(chapter => chapter.categoryName))];
     const availableLanguages = availableCategories.map(cat => languageMap[cat]).filter(Boolean);
     
-    console.log('🌐 Available languages:', availableLanguages);
     return availableLanguages;
   }
 
@@ -191,7 +176,6 @@ export class BhagavadGitaService {
     this.allChaptersCache = null;
     this.slokaDataSubject.next(null);
     this.allChaptersSubject.next(null);
-    console.log('🗑️ Cache cleared');
   }
 
   // Preload data (useful for app initialization)
@@ -217,35 +201,20 @@ export class BhagavadGitaService {
     return this.http.get<BhagavadGitaSloka>(url);
   }
 
-  // Get slokas by chapter (if needed for filtering)
   getSlokasByChapter(chapter: number): Observable<BhagavadGitaSloka[]> {
     const url = `${this.baseUrl}/bg-sloka`;
     return this.http.get<BhagavadGitaSloka[]>(url);
-    // Note: You might need to filter client-side or modify API if server doesn't support chapter filtering
   }
 
-  // Log slokas to console (for debugging)
   logSlokas(): void {
     this.getBgSlokas().subscribe({
       next: (slokas) => {
-        console.log('=== Bhagavad Gita Slokas ===');
-        console.log(`Total slokas received: ${slokas.length}`);
-        console.log('Slokas data:', slokas);
-        
-        // Log each sloka with detailed information
         slokas.forEach((sloka, index) => {
-          console.log(`\n--- Sloka ${index + 1} ---`);
-          console.log(`ID: ${sloka._id}`);
-          console.log(`Sloka No: ${sloka.slokaNo}`);
-          console.log(`Order No: ${sloka.orderNo}`);
-          console.log(`Text: ${sloka.slokaText}`);
-          console.log(`Voice URL: ${sloka.SlokaVoice}`);
-          console.log(`Meaning: ${sloka.slokaMeaning}`);
+          console.log(`📜 Sloka ${index + 1}:`, sloka);
         });
       },
       error: (error) => {
         console.error('Error fetching BG slokas:', error);
-        console.error('API URL attempted:', `${this.baseUrl}/bg-sloka`);
       },
       complete: () => {
         console.log('BG slokas fetch completed');

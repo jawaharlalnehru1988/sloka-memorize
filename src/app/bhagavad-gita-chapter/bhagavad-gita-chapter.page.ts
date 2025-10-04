@@ -84,17 +84,12 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   }
 
   private loadChapterData(): void {
-    console.log('🔄 Loading Bhagavad Gita chapter data...');
-    
-    // Get selected language from query params
     const selectedLanguage = this.route.snapshot.queryParamMap.get('lang') || 'tamil';
-    console.log('🌐 Loading chapter data for language:', selectedLanguage);
     
     // First try to get data from cache synchronously
     const cachedChapter = this.bhagavadGitaService.getChapterByNumber(this.chapterNumber, selectedLanguage);
     
     if (cachedChapter) {
-      console.log('✅ Found chapter in cache:', cachedChapter);
       this.chapterData = cachedChapter;
       this.loading = false;
       this.setupScrollDetection();
@@ -111,7 +106,6 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     // If not in cache, fetch from API (which will cache it)
     this.bhagavadGitaService.getChaptersByLanguage(selectedLanguage).subscribe({
       next: (response) => {
-        console.log('✅ Chapter data received from API:', response);
         
         if (response && response.length > 0) {
           // Find the specific chapter
@@ -121,7 +115,6 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
           
           if (chapter) {
             this.chapterData = chapter;
-            console.log('📖 Found chapter:', this.chapterData);
             this.setupMetaTags();
             
             // Initialize audio for seeking (load metadata without playing)

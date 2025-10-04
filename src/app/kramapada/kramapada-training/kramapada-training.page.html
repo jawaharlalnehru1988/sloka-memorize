@@ -1,0 +1,325 @@
+<app-technique-header
+  title="Krama Pāṭha Training"
+  sanskrit="क्रमपाठ अभ्यास"
+  emoji="🎯"
+  color="primary"
+  [translucent]="true"
+  [showMenuButton]="false">
+</app-technique-header>
+
+<ion-content [fullscreen]="true" class="kramapada-training-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Krama Pāṭha Training</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (selectedSloka && selectedMode) {
+    <div class="training-interface">
+      <div class="training-header">
+        <div class="header-main">
+          <h3>🔄 {{selectedMode | titlecase}} Mode: {{selectedSloka.title}}</h3>
+          <div class="mode-switcher">
+            <ion-button
+              fill="outline"
+              size="small"
+              (click)="selectMode('guided')"
+              [color]="selectedMode === 'guided' ? 'primary' : 'medium'"
+              >
+              Guided
+            </ion-button>
+            <ion-button
+              fill="outline"
+              size="small"
+              (click)="selectMode('interactive')"
+              [color]="selectedMode === 'interactive' ? 'secondary' : 'medium'"
+              >
+              Interactive
+            </ion-button>
+            <ion-button
+              fill="outline"
+              size="small"
+              (click)="selectMode('challenge')"
+              [color]="selectedMode === 'challenge' ? 'warning' : 'medium'"
+              >
+              Challenge
+            </ion-button>
+            <ion-button
+              fill="clear"
+              size="small"
+              (click)="selectNewSloka()"
+              color="medium"
+              >
+              <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+              Change Śloka
+            </ion-button>
+          </div>
+        </div>
+        <div class="training-progress">
+          <div class="progress-info">
+            <span>Step {{currentStep + 1}} of {{totalSteps}}</span>
+            <span class="progress-percentage">{{progressPercentage}}% Complete</span>
+            @if (getCurrentSlokaRecordingsCount() > 0) {
+              <span class="recordings-count">
+                📼 {{getCurrentSlokaRecordingsCount()}} recordings
+              </span>
+            }
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Current Step Display -->
+      <div class="current-step-section">
+        <div class="step-header">
+          <h4>Current Krama Step</h4>
+          <div class="step-type" [ngClass]="getCurrentStepType()">
+            <ion-icon [name]="getStepIcon()"></ion-icon>
+            <span>{{getStepTypeText()}}</span>
+          </div>
+        </div>
+        <div class="step-display">
+          <div class="step-content">
+            <div class="step-instruction">{{getCurrentInstruction()}}</div>
+            <div class="current-recitation">
+              <div class="recitation-text">{{getCurrentRecitationText()}}</div>
+              <div class="recitation-roman">{{getCurrentRecitationRoman()}}</div>
+            </div>
+            @if (shouldShowWordHighlight()) {
+              <div class="word-highlight">
+                <span>Focus on: </span>
+                <span class="highlighted-words">{{getHighlightedWords()}}</span>
+              </div>
+            }
+          </div>
+          <div class="step-controls">
+            <div class="audio-controls">
+              <ion-button (click)="playCurrentStep()" color="primary">
+                <ion-icon name="play-outline" slot="start"></ion-icon>
+                Play Step
+              </ion-button>
+              <ion-button (click)="playSlowly()" color="secondary">
+                <ion-icon name="hourglass-outline" slot="start"></ion-icon>
+                Play Slowly
+              </ion-button>
+              <ion-button (click)="completeCurrentStep()" color="success" fill="outline">
+                <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                Complete Step
+              </ion-button>
+            </div>
+            @if (selectedMode === 'interactive') {
+              <div class="practice-controls">
+                <ion-button
+                  (click)="isRecording ? stopRecording() : startRecording()"
+                  [color]="isRecording ? 'danger' : 'tertiary'"
+                  [fill]="isRecording ? 'solid' : 'outline'"
+                  >
+                  <ion-icon [name]="isRecording ? 'stop-outline' : 'mic-outline'" slot="start"></ion-icon>
+                  {{isRecording ? 'Stop Recording' : 'Record Practice'}}
+                </ion-button>
+                <!-- Recording indicator -->
+                @if (isRecording) {
+                  <div class="recording-indicator">
+                    <div class="recording-pulse"></div>
+                    <span>Recording in progress...</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sequence Overview -->
+      <div class="sequence-overview">
+        <h4>📊 Krama Sequence Progress</h4>
+        <div class="sequence-timeline">
+          @for (step of kramaSequence; track step; let i = $index) {
+            <div
+              class="timeline-step"
+            [ngClass]="{
+              'completed': i < currentStep,
+              'current': i === currentStep,
+              'upcoming': i > currentStep
+            }"
+              (click)="goToStep(i)"
+              >
+              <div class="step-number">{{i + 1}}</div>
+              <div class="step-preview">
+                <div class="step-type-indicator" [ngClass]="step.type">
+                  {{step.type === 'single' ? '1' : '2'}}
+                </div>
+                <div class="step-text">{{step.text.substring(0, 15)}}...</div>
+              </div>
+              <div class="step-status">
+                @if (i < currentStep) {
+                  <ion-icon
+                    name="checkmark-circle"
+                    color="success"
+                  ></ion-icon>
+                }
+                @if (i === currentStep) {
+                  <ion-icon
+                    name="radio-button-on"
+                    color="primary"
+                  ></ion-icon>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <!-- Practice Feedback -->
+      @if (practiceResult) {
+        <div class="practice-feedback">
+          <div class="feedback-content" [ngClass]="practiceResult.level">
+            <div class="feedback-icon">
+              <ion-icon [name]="getFeedbackIcon()"></ion-icon>
+            </div>
+            <div class="feedback-message">
+              <h4>{{practiceResult.title}}</h4>
+              <p>{{practiceResult.message}}</p>
+            </div>
+          </div>
+          <div class="feedback-actions">
+            @if (practiceResult.level !== 'excellent') {
+              <ion-button (click)="retryStep()" fill="outline">
+                <ion-icon name="refresh-outline" slot="start"></ion-icon>
+                Try Again
+              </ion-button>
+            }
+            @if (practiceResult.level === 'excellent') {
+              <ion-button (click)="nextStep()" color="primary">
+                <ion-icon name="arrow-forward-outline" slot="start"></ion-icon>
+                Next Step
+              </ion-button>
+            }
+          </div>
+        </div>
+      }
+      
+      <!-- Current Step Recordings -->
+      @if (getCurrentStepRecordings().length > 0) {
+        <div class="step-recordings">
+          <h4>📼 Recordings for This Step</h4>
+          <div class="recordings-list">
+            @for (recording of getCurrentStepRecordings(); track recording) {
+              <div
+                class="recording-item"
+                >
+                <div class="recording-info">
+                  <div class="recording-details">
+                    <span class="recording-time">{{recording.timestamp | date:'short'}}</span>
+                    <span class="recording-duration">{{formatDuration(recording.duration)}}</span>
+                    <span class="recording-size">{{formatFileSize(recording.size)}}</span>
+                  </div>
+                  <div class="recording-mode">{{recording.mode | titlecase}} Mode</div>
+                </div>
+                <div class="recording-actions">
+                  <ion-button
+                    (click)="playRecording(recording.id)"
+                    fill="clear"
+                    size="small"
+                    color="primary"
+                    >
+                    <ion-icon name="play-outline" slot="icon-only"></ion-icon>
+                  </ion-button>
+                  <ion-button
+                    (click)="deleteRecording(recording.id)"
+                    fill="clear"
+                    size="small"
+                    color="danger"
+                    >
+                    <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      
+      <!-- Navigation Controls -->
+      <div class="navigation-controls">
+        <ion-button
+          (click)="previousStep()"
+          [disabled]="currentStep === 0"
+          fill="outline"
+          >
+          <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
+          Previous Step
+        </ion-button>
+        <ion-button
+          (click)="nextStep()"
+          [disabled]="!canProceedToNext()"
+          fill="outline"
+          >
+          Next Step
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+      
+      <!-- Completion Section -->
+      @if (isSequenceCompleted()) {
+        <div class="completion-section">
+          <div class="completion-card">
+            <div class="completion-animation">
+              <ion-icon name="trophy" color="warning"></ion-icon>
+              <div class="celebration-text">🎉 Krama Mastered! 🎉</div>
+            </div>
+            <h3>Excellent Work!</h3>
+            <p>You've successfully completed the entire Krama Pāṭha sequence. Your word-to-word transitions are now smooth and natural!</p>
+            <div class="completion-stats">
+              <div class="stat-item">
+                <ion-icon name="timer-outline"></ion-icon>
+                <span>Time: {{completionTime}}</span>
+              </div>
+              <div class="stat-item">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>Steps: {{totalSteps}}</span>
+              </div>
+              <div class="stat-item">
+                <ion-icon name="star-outline"></ion-icon>
+                <span>Accuracy: {{accuracy}}%</span>
+              </div>
+            </div>
+            <div class="completion-actions">
+              <ion-button (click)="practiceFullSequence()" color="success">
+                <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+                Practice Full Sequence
+              </ion-button>
+              <ion-button (click)="earnMasteryBadge()" color="warning">
+                <ion-icon name="medal-outline" slot="start"></ion-icon>
+                Earn Mastery Badge
+              </ion-button>
+              <ion-button (click)="selectNewSloka()" fill="outline">
+                <ion-icon name="refresh-outline" slot="start"></ion-icon>
+                Try Another Śloka
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+  
+  @if (!selectedSloka) {
+    <div class="loading-section">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Loading Training Session</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Preparing your Krama Pāṭha training session...</p>
+          <ion-button (click)="selectNewSloka()" fill="outline">
+            <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+            Back to Sloka Selection
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  }
+</ion-content>

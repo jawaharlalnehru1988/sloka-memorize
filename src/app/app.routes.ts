@@ -40,6 +40,10 @@ export const routes: Routes = [
     loadComponent: () => import('./kramapada/kramapada.page').then( m => m.KramapadaPage)
   },
   {
+    path: 'kramapada/training/:id',
+    loadComponent: () => import('./kramapada/kramapada-training/kramapada-training.page').then( m => m.KramapadaTrainingPage)
+  },
+  {
     path: 'jatapada',
     loadComponent: () => import('./jatapada/jatapada.page').then( m => m.JatapadaPage)
   },

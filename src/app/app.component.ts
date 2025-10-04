@@ -13,7 +13,8 @@ import {
   volumeHigh, volumeHighOutline, volumeHighSharp, create, createOutline, createSharp,
   bulb, bulbOutline, bulbSharp, bookmarks, bookmarksOutline, bookmarksSharp,
   library, libraryOutline, librarySharp, flower, flowerOutline, flowerSharp,
-  infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp
+  infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp,
+  earOutline, repeatOutline, timeOutline, playCircle
 } from 'ionicons/icons';
 
 @Component({
@@ -55,7 +56,8 @@ export class AppComponent {
       volumeHigh, volumeHighOutline, volumeHighSharp, create, createOutline, createSharp,
       bulb, bulbOutline, bulbSharp, bookmarks, bookmarksOutline, bookmarksSharp,
       library, libraryOutline, librarySharp, flower, flowerOutline, flowerSharp,
-      infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp
+      infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp,
+      earOutline, repeatOutline, timeOutline, playCircle
     });
   }
 }

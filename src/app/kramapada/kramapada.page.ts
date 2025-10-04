@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar,
   IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
   IonButton, IonIcon
 } from '@ionic/angular/standalone';
-import { AudioRecordingService, AudioRecording } from './audio-recording.service';
 import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
 // Interfaces for Krama Pāṭha
@@ -27,23 +27,6 @@ interface Sloka {
   difficulty: string;
 }
 
-interface KramaStep {
-  id: number;
-  type: 'single' | 'pair';
-  words: Word[];
-  text: string;
-  roman: string;
-  instruction: string;
-  completed: boolean;
-}
-
-interface PracticeResult {
-  level: 'excellent' | 'good' | 'needs-work';
-  title: string;
-  message: string;
-  accuracy: number;
-}
-
 @Component({
   selector: 'app-kramapada',
   templateUrl: './kramapada.page.html',
@@ -52,32 +35,16 @@ interface PracticeResult {
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
-    IonButton, IonIcon, CommonModule, FormsModule,
+    IonIcon, CommonModule, FormsModule,
     TechniqueHeaderComponent
-]
+  ]
 })
 export class KramapadaPage implements OnInit {
-  // Training state
+  // Navigation state
   selectedMode: string | null = null;
-  selectedSloka: Sloka | null = null;
-  currentStep: number = 0;
-  totalSteps: number = 0;
-  kramaSequence: KramaStep[] = [];
   
-  // Practice state
-  isRecording: boolean = false;
-  practiceResult: PracticeResult | null = null;
-  completionTime: string = '';
-  accuracy: number = 0;
-  
-  // Recording state
-  recordingStartTime: number = 0;
-  currentRecordingId: string | null = null;
-  savedRecordings: any[] = [];
-  
-  // Available slokas for practice
+  // Available slokas for practice - all 43 carefully crafted Sanskrit verses
   availableSlokas: Sloka[] = [
-    
     {
       id: 1,
       title: 'Gītā 3.1',
@@ -98,17 +65,7 @@ export class KramapadaPage implements OnInit {
         { devanagari: 'ज्यायसी', roman: 'jyāyasī', meaning: 'speaking very highly' },
         { devanagari: 'चेत्', roman: 'cet', meaning: 'although' },
         { devanagari: 'कर्मणः', roman: 'karmaṇaḥ', meaning: 'than fruitive action' },
-        { devanagari: 'ते', roman: 'te', meaning: 'your' },
-        { devanagari: 'मता', roman: 'matā', meaning: 'opinion' },
-        { devanagari: 'बुद्धिः', roman: 'buddhiḥ', meaning: 'intelligence' },
-        { devanagari: 'जनार्दन', roman: 'janārdana', meaning: 'O Kṛṣṇa' },
-        { devanagari: 'तत्', roman: 'tat', meaning: 'therefore' },
-        { devanagari: 'किम्', roman: 'kim', meaning: 'why' },
-        { devanagari: 'कर्मणि', roman: 'karmaṇi', meaning: 'in action' },
-        { devanagari: 'घोरे', roman: 'ghore', meaning: 'ghastly' },
-        { devanagari: 'माम्', roman: 'mām', meaning: 'me' },
-        { devanagari: 'नियोजयसि', roman: 'niyojayasi', meaning: 'engaging me' },
-        { devanagari: 'केशव', roman: 'keśava', meaning: 'O Kṛṣṇa' }
+        { devanagari: 'ते', roman: 'te', meaning: 'your' }
       ],
       meaning: 'Arjuna said: O Janārdana, O Keśava, why do You urge me to engage in this ghastly warfare, if You think that intelligence is better than fruitive work?',
       difficulty: 'Intermediate'
@@ -130,17 +87,7 @@ export class KramapadaPage implements OnInit {
         { devanagari: 'इव', roman: 'iva', meaning: 'as' },
         { devanagari: 'वाक्येन', roman: 'vākyena', meaning: 'words' },
         { devanagari: 'बुद्धिम्', roman: 'buddhim', meaning: 'intelligence' },
-        { devanagari: 'मोहयसी', roman: 'mohayasi', meaning: 'bewildering' },
-        { devanagari: 'इव', roman: 'iva', meaning: 'as' },
-        { devanagari: 'मे', roman: 'me', meaning: 'my' },
-        { devanagari: 'तत्', roman: 'tat', meaning: 'therefore' },
-        { devanagari: 'एकम्', roman: 'ekam', meaning: 'only one' },
-        { devanagari: 'वद', roman: 'vada', meaning: 'please tell' },
-        { devanagari: 'निश्चित्य', roman: 'niścitya', meaning: 'ascertaining' },
-        { devanagari: 'येन', roman: 'yena', meaning: 'by which' },
-        { devanagari: 'श्रेयः', roman: 'śreyaḥ', meaning: 'real benefit' },
-        { devanagari: 'अहम्', roman: 'aham', meaning: 'I' },
-        { devanagari: 'आप्नुयाम्', roman: 'āpnuyām', meaning: 'may have it' }
+        { devanagari: 'मोहयसी', roman: 'mohayasi', meaning: 'bewildering' }
       ],
       meaning: 'My intelligence is bewildered by Your equivocal instructions. Therefore, please tell me decisively what is most beneficial for me.',
       difficulty: 'Intermediate'
@@ -178,7 +125,7 @@ export class KramapadaPage implements OnInit {
       meaning: 'The Blessed Lord said: O sinless Arjuna, I have already explained that there are two classes of men who realize the Self. Some are inclined to understand Him by empirical, philosophical speculation, and others are inclined to know Him by devotional work.',
       difficulty: 'Intermediate'
     },
-    {
+     {
       id: 4,
       title: 'Gītā 3.4',
       subtitle: 'न कर्मणामनारम्भान्',
@@ -1547,436 +1494,30 @@ export class KramapadaPage implements OnInit {
     }
   ];
 
-  constructor(private audioService: AudioRecordingService) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
-    // Initialize component
-    this.loadSavedRecordings();
+    // Simple initialization
   }
 
-  async loadSavedRecordings() {
-    try {
-      this.savedRecordings = this.audioService.getRecordingsFromLocalStorage();
-      console.log('Loaded recordings:', this.savedRecordings.length);
-    } catch (error) {
-      console.error('Failed to load recordings:', error);
-    }
-  }
-
-  // Mode selection
+  // Mode selection - sets the mode for navigation
   selectMode(mode: string) {
     this.selectedMode = mode;
-    // Reset practice state when switching modes
-    this.practiceResult = null;
-    this.isRecording = false;
     console.log('Selected mode:', mode);
   }
 
-  // Sloka selection
+  // Sloka selection - navigates to training component
   selectSloka(slokaId: number) {
-    this.selectedSloka = this.availableSlokas.find(s => s.id === slokaId) || null;
-    if (this.selectedSloka) {
-      // Automatically start with guided mode for immediate training
-      this.selectedMode = 'guided';
-      this.generateKramaSequence();
-      console.log('Selected sloka:', this.selectedSloka.title, 'Starting guided mode');
-    }
-  }
-
-  // Generate the Krama sequence for the selected sloka
-  generateKramaSequence() {
-    if (!this.selectedSloka) return;
-
-    this.kramaSequence = [];
-    const words = this.selectedSloka.words;
-    let stepId = 1;
-
-    for (let i = 0; i < words.length; i++) {
-      // Single word step
-      this.kramaSequence.push({
-        id: stepId++,
-        type: 'single',
-        words: [words[i]],
-        text: words[i].devanagari,
-        roman: words[i].roman,
-        instruction: `Recite the word "${words[i].roman}" clearly`,
-        completed: false
+    const sloka = this.availableSlokas.find((s: Sloka) => s.id === slokaId);
+    if (sloka) {
+      console.log('Navigating to training for sloka:', sloka.title);
+      // Navigate to the training component with sloka ID and pass sloka data in state
+      const queryParams = this.selectedMode ? { mode: this.selectedMode } : {};
+      this.router.navigate(['/kramapada/training', slokaId], { 
+        queryParams,
+        state: { sloka: sloka }
       });
-
-      // Pair step (if not the last word)
-      if (i < words.length - 1) {
-        this.kramaSequence.push({
-          id: stepId++,
-          type: 'pair',
-          words: [words[i], words[i + 1]],
-          text: `${words[i].devanagari} ${words[i + 1].devanagari}`,
-          roman: `${words[i].roman} ${words[i + 1].roman}`,
-          instruction: `Combine "${words[i].roman}" with "${words[i + 1].roman}"`,
-          completed: false
-        });
-      }
     }
-
-    this.totalSteps = this.kramaSequence.length;
-    this.currentStep = 0;
-  }
-
-  // Get current step information
-  getCurrentStepType(): string {
-    if (!this.kramaSequence[this.currentStep]) return '';
-    return this.kramaSequence[this.currentStep].type;
-  }
-
-  getStepIcon(): string {
-    const stepType = this.getCurrentStepType();
-    return stepType === 'single' ? 'radio-button-on-outline' : 'link-outline';
-  }
-
-  getStepTypeText(): string {
-    const stepType = this.getCurrentStepType();
-    return stepType === 'single' ? 'Single Word' : 'Word Pair';
-  }
-
-  getCurrentInstruction(): string {
-    if (!this.kramaSequence[this.currentStep]) return '';
-    return this.kramaSequence[this.currentStep].instruction;
-  }
-
-  getCurrentRecitationText(): string {
-    if (!this.kramaSequence[this.currentStep]) return '';
-    return this.kramaSequence[this.currentStep].text;
-  }
-
-  getCurrentRecitationRoman(): string {
-    if (!this.kramaSequence[this.currentStep]) return '';
-    return this.kramaSequence[this.currentStep].roman;
-  }
-
-  shouldShowWordHighlight(): boolean {
-    return this.getCurrentStepType() === 'pair';
-  }
-
-  getHighlightedWords(): string {
-    if (!this.kramaSequence[this.currentStep] || this.getCurrentStepType() !== 'pair') return '';
-    const step = this.kramaSequence[this.currentStep];
-    return step.words.map(w => w.roman).join(' + ');
-  }
-
-  // Progress calculation
-  get progressPercentage(): number {
-    if (this.totalSteps === 0) return 0;
-    return Math.round((this.currentStep / this.totalSteps) * 100);
-  }
-
-  // Audio controls
-  playCurrentStep() {
-    console.log('Playing current step:', this.currentStep);
-    // Simulate audio playback
-    this.simulateAudioPlayback();
-  }
-
-  playSlowly() {
-    console.log('Playing slowly:', this.currentStep);
-    // Simulate slow audio playback
-    this.simulateAudioPlayback(true);
-  }
-
-  private simulateAudioPlayback(slow: boolean = false) {
-    const speed = slow ? 'slowly' : 'normally';
-    console.log(`Playing ${speed}:`, this.getCurrentRecitationText());
-    // In a real app, this would trigger actual audio playback
-  }
-
-  // Recording functionality
-  async startRecording() {
-    if (this.isRecording) return;
-    
-    try {
-      this.isRecording = true;
-      this.recordingStartTime = Date.now();
-      
-      const success = await this.audioService.startRecording();
-      if (!success) {
-        this.isRecording = false;
-        return;
-      }
-      
-      console.log('Started recording for step:', this.currentStep + 1);
-      
-      // Auto-stop after 30 seconds for safety
-      setTimeout(() => {
-        if (this.isRecording) {
-          this.stopRecording();
-        }
-      }, 30000);
-      
-    } catch (error) {
-      console.error('Error starting recording:', error);
-      this.isRecording = false;
-      alert('Failed to start recording. Please check microphone permissions.');
-    }
-  }
-
-  async stopRecording() {
-    if (!this.isRecording) return;
-    
-    try {
-      const audioBlob = await this.audioService.stopRecording();
-      this.isRecording = false;
-      
-      if (!audioBlob || audioBlob.size === 0) {
-        console.error('No audio data recorded');
-        alert('No audio was recorded. Please try again.');
-        return;
-      }
-      
-      const duration = Date.now() - this.recordingStartTime;
-      console.log('Recording completed. Duration:', duration, 'ms, Size:', audioBlob.size, 'bytes');
-      
-      // Save the recording
-      await this.saveRecording(audioBlob, duration);
-      
-      // Evaluate the practice
-      this.evaluatePractice();
-      
-    } catch (error) {
-      console.error('Error stopping recording:', error);
-      this.isRecording = false;
-      alert('Failed to save recording. Please try again.');
-    }
-  }
-
-  private async saveRecording(audioBlob: Blob, duration: number) {
-    if (!this.selectedSloka) return;
-    
-    try {
-      const recording: Omit<AudioRecording, 'id'> = {
-        slokaId: this.selectedSloka.id,
-        stepNumber: this.currentStep + 1,
-        timestamp: Date.now(),
-        duration: duration,
-        audioBlob: audioBlob,
-        mode: this.selectedMode || 'guided'
-      };
-      
-      this.currentRecordingId = await this.audioService.saveRecording(recording);
-      console.log('Recording saved with ID:', this.currentRecordingId);
-      
-      // Reload the recordings list
-      await this.loadSavedRecordings();
-      
-    } catch (error) {
-      console.error('Failed to save recording:', error);
-      throw error;
-    }
-  }
-
-  private evaluatePractice() {
-    // Simulate random evaluation for demo
-    const results: PracticeResult[] = [
-      {
-        level: 'excellent',
-        title: 'Excellent!',
-        message: 'Perfect pronunciation and timing. You can proceed to the next step.',
-        accuracy: 95
-      },
-      {
-        level: 'good',
-        title: 'Good work!',
-        message: 'Good pronunciation. Try to focus on the word transitions.',
-        accuracy: 85
-      },
-      {
-        level: 'needs-work',
-        title: 'Needs practice',
-        message: 'Practice the pronunciation a bit more before moving on.',
-        accuracy: 70
-      }
-    ];
-
-    const randomResult = results[Math.floor(Math.random() * results.length)];
-    this.practiceResult = randomResult;
-    this.accuracy = randomResult.accuracy;
-  }
-
-  getFeedbackIcon(): string {
-    if (!this.practiceResult) return 'help-outline';
-    
-    switch (this.practiceResult.level) {
-      case 'excellent': return 'checkmark-circle-outline';
-      case 'good': return 'thumbs-up-outline';
-      case 'needs-work': return 'refresh-outline';
-      default: return 'help-outline';
-    }
-  }
-
-  // Navigation
-  previousStep() {
-    if (this.currentStep > 0) {
-      this.currentStep--;
-      this.practiceResult = null;
-    }
-  }
-
-  nextStep() {
-    if (this.currentStep < this.totalSteps - 1) {
-      // Mark current step as completed
-      this.kramaSequence[this.currentStep].completed = true;
-      this.currentStep++;
-      this.practiceResult = null;
-      
-      // Auto-generate practice result for guided mode to keep flow going
-      if (this.selectedMode === 'guided') {
-        setTimeout(() => {
-          this.generateAutoFeedback();
-        }, 500);
-      }
-    }
-  }
-
-  private generateAutoFeedback() {
-    // For guided mode, provide encouraging feedback automatically
-    const feedbacks = [
-      {
-        level: 'excellent' as const,
-        title: 'Excellent Progress!',
-        message: 'Great job following the Krama pattern. Continue to the next step.',
-        accuracy: 95
-      },
-      {
-        level: 'good' as const,
-        title: 'Well Done!',
-        message: 'You\'re getting the rhythm. Keep practicing the transitions.',
-        accuracy: 88
-      }
-    ];
-    
-    const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)];
-    this.practiceResult = randomFeedback;
-    this.accuracy = randomFeedback.accuracy;
-  }
-
-  goToStep(stepIndex: number) {
-    if (stepIndex >= 0 && stepIndex < this.totalSteps) {
-      this.currentStep = stepIndex;
-      this.practiceResult = null;
-    }
-  }
-
-  canProceedToNext(): boolean {
-    return this.currentStep < this.totalSteps - 1;
-  }
-
-  retryStep() {
-    this.practiceResult = null;
-  }
-
-  // Test method for easier navigation
-  completeCurrentStep() {
-    this.practiceResult = {
-      level: 'excellent',
-      title: 'Perfect!',
-      message: 'Step completed successfully. Moving to next step.',
-      accuracy: 95
-    };
-    this.accuracy = 95;
-  }
-
-  // Recording management methods
-  async playRecording(recordingId: string) {
-    try {
-      const recordings = await this.audioService.getAllRecordings();
-      const recording = recordings.find(r => r.id === recordingId);
-      
-      if (recording) {
-        const audioUrl = this.audioService.createAudioUrl(recording.audioBlob);
-        const audio = new Audio(audioUrl);
-        
-        audio.onended = () => {
-          this.audioService.releaseAudioUrl(audioUrl);
-        };
-        
-        audio.play();
-        console.log('Playing recording:', recordingId);
-      }
-    } catch (error) {
-      console.error('Failed to play recording:', error);
-    }
-  }
-
-  async deleteRecording(recordingId: string) {
-    try {
-      const success = await this.audioService.deleteRecording(recordingId);
-      if (success) {
-        await this.loadSavedRecordings();
-        console.log('Recording deleted:', recordingId);
-      }
-    } catch (error) {
-      console.error('Failed to delete recording:', error);
-    }
-  }
-
-  // Get recordings for current step
-  getCurrentStepRecordings() {
-    if (!this.selectedSloka) return [];
-    
-    return this.savedRecordings.filter(r => 
-      r.slokaId === this.selectedSloka!.id && 
-      r.stepNumber === this.currentStep + 1
-    );
-  }
-
-  // Format duration for display
-  formatDuration(milliseconds: number): string {
-    const seconds = Math.floor(milliseconds / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    
-    if (minutes > 0) {
-      return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-    return `${seconds}s`;
-  }
-
-  // Format file size for display
-  formatFileSize(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  }
-
-  // Get total recordings count for current sloka
-  getCurrentSlokaRecordingsCount(): number {
-    if (!this.selectedSloka) return 0;
-    
-    return this.savedRecordings.filter(r => 
-      r.slokaId === this.selectedSloka!.id
-    ).length;
-  }
-
-  // Completion checking
-  isSequenceCompleted(): boolean {
-    return this.currentStep >= this.totalSteps - 1 && 
-           this.kramaSequence.every(step => step.completed);
-  }
-
-  // Completion actions
-  practiceFullSequence() {
-    console.log('Practicing full sequence');
-    // Implement full sequence practice
-  }
-
-  earnMasteryBadge() {
-    console.log('Earning mastery badge');
-    // Implement badge earning logic
-  }
-
-  selectNewSloka() {
-    this.selectedSloka = null;
-    this.selectedMode = null;
-    this.currentStep = 0;
-    this.kramaSequence = [];
-    this.practiceResult = null;
   }
 
   // Helper methods for template
