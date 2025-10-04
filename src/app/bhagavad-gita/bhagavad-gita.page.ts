@@ -25,7 +25,7 @@ import {
   IonLabel
 } from '@ionic/angular/standalone';
 import { BhagavadGitaService, BhagavadGitaChapterResponse, BhagavadGitaChapterItem } from './bhagavad-gita.service';
-import { book, close, chevronDown, play, bookmark, image } from 'ionicons/icons';
+import { book, close, chevronDown, play, bookmark, image, library } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
@@ -79,7 +79,7 @@ export class BhagavadGitaPage implements OnInit {
     private meta: Meta,
     private titleService: Title
   ) {
-    addIcons({book});
+    addIcons({book, library});
   }
 
   ngOnInit() {
@@ -194,6 +194,10 @@ export class BhagavadGitaPage implements OnInit {
     this.loadChapterData();
   }
 
-
-
+  navigateToSlokas(): void {
+    console.log('🔄 Navigating to slokas page...');
+    this.router.navigate(['/sloka-renderer'], {
+      queryParams: { view: 'all' }
+    });
+  }
 }

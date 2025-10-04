@@ -23,6 +23,17 @@
       <p class="welcome-subtitle">Choose your Chapter to Learn</p>
     </ion-text>
     
+    <!-- Quick Access Buttons -->
+    <div class="quick-access-buttons">
+      <ion-button 
+        fill="outline" 
+        color="tertiary"
+        (click)="navigateToSlokas()">
+        <ion-icon name="library" slot="start"></ion-icon>
+        Important Slokas
+      </ion-button>
+    </div>
+    
     <!-- Language Selection -->
     <div class="language-selection">
       <ion-item lines="none" class="language-item">

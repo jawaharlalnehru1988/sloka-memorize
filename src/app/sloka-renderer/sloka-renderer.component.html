@@ -1,0 +1,236 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/bhagavad-gita"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ (currentSloka && currentSloka.slokaNo) ? 'Sloka ' + currentSloka.slokaNo : 'Bhagavad Gita Slokas' }}</ion-title>
+    <ion-buttons slot="end">
+      @if (currentSloka) {
+        <ion-button (click)="shareSloka()">
+          <ion-icon name="share" slot="icon-only"></ion-icon>
+        </ion-button>
+      }
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="sloka-detail-bg">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ (currentSloka && currentSloka.slokaNo) ? 'Sloka ' + currentSloka.slokaNo : 'Slokas' }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <ion-text color="medium">
+        <p>Loading sloka details...</p>
+      </ion-text>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error) {
+    <div class="error-container">
+      <ion-text color="danger">
+        <h3>⚠️ Connection Error</h3>
+        <p>{{ error }}</p>
+      </ion-text>
+      <div class="error-actions">
+        <ion-button fill="solid" color="primary" (click)="retryLoading()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Try Again
+        </ion-button>
+        <ion-button fill="outline" color="medium" (click)="goBack()">
+          <ion-icon name="arrow-back" slot="start"></ion-icon>
+          Go Back
+        </ion-button>
+      </div>
+    </div>
+  }
+
+  <!-- Single Sloka View -->
+  @else if (currentSloka && !showAllSlokas) {
+    <div class="sloka-detail-container">
+      
+      <!-- Sloka Header -->
+      <div class="sloka-header-section">
+        <div class="sloka-number-badge">
+          <ion-text color="primary">
+            <h1>{{ currentSloka.slokaNo }}</h1>
+          </ion-text>
+        </div>
+        <ion-text color="medium">
+          <p class="sloka-order">Order: {{ currentSloka.orderNo }}</p>
+        </ion-text>
+      </div>
+
+      <!-- Sloka Content -->
+      <div class="sloka-content-section">
+        
+        <!-- Sanskrit Text -->
+        <div class="sloka-text-section">
+          <ion-text color="primary">
+            <h3>🕉️ Sanskrit Text</h3>
+          </ion-text>
+          <div class="sloka-text-content">
+            <ion-text>
+              <p class="sanskrit-text">{{ currentSloka.slokaText }}</p>
+            </ion-text>
+          </div>
+        </div>
+
+        <!-- Audio Section -->
+        @if (currentSloka.SlokaVoice) {
+          <app-audio-player 
+            [audioUrl]="currentSloka.SlokaVoice"
+            [audioTitle]="'Sloka'"
+            [enableDownload]="true"
+            [enableShare]="false"
+            [enableSpeedControl]="true"
+            [autoLoadMetadata]="true"
+            (onDownload)="handleDownload($event)">
+          </app-audio-player>
+        }
+
+        <!-- Meaning Section -->
+        <div class="sloka-meaning-section">
+          <ion-text color="primary">
+            <h3>📖 Tamil Meaning</h3>
+          </ion-text>
+          <div class="sloka-meaning-content">
+            <ion-text>
+              <p class="meaning-text">{{ currentSloka.slokaMeaning }}</p>
+            </ion-text>
+          </div>
+        </div>
+
+        <!-- Navigation Section -->
+        <div class="sloka-navigation-section">
+          <ion-text color="primary">
+            <h3>🧭 Navigation</h3>
+          </ion-text>
+          <div class="navigation-buttons">
+            <ion-button 
+              fill="outline" 
+              color="primary"
+              (click)="goToPreviousSloka()"
+              [disabled]="!hasPreviousSloka()">
+              <ion-icon name="chevron-back" slot="start"></ion-icon>
+              Previous
+            </ion-button>
+            
+            <ion-button 
+              fill="solid" 
+              color="tertiary"
+              (click)="showAllSlokas = true; loadAllSlokas()">
+              <ion-icon name="list" slot="start"></ion-icon>
+              All Slokas
+            </ion-button>
+            
+            <ion-button 
+              fill="outline" 
+              color="primary"
+              (click)="goToNextSloka()"
+              [disabled]="!hasNextSloka()">
+              <ion-icon name="chevron-forward" slot="end"></ion-icon>
+              Next
+            </ion-button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  <!-- All Slokas List View -->
+  @else if (showAllSlokas && allSlokas && allSlokas.length > 0) {
+    <div class="all-slokas-container">
+      
+      <!-- List Header -->
+      <div class="slokas-list-header">
+        <ion-text color="primary">
+          <h2>📜 All Bhagavad Gita Slokas</h2>
+        </ion-text>
+        <ion-text color="medium">
+          <p>Total: {{ allSlokas.length }} slokas</p>
+        </ion-text>
+        
+        @if (currentSloka) {
+          <ion-button 
+            fill="outline" 
+            color="primary"
+            (click)="showAllSlokas = false">
+            <ion-icon name="arrow-back" slot="start"></ion-icon>
+            Back to Current Sloka
+          </ion-button>
+        }
+      </div>
+
+      <!-- Slokas List -->
+      <div class="slokas-list">
+        @for (sloka of allSlokas; track sloka._id) {
+          <ion-card 
+            class="sloka-card" 
+            [class.current-sloka]="currentSloka?._id === sloka._id"
+            button="true" 
+            (click)="selectSloka(sloka)">
+            <ion-card-header>
+              <div class="sloka-card-header">
+                <ion-card-title class="sloka-number">{{ sloka.slokaNo }}</ion-card-title>
+                <ion-text color="medium">
+                  <small>Order: {{ sloka.orderNo }}</small>
+                </ion-text>
+              </div>
+            </ion-card-header>
+            
+            <ion-card-content>
+              <div class="sloka-preview">
+                <ion-text>
+                  <p class="sloka-text-preview">{{ getTextPreview(sloka.slokaText) }}</p>
+                </ion-text>
+                <ion-text color="medium">
+                  <p class="meaning-preview">{{ getMeaningPreview(sloka.slokaMeaning) }}</p>
+                </ion-text>
+              </div>
+              
+              <div class="sloka-card-actions">
+                <ion-button 
+                  fill="clear" 
+                  size="small"
+                  (click)="playSloka(sloka, $event)">
+                  <ion-icon name="play" slot="start"></ion-icon>
+                  Play
+                </ion-button>
+                <ion-button 
+                  fill="clear" 
+                  size="small"
+                  (click)="shareSloka(sloka, $event)">
+                  <ion-icon name="share" slot="start"></ion-icon>
+                  Share
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- No Data State -->
+  @else {
+    <div class="no-data-container">
+      <ion-text color="medium">
+        <h3>📜 No Slokas Available</h3>
+        <p>Please check your connection and try again.</p>
+      </ion-text>
+      <ion-button fill="outline" color="primary" (click)="loadAllSlokas()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Load Slokas
+      </ion-button>
+    </div>
+  }
+
+</ion-content>

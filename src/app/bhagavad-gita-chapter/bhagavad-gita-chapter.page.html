@@ -28,13 +28,30 @@
   @else if (error) {
     <div class="error-container">
       <ion-text color="danger">
-        <h3>⚠️ Error</h3>
+        <h3>⚠️ Connection Error</h3>
         <p>{{ error }}</p>
       </ion-text>
-      <ion-button fill="outline" (click)="goBack()">
-        <ion-icon name="arrow-back" slot="start"></ion-icon>
-        Go Back
-      </ion-button>
+      <div class="error-actions">
+        <ion-button fill="solid" color="primary" (click)="retryLoading()">
+          <ion-icon name="refresh" slot="start"></ion-icon>
+          Try Again
+        </ion-button>
+        <ion-button fill="outline" color="medium" (click)="goBack()">
+          <ion-icon name="arrow-back" slot="start"></ion-icon>
+          Go Back
+        </ion-button>
+      </div>
+      <div class="connection-tips">
+        <ion-text color="medium">
+          <h4>💡 Troubleshooting Tips:</h4>
+          <ul>
+            <li>Check if you're connected to Wi-Fi or mobile data</li>
+            <li>Try switching between Wi-Fi and mobile data</li>
+            <li>Make sure you have a stable internet connection</li>
+            <li>Close and reopen the app if the problem persists</li>
+          </ul>
+        </ion-text>
+      </div>
     </div>
   }
 

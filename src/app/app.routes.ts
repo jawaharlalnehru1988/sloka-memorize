@@ -64,6 +64,10 @@ export const routes: Routes = [
     loadComponent: () => import('./bhagavad-gita/bhagavad-gita.page').then( m => m.BhagavadGitaPage)
   },
   {
+    path: '35-slokas',
+    loadComponent: () => import('./sloka-renderer/sloka-renderer.component').then( m => m.SlokaRendererComponent)
+  },
+  {
     path: 'srimad-bhagavatam',
     loadComponent: () => import('./srimad-bhagavatam/srimad-bhagavatam.page').then( m => m.SrimadBhagavatamPage)
   },
@@ -82,6 +86,14 @@ export const routes: Routes = [
   {
     path: 'bhagavad-gita-chapter/:chapterNumber',
     loadComponent: () => import('./bhagavad-gita-chapter/bhagavad-gita-chapter.page').then( m => m.BhagavadGitaChapterPage)
+  },
+  {
+    path: 'sloka-renderer',
+    loadComponent: () => import('./sloka-renderer/sloka-renderer.component').then( m => m.SlokaRendererComponent)
+  },
+  {
+    path: 'sloka-renderer/:id',
+    loadComponent: () => import('./sloka-renderer/sloka-renderer.component').then( m => m.SlokaRendererComponent)
   },
   {
     path: 'vakyapada/training/:id',

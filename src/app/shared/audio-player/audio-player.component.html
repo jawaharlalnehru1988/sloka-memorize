@@ -1,0 +1,76 @@
+<div class="audio-section">
+  <ion-text color="primary">
+    <h3>🎵 {{ audioTitle }}</h3>
+  </ion-text>
+  
+  <!-- Custom Audio Player -->
+  <div class="custom-audio-player">
+    <!-- Progress Bar -->
+    <div class="audio-progress-container" 
+         (click)="onProgressBarClick($event)"
+         (touchstart)="onTouchStart($event)"
+         (touchmove)="onTouchMove($event)"
+         (touchend)="onTouchEnd($event)"
+         (mousedown)="onMouseDown($event)"
+         (mousemove)="onMouseMove($event)"
+         (mouseup)="onMouseUp($event)"
+         (mouseleave)="onMouseUp($event)">
+      <div class="audio-progress-bar">
+        <div class="audio-progress-fill" [style.width.%]="progress"></div>
+        <div class="audio-progress-thumb" [style.left.%]="progress"></div>
+      </div>
+    </div>
+    
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+      <div class="audio-time">
+        <span class="current-time">{{ formatTime(currentTime) }}</span>
+        <span class="duration">{{ formatTime(duration) }}</span>
+      </div>
+      
+      <div class="audio-actions">
+        <ion-button 
+          expand="block" 
+          fill="solid" 
+          [color]="isPlaying ? 'warning' : 'secondary'"
+          (click)="playAudio()">
+          <ion-icon [name]="isPlaying ? 'pause' : 'play'" slot="start"></ion-icon>
+          {{ isPlaying ? 'Pause ' + audioTitle : 'Play ' + audioTitle }}
+        </ion-button>
+        
+        <!-- Additional Controls Row -->
+        <div class="audio-controls-row">
+          <!-- Playback Speed Control -->
+          <ion-button 
+            *ngIf="enableSpeedControl"
+            fill="outline" 
+            color="primary"
+            (click)="changePlaybackSpeed()">
+            <ion-icon name="speedometer" slot="start"></ion-icon>
+            {{ playbackSpeed }}x
+          </ion-button>
+          
+          <!-- Download Button -->
+          <ion-button 
+            *ngIf="enableDownload"
+            fill="outline" 
+            color="success"
+            (click)="downloadAudio()">
+            <ion-icon name="download" slot="start"></ion-icon>
+            Download
+          </ion-button>
+
+          <!-- Share Button -->
+          <ion-button 
+            *ngIf="enableShare"
+            fill="outline" 
+            color="tertiary"
+            (click)="shareAudio()">
+            <ion-icon name="share" slot="start"></ion-icon>
+            Share
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -38,6 +38,7 @@ export class AppComponent {
   ];
   public scripturePages = [
     { title: 'Srimad Bhagavad Gītā', url: '/bhagavad-gita', icon: 'bookmarks', image: '/assets/Bhagavadgita.png' },
+    { title: '35 important SB slokas', url: '/35-slokas', icon: 'bookmarks', image: '/assets/Bhagavadgita.png' },
     // { title: 'Śrīmad Bhāgavatam', url: '/srimad-bhagavatam', icon: 'library' },
     // { title: 'Upadeshamrtam', url: '/upadeshamritam', icon: 'flower' },
     // { title: 'Ishopanishad', url: '/ishopanishad', icon: 'infinite' },

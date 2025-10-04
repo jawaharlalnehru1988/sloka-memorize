@@ -16,7 +16,7 @@ import {
   IonButtons
 } from '@ionic/angular/standalone';
 import { BhagavadGitaService, BhagavadGitaChapterItem } from '../bhagavad-gita/bhagavad-gita.service';
-import { play, pause, arrowBack, download, speedometer, share, personCircle, call, logoYoutube, globe, logoWhatsapp } from 'ionicons/icons';
+import { play, pause, arrowBack, download, speedometer, share, personCircle, call, logoYoutube, globe, logoWhatsapp, refresh } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 
 @Component({
@@ -67,7 +67,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     private meta: Meta,
     private titleService: Title
   ) {
-    addIcons({arrowBack,speedometer,download,share,personCircle,call,logoWhatsapp,logoYoutube,globe,play,pause});
+    addIcons({refresh,arrowBack,speedometer,download,share,personCircle,call,logoWhatsapp,logoYoutube,globe,play,pause});
   }
 
   ngOnInit() {
@@ -142,7 +142,20 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('❌ Error fetching chapter data:', error);
-        this.error = 'Failed to load chapter data';
+        
+        // Provide more specific error messages based on error type
+        if (!navigator.onLine) {
+          this.error = 'No internet connection. Please check your network and try again.';
+        } else if (error.status === 0 || error.name === 'NetworkError') {
+          this.error = 'Network error occurred. Please check your internet connection and try again.';
+        } else if (error.status >= 500) {
+          this.error = 'Server is temporarily unavailable. Please check your internet connection and try again later.';
+        } else if (error.status === 404) {
+          this.error = 'Chapter data not found. Please check your internet connection and try again.';
+        } else {
+          this.error = 'Failed to load chapter data. Please check your internet connection and try again.';
+        }
+        
         this.loading = false;
       }
     });
@@ -635,5 +648,23 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['/bhagavad-gita']);
+  }
+
+  retryLoading(): void {
+    console.log('🔄 Retrying to load chapter data...');
+    
+    // Reset error state
+    this.error = '';
+    this.loading = true;
+    
+    // Check internet connectivity first
+    if (!navigator.onLine) {
+      this.error = 'No internet connection detected. Please connect to the internet and try again.';
+      this.loading = false;
+      return;
+    }
+    
+    // Retry loading chapter data
+    this.loadChapterData();
   }
 }

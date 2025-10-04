@@ -1,0 +1,589 @@
+// Sloka Renderer Component Styling
+
+// Background
+.sloka-detail-bg {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --color: var(--ion-text-color);
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .sloka-detail-bg {
+    --background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --color: var(--ion-text-color);
+  }
+}
+
+// Loading and Error states
+.loading-container, .error-container, .no-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  min-height: 50vh;
+
+  ion-spinner {
+    margin-bottom: 1rem;
+    --color: var(--ion-color-primary);
+  }
+
+  h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+    ion-button {
+      min-width: 120px;
+      --border-radius: 25px;
+      font-weight: 600;
+      
+      &[color="primary"] {
+        --box-shadow: 0 4px 16px rgba(var(--ion-color-primary-rgb), 0.3);
+        
+        &:hover {
+          --box-shadow: 0 6px 20px rgba(var(--ion-color-primary-rgb), 0.4);
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
+
+// Single Sloka Detail Container
+.sloka-detail-container {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+// Sloka Header Section
+.sloka-header-section {
+  position: relative;
+  padding: 2rem 1rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  margin: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  .sloka-number-badge {
+    margin-bottom: 0.5rem;
+    
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .sloka-order {
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.8;
+  }
+}
+
+// Sloka Content Section
+.sloka-content-section {
+  padding: 0 1rem;
+  
+  > div {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  h3 {
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    text-align: center;
+  }
+}
+
+// Sanskrit Text Section
+.sloka-text-section {
+  border-left: 4px solid var(--ion-color-primary);
+  
+  .sloka-text-content {
+    .sanskrit-text {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      white-space: pre-line;
+      text-align: center;
+      color: var(--ion-text-color);
+      margin: 0;
+      padding: 1rem;
+      background: rgba(var(--ion-color-primary-rgb), 0.05);
+      border-radius: 12px;
+    }
+  }
+}
+
+// Audio Section
+.sloka-audio-section {
+  border-left: 4px solid var(--ion-color-secondary);
+  
+  .custom-audio-player {
+    margin-bottom: 1rem;
+    padding: 1.5rem;
+    background: rgba(var(--ion-color-secondary-rgb), 0.05);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .audio-progress-container {
+      margin-bottom: 1rem;
+      cursor: pointer;
+      padding: 10px 0;
+      user-select: none;
+      -webkit-user-select: none;
+
+      .audio-progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(var(--ion-color-secondary-rgb), 0.2);
+        border-radius: 3px;
+        position: relative;
+        overflow: visible;
+
+        .audio-progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, var(--ion-color-secondary) 0%, var(--ion-color-primary) 100%);
+          border-radius: 3px;
+          transition: width 0.1s ease;
+          position: relative;
+        }
+        
+        .audio-progress-thumb {
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 16px;
+          height: 16px;
+          background: var(--ion-color-secondary);
+          border-radius: 50%;
+          border: 2px solid white;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          transition: all 0.2s ease;
+          z-index: 2;
+          opacity: 0;
+          
+          .audio-progress-container:hover &,
+          .audio-progress-container:active &,
+          .audio-progress-container.dragging & {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.2);
+          }
+        }
+        
+        &:hover,
+        &:active {
+          .audio-progress-fill {
+            box-shadow: 0 0 8px rgba(var(--ion-color-secondary-rgb), 0.4);
+          }
+        }
+      }
+      
+      @media (max-width: 768px) {
+        padding: 15px 0;
+        
+        .audio-progress-bar {
+          height: 8px;
+          
+          .audio-progress-thumb {
+            width: 20px;
+            height: 20px;
+            opacity: 1;
+            
+            &:active {
+              transform: translate(-50%, -50%) scale(1.3);
+            }
+          }
+        }
+      }
+      
+      @media (pointer: coarse) {
+        .audio-progress-thumb {
+          opacity: 1;
+        }
+      }
+    }
+
+    .audio-controls {
+      .audio-time {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: var(--ion-color-medium);
+        font-weight: 500;
+
+        .current-time {
+          color: var(--ion-color-primary);
+          font-weight: 600;
+        }
+
+        .duration {
+          color: var(--ion-color-medium);
+        }
+      }
+
+      .audio-actions {
+        ion-button {
+          --border-radius: 25px;
+          --padding-top: 12px;
+          --padding-bottom: 12px;
+          font-weight: 600;
+          --box-shadow: 0 4px 16px rgba(var(--ion-color-secondary-rgb), 0.3);
+          transition: all 0.3s ease;
+          
+          ion-icon {
+            margin-right: 8px;
+          }
+
+          &:hover {
+            transform: translateY(-2px);
+            --box-shadow: 0 6px 20px rgba(var(--ion-color-secondary-rgb), 0.4);
+          }
+        }
+
+        .audio-controls-row {
+          display: flex;
+          gap: 0.5rem;
+          margin-top: 1rem;
+          justify-content: space-between;
+
+          ion-button {
+            flex: 1;
+            min-width: 0;
+            --border-radius: 20px;
+            --padding-top: 8px;
+            --padding-bottom: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+
+            ion-icon {
+              margin-right: 4px;
+              font-size: 1.1rem;
+            }
+          }
+
+          @media (max-width: 480px) {
+            flex-direction: column;
+            gap: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Meaning Section
+.sloka-meaning-section {
+  border-left: 4px solid var(--ion-color-tertiary);
+  
+  .sloka-meaning-content {
+    .meaning-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--ion-text-color);
+      margin: 0;
+      padding: 1rem;
+      background: rgba(var(--ion-color-tertiary-rgb), 0.05);
+      border-radius: 12px;
+      text-align: justify;
+    }
+  }
+}
+
+// Navigation Section
+.sloka-navigation-section {
+  border-left: 4px solid var(--ion-color-warning);
+  
+  .navigation-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+    ion-button {
+      --border-radius: 25px;
+      --padding-start: 1rem;
+      --padding-end: 1rem;
+      font-weight: 600;
+      min-width: 100px;
+      
+      &[disabled] {
+        opacity: 0.5;
+      }
+      
+      ion-icon {
+        font-size: 1.1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: center;
+      
+      ion-button {
+        width: 100%;
+        max-width: 200px;
+      }
+    }
+  }
+}
+
+// All Slokas Container
+.all-slokas-container {
+  padding: 1rem;
+  
+  .slokas-list-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    
+    h2 {
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+  }
+}
+
+// Slokas List
+.slokas-list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Sloka Card in List
+.sloka-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  &.current-sloka {
+    border: 2px solid var(--ion-color-primary);
+    box-shadow: 0 4px 20px rgba(var(--ion-color-primary-rgb), 0.3);
+  }
+  
+  .sloka-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .sloka-number {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ion-color-primary);
+      margin: 0;
+    }
+    
+    small {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+  }
+  
+  .sloka-preview {
+    margin-bottom: 1rem;
+    
+    .sloka-text-preview {
+      font-family: 'Georgia', serif;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+      color: var(--ion-text-color);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .meaning-preview {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      color: var(--ion-color-medium);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin: 0;
+    }
+  }
+  
+  .sloka-card-actions {
+    display: flex;
+    justify-content: space-between;
+    
+    ion-button {
+      --border-radius: 20px;
+      font-size: 0.8rem;
+      
+      ion-icon {
+        margin-right: 4px;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .sloka-header-section,
+  .sloka-content-section > div,
+  .slokas-list-header,
+  .sloka-card {
+    background: var(--ion-item-background) !important;
+    color: var(--ion-text-color);
+  }
+  
+  .sanskrit-text,
+  .meaning-text {
+    color: var(--ion-text-color) !important;
+  }
+  
+  .custom-audio-player {
+    background: rgba(var(--ion-color-secondary-rgb), 0.1) !important;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .sloka-header-section {
+    margin: 0.5rem;
+    padding: 1.5rem 1rem;
+    
+    .sloka-number-badge h1 {
+      font-size: 2.5rem;
+    }
+  }
+  
+  .sloka-content-section {
+    padding: 0 0.5rem;
+    
+    > div {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .sanskrit-text {
+    font-size: 1.1rem !important;
+    padding: 0.75rem !important;
+  }
+  
+  .meaning-text {
+    font-size: 1rem !important;
+    padding: 0.75rem !important;
+  }
+  
+  .all-slokas-container {
+    padding: 0.5rem;
+    
+    .slokas-list-header {
+      padding: 1rem;
+      
+      h2 {
+        font-size: 1.6rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .sloka-header-section {
+    .sloka-number-badge h1 {
+      font-size: 2rem;
+    }
+  }
+  
+  .sloka-content-section h3 {
+    font-size: 1rem;
+  }
+  
+  .sanskrit-text {
+    font-size: 1rem !important;
+  }
+  
+  .meaning-text {
+    font-size: 0.95rem !important;
+  }
+}
+
+// Animation for cards entrance
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sloka-card {
+  animation: cardFadeIn 0.6s ease-out;
+  
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.05}s;
+    }
+  }
+}
