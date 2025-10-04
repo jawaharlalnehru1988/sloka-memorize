@@ -1,10 +1,87 @@
 // Chapter Detail Page Styling
 
 // Background
-// Chapter detail background
+// Chapter detail background with dark mode support
 .chapter-detail-bg {
   --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --color: #ffffff;
+  --color: var(--ion-text-color);
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .chapter-detail-bg {
+    --background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    --color: var(--ion-text-color);
+  }
+  
+  // Update content sections for dark mode
+  .chapter-content-section {
+    background: var(--ion-background-color) !important;
+    color: var(--ion-text-color);
+    
+    .audio-section {
+      background: var(--ion-item-background) !important;
+      color: var(--ion-text-color);
+      border-color: var(--ion-border-color);
+    }
+    
+    .description-section {
+      background: var(--ion-item-background) !important;
+      color: var(--ion-text-color);
+    }
+    
+    .chapter-info-section {
+      background: rgba(var(--ion-color-primary-rgb), 0.1) !important;
+      border-color: rgba(var(--ion-color-primary-rgb), 0.3);
+      
+      .info-item {
+        background: var(--ion-item-background) !important;
+        color: var(--ion-text-color);
+      }
+    }
+    
+    .instructions-section {
+      background: rgba(var(--ion-color-warning-rgb), 0.1) !important;
+      border-color: rgba(var(--ion-color-warning-rgb), 0.3);
+      color: var(--ion-text-color);
+    }
+    
+    .contact-section {
+      background: rgba(var(--ion-color-success-rgb), 0.1) !important;
+      border-color: rgba(var(--ion-color-success-rgb), 0.3);
+      color: var(--ion-text-color);
+      
+      .contact-item {
+        background: var(--ion-item-background) !important;
+        color: var(--ion-text-color);
+        
+        .contact-details {
+          strong {
+            color: var(--ion-text-color) !important;
+          }
+          
+          p {
+            color: var(--ion-color-medium) !important;
+          }
+        }
+      }
+    }
+  }
+  
+  .custom-audio-player {
+    background: var(--ion-item-background) !important;
+    color: var(--ion-text-color);
+  }
+  
+  .floating-audio-control {
+    background: var(--ion-background-color) !important;
+    color: var(--ion-text-color);
+    border-color: var(--ion-border-color);
+    
+    .floating-time {
+      color: var(--ion-text-color) !important;
+    }
+  }
 }
 
 // Floating Audio Control (Mobile Only)

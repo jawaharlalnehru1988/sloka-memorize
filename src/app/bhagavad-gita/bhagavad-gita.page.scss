@@ -596,49 +596,99 @@
 
     .card-button {
       --border-radius: 25px;
-      --padding-top: 12px;
-      --padding-bottom: 12px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      background: linear-gradient(45deg, #8a2be2, #da70d6, #ff69b4);
-      --box-shadow: 
-        0 4px 16px rgba(138, 43, 226, 0.4),
-        0 0 20px rgba(255, 105, 180, 0.3);
-      color: white;
-      border: none;
+      --padding-top: 14px;
+      --padding-bottom: 14px;
+      --border-width: 0;
+      --border-style: none;
+      --box-shadow: none;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      background: linear-gradient(45deg, 
+        #ffd700 0%, 
+        #ff69b4 25%, 
+        #da70d6 50%, 
+        #8a2be2 75%, 
+        #4b0082 100%) !important;
+      background-size: 300% 300%;
+      animation: rainbowButton 3s ease-in-out infinite;
+      border: none !important;
+      box-shadow: 
+        0 4px 20px rgba(255, 215, 0, 0.4),
+        0 0 30px rgba(255, 105, 180, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+      color: white !important;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
       flex-shrink: 0;
       position: relative;
       overflow: hidden;
+      text-transform: uppercase;
+      font-size: 0.9rem;
       
-      // Animated shine effect
+      // Animated divine particles
       &::before {
         content: '';
         position: absolute;
-        top: 0;
+        top: -2px;
         left: -100%;
         width: 100%;
-        height: 100%;
+        height: calc(100% + 4px);
         background: linear-gradient(90deg, 
           transparent, 
-          rgba(255, 255, 255, 0.4), 
+          rgba(255, 255, 255, 0.6), 
           transparent);
-        transition: left 0.5s ease;
+        transition: left 0.6s ease;
+        z-index: 1;
+      }
+      
+      // Divine sparkle overlay
+      &::after {
+        content: '✨';
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        opacity: 0.8;
+        animation: buttonSparkle 2s ease-in-out infinite;
+        z-index: 2;
       }
       
       ion-icon {
-        margin-right: 8px;
-        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        margin-right: 10px;
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+        font-size: 1.1rem;
+        z-index: 2;
+        position: relative;
       }
 
       &:hover {
-        --box-shadow: 
-          0 6px 20px rgba(138, 43, 226, 0.5),
-          0 0 30px rgba(255, 105, 180, 0.4);
-        transform: scale(1.05);
+        box-shadow: 
+          0 8px 30px rgba(255, 215, 0, 0.6),
+          0 0 50px rgba(255, 105, 180, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+        transform: scale(1.08) translateY(-2px);
+        border: none !important;
         
         &::before {
           left: 100%;
         }
+        
+        &::after {
+          animation: buttonSparkleHover 1s ease-in-out infinite;
+        }
+      }
+      
+      &:active {
+        transform: scale(1.04) translateY(-1px);
+        box-shadow: 
+          0 4px 15px rgba(255, 215, 0, 0.5),
+          0 0 25px rgba(255, 105, 180, 0.4) !important;
+        border: none !important;
+      }
+      
+      &:focus {
+        border: none !important;
+        outline: none !important;
       }
     }
   }
@@ -1036,5 +1086,52 @@
   to {
     opacity: 1;
     transform: translateY(0) rotateX(0deg);
+  }
+}
+
+// Rainbow button animation
+@keyframes rainbowButton {
+  0% { 
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  25% { 
+    background-position: 50% 0%;
+    filter: hue-rotate(45deg) brightness(1.1);
+  }
+  50% { 
+    background-position: 100% 50%;
+    filter: hue-rotate(90deg) brightness(1.2);
+  }
+  75% { 
+    background-position: 50% 100%;
+    filter: hue-rotate(135deg) brightness(1.1);
+  }
+  100% { 
+    background-position: 0% 50%;
+    filter: hue-rotate(180deg) brightness(1);
+  }
+}
+
+// Button sparkle animations
+@keyframes buttonSparkle {
+  0%, 100% { 
+    opacity: 0.6;
+    transform: translateY(-50%) scale(1) rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateY(-50%) scale(1.3) rotate(180deg);
+  }
+}
+
+@keyframes buttonSparkleHover {
+  0%, 100% { 
+    opacity: 0.8;
+    transform: translateY(-50%) scale(1.2) rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: translateY(-50%) scale(1.6) rotate(360deg);
   }
 }
