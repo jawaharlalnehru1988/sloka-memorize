@@ -1,13 +1,11 @@
-/* Pratiloma Pāṭha (Reverse Recitation) Styling - Enhanced */
-.pratiloma-container {
-  padding: 24px;
-  background: linear-gradient(135deg, #f3e5f5 0%, #e8eaf6 30%, #f0f4c3 70%, #fff9c4 100%);
-  min-height: 100vh;
+/* Pratiloma Training Component Styling */
+.pratiloma-training-content {
+  --background: linear-gradient(135deg, #f3e5f5 0%, #e8eaf6 30%, #f0f4c3 70%, #fff9c4 100%);
   position: relative;
   overflow: hidden;
 }
 
-.pratiloma-container::before {
+.pratiloma-training-content::before {
   content: '';
   position: absolute;
   top: 0;
@@ -19,399 +17,11 @@
   pointer-events: none;
 }
 
-/* Hero Section - Enhanced */
-.hero-section {
-  text-align: center;
-  padding: 40px 24px;
-  background: linear-gradient(135deg, #9c27b0 0%, #673ab7 25%, #3f51b5 75%, #2196f3 100%);
-  border-radius: 24px;
-  margin-bottom: 32px;
-  color: white;
-  box-shadow: 0 12px 40px rgba(156, 39, 176, 0.4), 0 4px 20px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 60%),
-              radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.hero-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  margin-bottom: 12px;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
-  position: relative;
-  z-index: 1;
-  letter-spacing: -0.5px;
-}
-
-.hero-sanskrit {
-  font-size: 2rem;
-  margin-bottom: 18px;
-  font-family: 'Noto Sans Devanagari', serif;
-  opacity: 0.95;
-  position: relative;
-  z-index: 1;
-  font-weight: 600;
-}
-
-.hero-description {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  line-height: 1.7;
-  position: relative;
-  z-index: 1;
-  max-width: 600px;
-  margin: 0 auto;
-  font-weight: 400;
-}
-
-/* Introduction Section - Enhanced */
-.intro-section {
-  background: white;
-  border-radius: 20px;
-  padding: 32px;
-  margin-bottom: 28px;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08), 0 2px 12px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  position: relative;
-  z-index: 1;
-}
-
-.intro-title {
-  color: #6a1b9a;
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-align: center;
-  letter-spacing: -0.25px;
-}
-
-.intro-text {
-  color: #555;
-  line-height: 1.8;
-  font-size: 1.05rem;
-  margin-bottom: 18px;
-  font-weight: 400;
-}
-
-/* Method Explanation */
-.method-explanation {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 25px;
-  border-left: 5px solid #ff9800;
-}
-
-.method-title {
-  color: #e65100;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.example-verse {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 20px 0;
-  border: 2px solid #ffcc02;
-}
-
-.verse-title {
-  color: #e65100;
-  font-weight: bold;
-  margin-bottom: 15px;
-  font-size: 1.1rem;
-}
-
-.original-verse {
-  margin-bottom: 20px;
-  padding: 15px;
-  background: #f5f5f5;
-  border-radius: 8px;
-}
-
-.devanagari {
-  font-family: 'Noto Sans Devanagari', serif;
-  font-size: 1.3rem;
-  color: #d84315;
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-
-.roman {
-  font-style: italic;
-  color: #666;
-  margin-bottom: 5px;
-}
-
-.comparison-section {
-  margin-top: 20px;
-}
-
-.normal-order, .reverse-order {
-  margin: 15px 0;
-}
-
-.normal-order h4 {
-  color: #2e7d32;
-  margin-bottom: 10px;
-}
-
-.reverse-order h4 {
-  color: #c62828;
-  margin-bottom: 10px;
-}
-
-.word-sequence {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.word-item {
-  padding: 8px 12px;
-  border-radius: 20px;
-  font-family: 'Noto Sans Devanagari', serif;
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-.word-sequence:not(.reverse) .word-item {
-  background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
-  color: #1b5e20;
-}
-
-.word-sequence.reverse .word-item {
-  background: linear-gradient(135deg, #ffcdd2, #ef9a9a);
-  color: #b71c1c;
-}
-
-.benefits-list {
-  margin-top: 20px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 10px;
-}
-
-.benefits-list h4 {
-  color: #e65100;
-  margin-bottom: 10px;
-}
-
-.benefits-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.benefits-list li {
-  padding: 5px 0;
-  color: #666;
-  position: relative;
-  padding-left: 20px;
-}
-
-.benefits-list li::before {
-  content: '✨';
-  position: absolute;
-  left: 0;
-}
-
-/* Training Levels */
-.training-levels {
-  background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 25px;
-}
-
-.levels-title {
-  color: #0277bd;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.level-item {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  margin: 10px 0;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(2, 119, 189, 0.1);
-  transition: all 0.3s ease;
-}
-
-.level-item.completed {
-  background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
-  border-left: 5px solid #4caf50;
-}
-
-.level-item.current {
-  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-  border-left: 5px solid #ff9800;
-}
-
-.level-number {
-  background: linear-gradient(135deg, #42a5f5, #2196f3);
-  color: white;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  margin-right: 15px;
-  font-size: 1.2rem;
-}
-
-.level-item.completed .level-number {
-  background: linear-gradient(135deg, #66bb6a, #4caf50);
-}
-
-.level-item.current .level-number {
-  background: linear-gradient(135deg, #ffb74d, #ff9800);
-}
-
-.level-content h4 {
-  color: #0277bd;
-  margin-bottom: 5px;
-  font-size: 1.1rem;
-}
-
-.level-content p {
-  color: #666;
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-.level-status {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-/* Practice Selection */
-.practice-selection {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.selection-title {
-  color: #6a1b9a;
-  font-size: 1.6rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.sloka-card {
-  background: linear-gradient(135deg, #f3e5f5 0%, #e8eaf6 100%);
-  border-radius: 12px;
-  padding: 20px;
-  margin: 15px 0;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.sloka-card:hover {
-  border-color: #9c27b0;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(156, 39, 176, 0.2);
-}
-
-.sloka-card.selected {
-  border-color: #6a1b9a;
-  background: linear-gradient(135deg, #e1bee7 0%, #c5cae9 100%);
-}
-
-.sloka-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.sloka-title {
-  color: #6a1b9a;
-  font-size: 1.3rem;
-  font-weight: bold;
-}
-
-.difficulty-badge {
-  background: #9c27b0;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
-.sloka-subtitle {
-  font-family: 'Noto Sans Devanagari', serif;
-  font-size: 1.2rem;
-  color: #7b1fa2;
-  margin-bottom: 8px;
-}
-
-.sloka-description {
-  color: #666;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-
-.card-action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #9c27b0;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-}
-
-.card-action ion-icon {
-  font-size: 1.4rem;
-  transition: transform 0.3s ease;
-}
-
-.sloka-card:hover .card-action ion-icon {
-  transform: scale(1.1);
-}
-
-/* Training Interface - Enhanced */
 .training-interface {
   background: white;
   border-radius: 20px;
   padding: 32px;
-  margin-bottom: 28px;
+  margin: 24px;
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08), 0 2px 12px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 0, 0, 0.05);
   position: relative;
@@ -421,21 +31,30 @@
 .training-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 32px;
   padding-bottom: 20px;
   border-bottom: 2px solid #f5f5f5;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
-.training-title {
+.header-main {
+  flex: 1;
+  min-width: 200px;
+}
+
+.header-main h3 {
   color: #6a1b9a;
   font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.25px;
+  margin-bottom: 12px;
 }
 
 .progress-info {
   text-align: right;
+  min-width: 220px;
 }
 
 .progress-bar {
@@ -815,6 +434,16 @@
 .verse-text .devanagari {
   font-size: 1.4rem;
   margin-bottom: 8px;
+  font-family: 'Noto Sans Devanagari', serif;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.verse-text .roman {
+  font-size: 1.1rem;
+  color: #388e3c;
+  font-style: italic;
+  font-weight: 500;
 }
 
 .word-pool {
@@ -863,10 +492,16 @@
 .word-option .word-devanagari {
   font-size: 1.3rem;
   margin-bottom: 5px;
+  font-family: 'Noto Sans Devanagari', serif;
+  color: #d84315;
+  font-weight: 600;
 }
 
 .word-option .word-roman {
   font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+  font-weight: 500;
 }
 
 .selected-sequence {
@@ -903,11 +538,16 @@
 .selected-word .word-devanagari {
   font-size: 1.1rem;
   margin-bottom: 0;
+  font-family: 'Noto Sans Devanagari', serif;
+  color: #1976d2;
+  font-weight: 600;
 }
 
 .selected-word .word-roman {
   font-size: 0.9rem;
   margin-bottom: 0;
+  color: #666;
+  font-style: italic;
 }
 
 .challenge-controls {
@@ -1197,99 +837,52 @@
   gap: 8px;
 }
 
-.badge-btn {
-  background: linear-gradient(135deg, #9c27b0, #6a1b9a);
-  color: white;
+/* Loading Section */
+.loading-section {
+  margin: 24px;
 }
 
-.next-btn {
-  background: linear-gradient(135deg, #2196f3, #1976d2);
-  color: white;
-}
-
-.saraswati-blessing {
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 12px;
-  padding: 20px;
-  border: 2px solid #ffc107;
-}
-
-.saraswati-blessing h4 {
-  color: #f57c00;
-  margin-bottom: 10px;
-}
-
-.saraswati-blessing p {
-  color: #666;
-  font-style: italic;
-  line-height: 1.6;
-}
-
-/* Tips Section */
-.tips-section {
-  background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 25px;
-}
-
-.tips-title {
-  color: #33691e;
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.tip-item {
-  display: flex;
-  align-items: flex-start;
-  margin: 15px 0;
-  padding: 15px;
+.loading-section ion-card {
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(51, 105, 30, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08), 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.tip-icon {
-  font-size: 1.5rem;
-  margin-right: 15px;
-  margin-top: 3px;
+.loading-section ion-card-title {
+  color: #6a1b9a;
+  font-weight: 700;
 }
 
-.tip-content h4 {
-  color: #33691e;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
-}
-
-.tip-content p {
+.loading-section ion-card-content {
   color: #666;
-  margin: 0;
-  line-height: 1.5;
-  font-size: 0.95rem;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .pratiloma-container {
-    padding: 15px;
+  .training-interface {
+    padding: 20px;
+    margin: 15px;
   }
   
-  .hero-title {
-    font-size: 2rem;
+  .training-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
   }
   
-  .hero-sanskrit {
+  .header-main h3 {
     font-size: 1.4rem;
   }
   
-  .word-sequence {
-    justify-content: center;
+  .progress-info {
+    text-align: center;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto 8px;
   }
   
   .flashcard-controls {
@@ -1317,16 +910,6 @@
     align-items: center;
   }
   
-  .training-header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-  
-  .progress-info {
-    text-align: center;
-  }
-  
   .word-grid {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
@@ -1342,36 +925,114 @@
   .flashcard {
     padding: 20px;
   }
+
+  .nav-btn, .audio-btn {
+    min-width: 120px;
+    padding: 12px 18px;
+    font-size: 0.95rem;
+  }
+
+  .play-btn, .record-btn {
+    min-width: 160px;
+    padding: 14px 24px;
+  }
 }
 
 /* Tamil Text Styling */
-.tamil {
+.word-tamil, .tamil, .hint-tamil {
   font-family: 'Noto Sans Tamil', 'Tamil Sangam MN', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.1em;
   color: #4a4a4a;
   font-weight: 500;
   letter-spacing: 0.5px;
-  margin: 8px 0;
-  line-height: 1.5;
-  border-left: 3px solid #9c27b0;
-  padding-left: 16px;
-  background: rgba(156, 39, 176, 0.02);
-  border-radius: 0 10px 10px 0;
+  margin: 4px 0;
+  line-height: 1.4;
+  
+  &:not(:empty) {
+    display: block;
+    border-left: 3px solid #9c27b0;
+    padding-left: 12px;
+    margin: 8px 0;
+    background: rgba(156, 39, 176, 0.02);
+    border-radius: 0 8px 8px 0;
+  }
+}
+
+.current-word .word-tamil {
+  font-size: 1.3rem;
+  color: #6a1b9a;
+  font-weight: 600;
+}
+
+.word-item .word-tamil {
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.word-option .word-tamil {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.selected-word .word-tamil {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.hint-word {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 8px 12px;
+  
+  .hint-devanagari {
+    font-size: 1.1rem;
+    color: #6a1b9a;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .hint-tamil {
+    font-size: 0.9rem;
+    color: #777;
+    border: none;
+    padding: 0;
+    background: none;
+    margin: 0;
+  }
 }
 
 /* Responsive Tamil text */
 @media (max-width: 768px) {
-  .tamil {
-    font-size: 1.1rem;
-    padding-left: 12px;
+  .word-tamil, .tamil {
+    font-size: 1rem;
+  }
+  
+  .current-word .word-tamil {
+    font-size: 1.2rem;
+  }
+  
+  .hint-tamil {
+    font-size: 0.85rem;
   }
 }
 
 /* Dark mode support for Tamil text */
 @media (prefers-color-scheme: dark) {
-  .tamil {
+  .word-tamil, .tamil, .hint-tamil {
     color: #bbb;
-    background: rgba(156, 39, 176, 0.1);
-    border-left-color: #ba68c8;
+    
+    &:not(:empty) {
+      background: rgba(156, 39, 176, 0.1);
+      border-left-color: #ba68c8;
+    }
+  }
+  
+  .current-word .word-tamil {
+    color: #ce93d8;
+  }
+  
+  .hint-word .hint-tamil {
+    color: #999;
   }
 }

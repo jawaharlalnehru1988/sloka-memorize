@@ -107,4 +107,8 @@ export const routes: Routes = [
     path: 'anuloma/training/:id',
     loadComponent: () => import('./anuloma/anuloma-training/anuloma-training.page').then( m => m.AnulomaTrainingPage)
   },
+  {
+    path: 'pratiloma/training/:id',
+    loadComponent: () => import('./pratiloma/pratiloma-training/pratiloma-training.component').then( m => m.PratilomaTrainingComponent)
+  },
 ];

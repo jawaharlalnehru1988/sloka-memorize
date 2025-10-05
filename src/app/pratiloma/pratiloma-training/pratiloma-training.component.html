@@ -1,0 +1,289 @@
+<app-technique-header
+  title="Pratiloma Pāṭha Training"
+  sanskrit="प्रतिलोम पाठ अभ्यास"
+  emoji="🔄"
+  color="tertiary"
+  [translucent]="true"
+  [showMenuButton]="false">
+</app-technique-header>
+
+<ion-content [fullscreen]="true" class="pratiloma-training-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Pratiloma Training</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  @if (selectedSloka && currentMode) {
+    <div class="training-interface">
+      <div class="training-header">
+        <div class="header-main">
+          <h3>🔄 {{currentMode.title}}: {{selectedSloka.title}}</h3>
+          <ion-button
+            fill="clear"
+            size="small"
+            (click)="goBack()"
+            color="medium"
+            >
+            <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+            Back to Selection
+          </ion-button>
+        </div>
+        <div class="progress-info">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getTrainingProgress()"></div>
+          </div>
+          <div class="progress-text">{{getTrainingProgress()}}% Complete</div>
+        </div>
+      </div>
+      
+      <!-- Flashcard Mode -->
+      @if (currentMode.type === 'flashcard') {
+        <div class="flashcard-mode">
+          <div class="flashcard-container">
+            <div class="word-position">Word {{currentWordIndex + 1}} of {{getReverseWords().length}}</div>
+            <div class="flashcard">
+              <div class="current-word">
+                <div class="word-devanagari">{{getCurrentWord().devanagari}}</div>
+                <div class="word-tamil">{{getCurrentWord().tamilword}}</div>
+                <div class="word-roman">{{getCurrentWord().roman}}</div>
+                <div class="word-meaning">{{getCurrentWord().meaning}}</div>
+              </div>
+              <div class="position-indicator">
+                <span class="original-position">Original position: {{getCurrentWord().originalIndex + 1}}</span>
+                <span class="reverse-position">Reverse position: {{currentWordIndex + 1}}</span>
+              </div>
+            </div>
+            <div class="flashcard-controls">
+              <ion-button class="nav-btn" (click)="previousWord()" [disabled]="currentWordIndex === 0">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+                Previous
+              </ion-button>
+              <div class="audio-controls">
+                <ion-button class="audio-btn" (click)="playCurrentWord()">
+                  <ion-icon name="volume-high-outline"></ion-icon>
+                  Play Word
+                </ion-button>
+              </div>
+              <ion-button class="nav-btn" (click)="nextWord()" [disabled]="currentWordIndex >= getReverseWords().length - 1">
+                Next
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Audio Practice Mode -->
+      @if (currentMode.type === 'audio') {
+        <div class="audio-mode">
+          <div class="audio-practice-container">
+            <h4>🎵 Listen and Repeat (Reverse Order)</h4>
+            <div class="reverse-sequence-display">
+              @for (word of getReverseWords(); track word; let i = $index) {
+                <div class="word-item"
+                  [class.current]="i === currentWordIndex"
+                  [class.completed]="i < currentWordIndex">
+                  <span class="word-text">{{word.devanagari}}</span>
+                  <span class="word-tamil">{{word.tamilword}}</span>
+                  <span class="word-roman">{{word.roman}}</span>
+                </div>
+              }
+            </div>
+            <div class="audio-controls-section">
+              <ion-button class="play-btn" (click)="playReverseSequence()">
+                <ion-icon name="play-outline"></ion-icon>
+                Play Reverse Sequence
+              </ion-button>
+              <ion-button class="record-btn" [class.recording]="isRecording"
+                (click)="startRecording()" [disabled]="!hasHeardSequence">
+                <ion-icon [name]="isRecording ? 'recording-outline' : 'mic-outline'"></ion-icon>
+                {{isRecording ? 'Recording...' : 'Practice Recitation'}}
+              </ion-button>
+            </div>
+            @if (practiceFeedback) {
+              <div class="practice-feedback" [class]="feedbackClass">
+                {{practiceFeedback}}
+              </div>
+            }
+            <div class="audio-hint">
+              💡 Listen to the complete reverse sequence, then try to repeat it from memory
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Challenge Mode -->
+      @if (currentMode.type === 'challenge') {
+        <div class="challenge-mode">
+          <div class="challenge-container">
+            <h4>🧩 Reverse Arrangement Challenge</h4>
+            <div class="challenge-instruction">
+              Arrange the words in reverse order by clicking them in the correct sequence:
+            </div>
+            <div class="original-verse-display">
+              <h5>Original Verse:</h5>
+              <div class="verse-text">
+                <div class="devanagari">{{selectedSloka.lines[0].devanagari}}</div>
+                <div class="tamil">{{selectedSloka.lines[0].tamilword}}</div>
+                <div class="roman">{{selectedSloka.lines[0].roman}}</div>
+              </div>
+            </div>
+            <div class="word-pool">
+              <div class="available-words">
+                <h5>Available Words (click in reverse order):</h5>
+                <div class="word-grid">
+                  @for (word of getShuffledWords(); track word; let i = $index) {
+                    <div class="word-option"
+                      [class.used]="word.used" [class.correct]="word.correct"
+                      (click)="selectWordForChallenge(word)">
+                      <div class="word-devanagari">{{word.devanagari}}</div>
+                      <div class="word-tamil">{{word.tamilword}}</div>
+                      <div class="word-roman">{{word.roman}}</div>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="selected-sequence">
+                <h5>Your Reverse Sequence:</h5>
+                <div class="sequence-display">
+                  @for (word of selectedSequence; track word; let i = $index) {
+                    <div class="selected-word">
+                      <span class="word-devanagari">{{word.devanagari}}</span>
+                      <span class="word-tamil">{{word.tamilword}}</span>
+                      <span class="word-roman">{{word.roman}}</span>
+                      <ion-button size="small" fill="clear" (click)="removeFromSequence(i)">
+                        <ion-icon name="close-outline"></ion-icon>
+                      </ion-button>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="challenge-controls">
+              <ion-button class="reset-btn" (click)="resetChallenge()">
+                <ion-icon name="refresh-outline"></ion-icon>
+                Reset
+              </ion-button>
+              <ion-button class="check-btn" (click)="checkChallengeAnswer()"
+                [disabled]="selectedSequence.length !== getOriginalWords().length">
+                <ion-icon name="checkmark-outline"></ion-icon>
+                Check Answer
+              </ion-button>
+            </div>
+            @if (challengeFeedback) {
+              <div class="challenge-feedback" [class]="challengeFeedbackClass">
+                {{challengeFeedback}}
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Memory Recall Mode -->
+      @if (currentMode.type === 'memory') {
+        <div class="memory-mode">
+          <div class="memory-container">
+            <h4>🧠 Memory Recall Challenge</h4>
+            <div class="memory-instruction">
+              Recite the complete śloka in reverse order from memory (no text hints):
+            </div>
+            @if (!showMemoryHints) {
+              <div class="memory-display">
+                <div class="verse-info">
+                  <h5>{{selectedSloka.title}}</h5>
+                  <p>Recite in reverse word order</p>
+                </div>
+                <div class="memory-controls">
+                  <ion-button class="hint-btn" (click)="showMemoryHints = true">
+                    <ion-icon name="help-outline"></ion-icon>
+                    Show Hints
+                  </ion-button>
+                  <ion-button class="record-btn" [class.recording]="isRecording" (click)="startMemoryRecording()">
+                    <ion-icon [name]="isRecording ? 'recording-outline' : 'mic-outline'"></ion-icon>
+                    {{isRecording ? 'Recording...' : 'Start Recitation'}}
+                  </ion-button>
+                </div>
+              </div>
+            }
+            @if (showMemoryHints) {
+              <div class="memory-hints">
+                <h5>💡 Reverse Word Sequence:</h5>
+                <div class="hint-words">
+                  @for (word of getReverseWords(); track word; let i = $index) {
+                    <span class="hint-word">
+                      <span class="hint-devanagari">{{word.devanagari}}</span>
+                      <span class="hint-tamil">{{word.tamilword}}</span>
+                    </span>
+                  }
+                </div>
+                <ion-button class="hide-hints-btn" (click)="showMemoryHints = false">
+                  <ion-icon name="eye-off-outline"></ion-icon>
+                  Hide Hints
+                </ion-button>
+              </div>
+            }
+            @if (memoryFeedback) {
+              <div class="memory-feedback" [class]="memoryFeedbackClass">
+                {{memoryFeedback}}
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Mode Navigation -->
+      <div class="mode-navigation">
+        <h4>Training Modes:</h4>
+        <div class="mode-tabs">
+          @for (mode of trainingModes; track mode; let i = $index) {
+            <div class="mode-tab"
+              [class.active]="currentMode.type === mode.type"
+              [class.locked]="mode.locked"
+              (click)="switchMode(mode)">
+              <ion-icon [name]="mode.icon"></ion-icon>
+              <span>{{mode.title}}</span>
+              @if (mode.completed) {
+                <ion-icon name="checkmark-circle" class="completed-icon"></ion-icon>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Completion Section -->
+      @if (isTrainingCompleted()) {
+        <div class="completion-section">
+          <div class="completion-icon">🏆</div>
+          <h3 class="completion-title">Pratiloma Pāṭha Mastered!</h3>
+          <p class="completion-message">
+            Excellent! You have mastered the reverse recitation technique for this śloka. Your memory and concentration have been significantly strengthened.
+          </p>
+          <div class="completion-actions">
+            <ion-button class="completion-btn" (click)="goBack()" color="primary">
+              <ion-icon name="library-outline" slot="start"></ion-icon>
+              Practice Another Śloka
+            </ion-button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (!selectedSloka) {
+    <div class="loading-section">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Loading Training Session</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Preparing your Pratiloma Pāṭha training session...</p>
+          <ion-button (click)="goBack()" fill="outline">
+            <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+            Back to Selection
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  }
+</ion-content>
