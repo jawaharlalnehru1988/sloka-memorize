@@ -330,76 +330,162 @@
   text-align: center;
 }
 
+/* Responsive Grid for Sloka Cards */
+.sloka-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr; /* Mobile: 1 card per row */
+}
+
+/* Tablet: 2 cards per row */
+@media (min-width: 768px) {
+  .sloka-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large Screen: 3 cards per row */
+@media (min-width: 1024px) {
+  .sloka-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Very Large Screen: 5 cards per row */
+@media (min-width: 1600px) {
+  .sloka-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
 .sloka-card {
-  background: linear-gradient(135deg, #f3e5f5 0%, #e8eaf6 100%);
   border-radius: 12px;
-  padding: 20px;
-  margin: 15px 0;
-  border: 2px solid transparent;
+  padding: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensures cards have equal height in grid */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  // Light mode styles
+  background: var(--ion-color-light);
+  
+  // Dark mode styles
+  @media (prefers-color-scheme: dark) {
+    background: var(--ion-color-step-50);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  // Mobile padding
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
 }
 
 .sloka-card:hover {
-  border-color: #9c27b0;
+  border-color: var(--ion-color-primary);
   transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(156, 39, 176, 0.2);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+  
+  @media (prefers-color-scheme: dark) {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .sloka-card.selected {
-  border-color: #6a1b9a;
-  background: linear-gradient(135deg, #e1bee7 0%, #c5cae9 100%);
+  border-color: var(--ion-color-primary-shade);
+  background: rgba(var(--ion-color-primary-rgb), 0.1);
+  
+  @media (prefers-color-scheme: dark) {
+    background: rgba(var(--ion-color-primary-rgb), 0.2);
+  }
 }
 
 .sloka-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 6px;
+  }
 }
 
 .sloka-title {
-  color: #6a1b9a;
-  font-size: 1.3rem;
+  color: var(--ion-color-primary);
+  font-size: 1.2rem;
   font-weight: bold;
+  
+  @media (max-width: 768px) {
+    font-size: 1.05rem;
+  }
 }
 
 .difficulty-badge {
-  background: #9c27b0;
-  color: white;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
   padding: 4px 12px;
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
+  
+  @media (max-width: 768px) {
+    padding: 3px 10px;
+    font-size: 0.7rem;
+  }
 }
 
 .sloka-subtitle {
   font-family: 'Noto Sans Devanagari', serif;
-  font-size: 1.2rem;
-  color: #7b1fa2;
+  font-size: 1.1rem;
+  color: var(--ion-color-primary-shade);
   margin-bottom: 8px;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
 }
 
 .sloka-description {
-  color: #666;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 16px;
+  color: var(--ion-text-color);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  opacity: 0.8;
+  
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
 }
 
 .card-action {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #9c27b0;
+  color: var(--ion-color-primary);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
+  
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+    gap: 6px;
+  }
 }
 
 .card-action ion-icon {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   transition: transform 0.3s ease;
+  
+  @media (max-width: 768px) {
+    font-size: 1.15rem;
+  }
 }
 
 .sloka-card:hover .card-action ion-icon {

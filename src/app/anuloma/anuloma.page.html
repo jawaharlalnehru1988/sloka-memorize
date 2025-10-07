@@ -209,7 +209,7 @@
                   <span>{{sloka.difficulty}}</span>
                 </div>
               </div>
-              <p>{{sloka.description}}</p>
+              <p>{{sloka.description.length > 40 ? sloka.description.substring(0, 40) + '...' : sloka.description}}</p>
             </ion-card-content>
           </ion-card>
         }

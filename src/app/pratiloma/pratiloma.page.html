@@ -109,21 +109,23 @@
   <div class="practice-selection">
     <h3 class="selection-title">📚 Choose Your Practice Śloka</h3>
 
-    @for (sloka of slokas; track sloka) {
-      <div class="sloka-card"
-        (click)="startTraining(sloka.id)">
-        <div class="sloka-header">
-          <h4 class="sloka-title">{{sloka.title}}</h4>
-          <span class="difficulty-badge">{{sloka.difficulty}}</span>
+    <div class="sloka-grid">
+      @for (sloka of slokas; track sloka) {
+        <div class="sloka-card"
+          (click)="startTraining(sloka.id)">
+          <div class="sloka-header">
+            <h4 class="sloka-title">{{sloka.title}}</h4>
+            <span class="difficulty-badge">{{sloka.difficulty}}</span>
+          </div>
+          <div class="sloka-subtitle">{{sloka.subtitle}}</div>
+          <div class="sloka-description">{{sloka.description}}</div>
+          <div class="card-action">
+            <ion-icon name="play-circle-outline"></ion-icon>
+            <span>Start Training</span>
+          </div>
         </div>
-        <div class="sloka-subtitle">{{sloka.subtitle}}</div>
-        <div class="sloka-description">{{sloka.description}}</div>
-        <div class="card-action">
-          <ion-icon name="play-circle-outline"></ion-icon>
-          <span>Start Training</span>
-        </div>
-      </div>
-    }
+      }
+    </div>
   </div>
 
   <!-- Tips Section -->

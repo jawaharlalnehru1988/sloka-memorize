@@ -504,70 +504,119 @@
 }
 
 .sloka-card {
-  background: linear-gradient(135deg, #fff8e1 0%, #fff3c4 100%);
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid transparent;
+  border: 2px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  
+  // Light mode styles
+  background: var(--ion-color-light);
+  
+  // Dark mode styles
+  @media (prefers-color-scheme: dark) {
+    background: var(--ion-color-step-50);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .sloka-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(255, 193, 7, 0.25);
-  border-color: #ffc107;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border-color: var(--ion-color-primary);
+  
+  @media (prefers-color-scheme: dark) {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .sloka-card ion-card-header {
-  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
-  color: #1a1a1a;
-  padding: 20px 24px;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  padding: 16px 20px;
+  
+  @media (max-width: 768px) {
+    padding: 12px 16px;
+  }
 }
 
 .sloka-card ion-card-title {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  color: var(--ion-color-primary-contrast);
+  
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
 }
 
 .sloka-card ion-card-subtitle {
   font-family: 'Noto Sans Devanagari', serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  opacity: 0.8;
+  opacity: 0.9;
+  color: var(--ion-color-primary-contrast);
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 }
 
 .sloka-card ion-card-content {
-  padding: 24px;
+  padding: 16px;
+  
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
 }
 
 .sloka-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
 }
 
 .lines-count, .difficulty-level {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 193, 7, 0.1);
+  background: rgba(var(--ion-color-primary-rgb), 0.1);
   padding: 6px 12px;
   border-radius: 16px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  color: #f57c00;
+  color: var(--ion-color-primary);
+  
+  @media (max-width: 768px) {
+    padding: 4px 10px;
+    font-size: 0.8rem;
+  }
+  
+  ion-icon {
+    font-size: 1rem;
+    
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+    }
+  }
 }
 
 .sloka-card p {
-  color: #666;
-  line-height: 1.6;
+  color: var(--ion-text-color);
+  line-height: 1.5;
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
 }
 
 /* Training Interface - Enhanced */
