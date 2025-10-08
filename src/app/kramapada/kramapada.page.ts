@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import {
   IonButton, IonIcon
 } from '@ionic/angular/standalone';
 import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
+import { SeoService } from '../shared/services/seo.service';
 
 // Interfaces for Krama Pāṭha
 interface Word {
@@ -40,6 +41,8 @@ interface Sloka {
   ]
 })
 export class KramapadaPage implements OnInit {
+  private seoService = inject(SeoService);
+  
   // Navigation state
   selectedMode: string | null = null;
   
@@ -1497,7 +1500,34 @@ export class KramapadaPage implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-    // Simple initialization
+    // SEO Optimization
+    this.seoService.updateSEO({
+      title: 'Kramapāṭha - Alternating Word Recitation Technique',
+      description: 'Master Kramapāṭha (क्रम पाठ), the alternating word recitation technique of Vedic learning. Learn to recite word pairs systematically with step-by-step progression. Features 43 Bhagavad Gita slokas, Tamil audio guidance, and intermediate-level Sanskrit memorization exercises.',
+      keywords: 'Kramapada, Kramapatha, alternating word recitation, word pairing practice, Vedic word pairs, step by step Sanskrit, intermediate Vedic technique, sequential word learning, Bhagavad Gita kramapada, Sanskrit word combinations, Vedic memory technique, alternating recitation method, word pair memorization, progressive Sanskrit learning, Tamil pronunciation, Indian scripture learning',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data for Course
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Kramapāṭha - Alternating Word Recitation",
+      "description": "Learn the Vedic technique of alternating word recitation (Kramapāṭha) with 43 Bhagavad Gita slokas and Tamil audio support.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka"
+      },
+      "educationalLevel": "Intermediate",
+      "inLanguage": ["en", "ta", "sa"],
+      "teaches": "Kramapāṭha alternating word recitation technique"
+    });
+
+    // Add breadcrumb navigation
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Kramapāṭha', url: '/kramapada' }
+    ]);
   }
 
   // Mode selection - sets the mode for navigation

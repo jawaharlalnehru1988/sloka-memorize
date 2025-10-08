@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,6 +13,7 @@ import {
   ToastController,
   AlertController
 } from '@ionic/angular/standalone';
+import { SeoService } from '../shared/services/seo.service';
 import { addIcons } from 'ionicons';
 import { 
   trophy,
@@ -104,6 +105,8 @@ interface ChallengeType {
 ]
 })
 export class SmaranaPage implements OnInit, OnDestroy {
+  private seoService = inject(SeoService);
+  
   // Challenge state
   isInChallenge = false;
   challengeCompleted = false;
@@ -265,6 +268,36 @@ export class SmaranaPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadProgress();
     this.checkFinalMastery();
+    
+    // SEO Optimization
+    this.seoService.updateSEO({
+      title: 'Smaraṇa - Memory Recall Challenges | Final Vedic Mastery Assessment',
+      description: 'Test complete Vedic mastery with Smaraṇa (स्मरण) memory challenges. Features random recall, verse identification, speed challenges, and comprehensive examination. Includes Tamil audio, timed quizzes, multiple-choice questions, and final certification for Bhagavad Gita memorization mastery.',
+      keywords: 'Smarana, memory recall, Vedic memory test, Sanskrit memorization, verse identification, speed recall challenge, memory assessment, quiz challenges, Bhagavad Gita test, comprehensive examination, final mastery, memory retention, recall accuracy, Tamil quiz, certification exam, Indian scripture memory, Vedic knowledge test',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data for Course
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Smaraṇa - Memory Recall Challenges",
+      "description": "Final assessment of Vedic mastery through comprehensive memory recall challenges including speed tests and comprehensive examination.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka"
+      },
+      "educationalLevel": "Master",
+      "inLanguage": ["en", "ta", "sa"],
+      "teaches": "Complete memory recall and comprehensive Vedic knowledge assessment",
+      "coursePrerequisites": "Completion of all 10 Vedic techniques required"
+    });
+
+    // Add breadcrumb navigation
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Smaraṇa', url: '/smarana' }
+    ]);
   }
 
   ngOnDestroy() {

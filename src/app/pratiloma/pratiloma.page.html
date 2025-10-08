@@ -118,7 +118,7 @@
             <span class="difficulty-badge">{{sloka.difficulty}}</span>
           </div>
           <div class="sloka-subtitle">{{sloka.subtitle}}</div>
-          <div class="sloka-description">{{sloka.description}}</div>
+          <div class="sloka-description">{{sloka.description.length > 40 ? sloka.description.substring(0, 40) + '...' : sloka.description}}</div>
           <div class="card-action">
             <ion-icon name="play-circle-outline"></ion-icon>
             <span>Start Training</span>

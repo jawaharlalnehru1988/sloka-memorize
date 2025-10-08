@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
          IonButton, IonIcon } from '@ionic/angular/standalone';
 import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
+import { SeoService } from '../shared/services/seo.service';
 
 // Interfaces for Jatā Pāṭha
 interface Word {
@@ -68,6 +69,7 @@ type TrainingMode = 'guided' | 'pattern-practice' | 'speed-building' | 'memory-c
     IonButton, IonIcon, CommonModule, FormsModule, RouterModule, TechniqueHeaderComponent]
 })
 export class JatapadaPage implements OnInit {
+  private seoService = inject(SeoService);
   
   // Training state
   selectedMode: TrainingMode | null = null;
@@ -169,6 +171,35 @@ export class JatapadaPage implements OnInit {
 
   ngOnInit() {
     console.log('Jatā Pāṭha page initialized');
+    
+    // SEO Optimization
+    this.seoService.updateSEO({
+      title: 'Jatāpāṭha - Braided Recitation Technique | Advanced Vedic Memory',
+      description: 'Master Jatāpāṭha (जटा पाठ), the braided recitation technique of advanced Vedic learning. Practice forward-reverse-forward word patterns with tri-word sequences. Features Tamil audio, step-by-step braid patterns, and advanced Sanskrit memorization for Bhagavad Gita mastery.',
+      keywords: 'Jatapada, Jatapatha, braided recitation, Vedic braiding technique, forward reverse recitation, tri-word patterns, advanced Vedic method, Sanskrit word braiding, Bhagavad Gita jatapada, complex recitation technique, intertwined word practice, Vedic memory mastery, advanced Sanskrit learning, braided memorization, Tamil audio, Indian scripture study',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data for Course
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Jatāpāṭha - Braided Recitation Technique",
+      "description": "Learn the advanced Vedic technique of braided recitation (Jatāpāṭha) with intricate forward-reverse-forward patterns.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka"
+      },
+      "educationalLevel": "Advanced",
+      "inLanguage": ["en", "ta", "sa"],
+      "teaches": "Jatāpāṭha braided recitation with tri-word sequences"
+    });
+
+    // Add breadcrumb navigation
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Jatāpāṭha', url: '/jatapada' }
+    ]);
   }
 
   // Mode selection

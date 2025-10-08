@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -6,6 +6,7 @@ import { IonContent,
          IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
          IonButton, IonIcon } from '@ionic/angular/standalone';
 import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
+import { SeoService } from '../shared/services/seo.service';
 
 // Interfaces for Ghana Pāṭha
 interface Word {
@@ -78,6 +79,7 @@ type TrainingMode = 'foundation' | 'intensive' | 'perfection' | 'certification';
     IonButton, IonIcon, CommonModule, FormsModule, RouterModule, TechniqueHeaderComponent]
 })
 export class GhanapadaPage implements OnInit {
+  private seoService = inject(SeoService);
   
   // Training state
   selectedMode: TrainingMode | null = null;
@@ -189,6 +191,36 @@ export class GhanapadaPage implements OnInit {
 
   ngOnInit() {
     console.log('Ghana Pāṭha page initialized - Ultimate Vedic mastery');
+    
+    // SEO Optimization
+    this.seoService.updateSEO({
+      title: 'Ghanapāṭha - Dense Recitation | Ultimate Vedic Mastery Technique',
+      description: 'Master Ghanapāṭha (घन पाठ), the most complex dense recitation technique of Vedic tradition. Learn 1-2-1, 2-3-2, 1-2-3-2-1 patterns for ultimate Sanskrit memorization. Requires mastery of all previous techniques. Features bell-resonance audio, perfection-level evaluation, and traditional guru methodology.',
+      keywords: 'Ghanapada, Ghanapatha, dense recitation, ultimate Vedic technique, bell resonance, ghana patterns, master level Sanskrit, perfect memorization, 1-2-1 pattern, 1-2-3-2-1 sequence, Vedic mastery, guru tradition, advanced Sanskrit, perfect recitation, Bhagavad Gita ghana, traditional learning, Tamil audio, Indian scripture mastery',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data for Course
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Ghanapāṭha - Dense Recitation Mastery",
+      "description": "Achieve ultimate Vedic mastery with Ghanapāṭha (घन पाठ), the most complex dense recitation technique requiring absolute perfection.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka"
+      },
+      "educationalLevel": "Master",
+      "inLanguage": ["en", "ta", "sa"],
+      "teaches": "Ghanapāṭha dense recitation with ultimate complexity patterns",
+      "coursePrerequisites": "Padapāṭha, Kramapāṭha, and Jatāpāṭha mastery required"
+    });
+
+    // Add breadcrumb navigation
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Ghanapāṭha', url: '/ghanapada' }
+    ]);
   }
 
   // Mastery level methods

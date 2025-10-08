@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { BhagavadGitaService } from '../bhagavad-gita/bhagavad-gita.service';
 import { TechniqueHeaderComponent } from '../shared/components/technique-header/technique-header.component';
+import { SeoService } from '../shared/services/seo.service';
 import { addIcons } from 'ionicons';
 import { 
   arrowForwardOutline,
@@ -46,6 +47,7 @@ interface AnulomaSloka {
 })
 export class AnulomaPage implements OnInit {
   slokas: AnulomaSloka[] = [];
+  private seoService = inject(SeoService);
 
   constructor(
     private router: Router,
@@ -71,6 +73,36 @@ export class AnulomaPage implements OnInit {
   }
 
   ngOnInit() {
+    // Update SEO for this page
+    this.seoService.updateSEO({
+      title: 'Anuloma Pāṭha - Forward Sequential Recitation',
+      description: 'Master Anuloma Pāṭha (अनुलोम पाठ), the foundational Vedic technique of forward sequential recitation. Learn Bhagavad Gita slokas line-by-line with Tamil transliteration, audio pronunciation, and progressive memory building. Perfect for beginners and devotees.',
+      keywords: 'Anuloma Patha, forward recitation, sequential learning, Vedic recitation techniques, Bhagavad Gita learning, Sanskrit with Tamil, line by line sloka, progressive memorization, Vedic chanting method, systematic sloka practice',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Anuloma Pāṭha - Forward Sequential Recitation",
+      "description": "Build memory gradually by mastering verses line by line in natural forward order, creating rhythm and flow",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka",
+        "sameAs": "https://askharekrishna.com"
+      },
+      "educationalLevel": "Beginner to Advanced",
+      "inLanguage": ["en", "ta", "sa"],
+      "teaches": "Vedic recitation technique - Anuloma Pāṭha (progressive forward recitation)"
+    });
+
+    // Add breadcrumb
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Anuloma Pāṭha', url: '/anuloma' }
+    ]);
+
     this.loadSlokas();
   }
 

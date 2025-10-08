@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import {
   ToastController,
   AlertController
 } from '@ionic/angular/standalone';
+import { SeoService } from '../shared/services/seo.service';
 import { addIcons } from 'ionicons';
 import { 
   create, 
@@ -107,6 +108,8 @@ interface DrawingStroke {
 ]
 })
 export class LikhitapadaPage implements OnInit {
+  private seoService = inject(SeoService);
+  
   @ViewChild('drawingCanvas', { static: false }) drawingCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('writingCanvas', { static: false }) writingCanvasRef!: ElementRef;
 
@@ -234,6 +237,35 @@ export class LikhitapadaPage implements OnInit {
   ngOnInit() {
     this.initializeWritingCategories();
     this.loadProgress();
+    
+    // SEO Optimization
+    this.seoService.updateSEO({
+      title: 'Likhitapāṭha - Sanskrit Writing Practice | Devanagari Manuscript Training',
+      description: 'Master Sanskrit writing with Likhitapāṭha (लिखित पाठ), the written practice technique. Learn Devanagari character formation, stroke order, word composition, and manuscript creation. Features interactive writing canvas, real-time feedback, tracing exercises, and traditional calligraphy for Bhagavad Gita verses.',
+      keywords: 'Likhitapada, Likhitapatha, Sanskrit writing, Devanagari script, character formation, stroke order, writing practice, manuscript creation, Sanskrit calligraphy, handwriting training, Devanagari learning, character tracing, writing composition, Sanskrit letters, Bhagavad Gita writing, traditional manuscripts, Tamil script, Indian calligraphy',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data for Course
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Likhitapāṭha - Sanskrit Writing Practice",
+      "description": "Learn to write Sanskrit with Likhitapāṭha covering character formation, word composition, and manuscript creation.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka"
+      },
+      "educationalLevel": "All Levels",
+      "inLanguage": ["en", "ta", "sa"],
+      "teaches": "Devanagari writing, character formation, and manuscript creation"
+    });
+
+    // Add breadcrumb navigation
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Likhitapāṭha', url: '/likhitapada' }
+    ]);
   }
 
   ngAfterViewInit() {

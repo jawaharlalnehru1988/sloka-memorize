@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { SeoService } from '../shared/services/seo.service';
 import { 
   IonContent, 
   IonHeader, 
@@ -69,6 +70,8 @@ export interface CardContent {
 ]
 })
 export class BhagavadGitaPage implements OnInit {
+  private seoService = inject(SeoService);
+  
   cardContents: CardContent[] = [];
   loading: boolean = true;
   selectedLanguage: string = 'tamil'; // Default language
@@ -85,6 +88,42 @@ export class BhagavadGitaPage implements OnInit {
   ngOnInit() {
     this.setupMetaTags();
     this.loadChapterData();
+    this.setupSEO();
+  }
+  
+  private setupSEO(): void {
+    // SEO Optimization
+    this.seoService.updateSEO({
+      title: 'Bhagavad Gita - Complete 18 Chapters with Tamil Audio & Meanings',
+      description: 'Read and listen to all 18 chapters of Bhagavad Gita in Sanskrit with Tamil pronunciation, translations, and meanings. Experience divine teachings of Lord Krishna through comprehensive chapter-wise audio recitation, verse-by-verse explanations, and multilingual support for spiritual learning.',
+      keywords: 'Bhagavad Gita, 18 chapters, Tamil audio, Sanskrit verses, Krishna teachings, Gita chapters, chapter wise, verse meanings, Tamil translation, spiritual scripture, Hindu philosophy, karma yoga, bhakti yoga, Arjuna Krishna dialogue, Gita audio, Tamil pronunciation, Mahabharata, sacred text, Indian scripture',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data for Book/Scripture
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Book",
+      "name": "Bhagavad Gita",
+      "description": "Complete scripture of Bhagavad Gita with all 18 chapters, Tamil audio recitation, and detailed meanings.",
+      "author": {
+        "@type": "Person",
+        "name": "Sage Vyasa"
+      },
+      "inLanguage": ["sa", "ta", "en"],
+      "numberOfPages": "18 chapters, 700 verses",
+      "bookFormat": "Digital",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka"
+      }
+    });
+
+    // Add breadcrumb navigation
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Bhagavad Gita', url: '/bhagavad-gita' }
+    ]);
   }
 
   private setupMetaTags(): void {

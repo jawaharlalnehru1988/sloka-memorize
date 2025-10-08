@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import {
   ToastController,
   AlertController
 } from '@ionic/angular/standalone';
+import { SeoService } from '../shared/services/seo.service';
 import { addIcons } from 'ionicons';
 import { 
   volumeHigh, 
@@ -107,6 +108,8 @@ interface CompletionStats {
 ]
 })
 export class UchcharanaPage implements OnInit {
+  private seoService = inject(SeoService);
+  
   // Training state
   isTraining = false;
   isCompleted = false;
@@ -267,6 +270,35 @@ export class UchcharanaPage implements OnInit {
   ngOnInit() {
     this.initializeMasteryCategories();
     this.loadProgress();
+    
+    // SEO Optimization
+    this.seoService.updateSEO({
+      title: 'Ucchāraṇa - Sanskrit Pronunciation Training | Authentic Vedic Phonetics',
+      description: 'Perfect Sanskrit pronunciation with Ucchāraṇa (उच्चारण) training. Learn authentic Devanagari phonetics, vowel clarity, consonant precision, and proper articulation. Features real-time pronunciation feedback, mouth position guides, and speech recognition for Bhagavad Gita recitation accuracy.',
+      keywords: 'Uchcharana, Uccharana, Sanskrit pronunciation, Devanagari phonetics, vowel sounds, consonant articulation, pronunciation training, speech recognition, authentic Sanskrit, mouth position, phonetic guide, Tamil pronunciation, Vedic recitation sounds, proper articulation, Sanskrit accent, Bhagavad Gita pronunciation, Indian language learning, speech clarity',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data for Course
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Ucchāraṇa - Sanskrit Pronunciation Training",
+      "description": "Master authentic Sanskrit pronunciation with Ucchāraṇa training covering vowels, consonants, clusters, and complete recitation.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka"
+      },
+      "educationalLevel": "All Levels",
+      "inLanguage": ["en", "ta", "sa"],
+      "teaches": "Authentic Sanskrit pronunciation and Devanagari phonetics"
+    });
+
+    // Add breadcrumb navigation
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Ucchāraṇa', url: '/uchcharana' }
+    ]);
   }
 
   private initializeMasteryCategories() {

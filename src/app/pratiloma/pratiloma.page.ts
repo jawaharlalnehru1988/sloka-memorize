@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { IonContent, IonIcon } from "@ionic/angular/standalone";
@@ -6,6 +6,7 @@ import { addIcons } from "ionicons";
 import { chevronBackOutline, chevronForwardOutline, playOutline, micOutline, checkmarkCircleOutline, ellipseOutline, volumeHighOutline, recordingOutline, libraryOutline, helpOutline, eyeOffOutline, refreshOutline, checkmarkOutline, closeOutline, ribbonOutline, bulbOutline, checkmarkCircle, playCircleOutline, bowlingBallOutline } from "ionicons/icons";
 import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 import { SlokaDataService, TrainingMode } from "../shared/services/sloka-data";
+import { SeoService } from "../shared/services/seo.service";
 
 interface TrainingLevel {
   title: string;
@@ -22,6 +23,8 @@ interface TrainingLevel {
   imports: [IonContent, IonIcon, FormsModule, TechniqueHeaderComponent]
 })
 export class PratilomaPage implements OnInit {
+  
+  private seoService = inject(SeoService);
 
   currentLevel: number = 0;
 
@@ -102,6 +105,35 @@ export class PratilomaPage implements OnInit {
   }
 
   ngOnInit() {
+    // Update SEO for this page
+    this.seoService.updateSEO({
+      title: 'Pratiloma Pāṭha - Reverse Recitation Training',
+      description: 'Master Pratiloma Pāṭha (प्रतिलोम पाठ), the ancient Vedic technique of reverse recitation. Develop rock-solid memory and mental flexibility by learning Bhagavad Gita slokas in reverse word order. Traditional gurukula method with Tamil audio, meanings, and step-by-step guidance.',
+      keywords: 'Pratiloma Patha, reverse recitation, Vedic memory techniques, backward sloka chanting, Sanskrit reverse learning, Bhagavad Gita memory, advanced Vedic study, gurukula training, mantra reverse recitation, Sarasvati blessings',
+      author: 'Hare Krishna Sloka'
+    });
+
+    // Add structured data for educational content
+    this.seoService.addStructuredData({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Pratiloma Pāṭha - Reverse Recitation Training",
+      "description": "Learn the ancient art of reverse recitation to achieve rock-solid memory and invoke the blessings of Goddess Sarasvatī",
+      "provider": {
+        "@type": "Organization",
+        "name": "Hare Krishna Sloka",
+        "sameAs": "https://askharekrishna.com"
+      },
+      "educationalLevel": "All Levels",
+      "inLanguage": ["en", "ta", "sa"],
+      "teaches": "Vedic recitation technique - Pratiloma Pāṭha (reverse word order recitation)"
+    });
+
+    // Add breadcrumb
+    this.seoService.addBreadcrumb([
+      { name: 'Home', url: '/home' },
+      { name: 'Pratiloma Pāṭha', url: '/pratiloma' }
+    ]);
   }
 
   startTraining(slokaId: number) {
