@@ -111,4 +111,12 @@ export const routes: Routes = [
     path: 'pratiloma/training/:id',
     loadComponent: () => import('./pratiloma/pratiloma-training/pratiloma-training.component').then( m => m.PratilomaTrainingComponent)
   },
+  {
+    path: 'prashna-patha',
+    loadComponent: () => import('./prashna-patha/prashna-patha.page').then( m => m.PrashnaPathaPage)
+  },
+  {
+    path: 'prashna-patha/:id',
+    loadComponent: () => import('./prashna-patha/prashna-patha-training/prashna-patha-training.component').then( m => m.PrashnaPathaTrainingComponent)
+  },
 ];

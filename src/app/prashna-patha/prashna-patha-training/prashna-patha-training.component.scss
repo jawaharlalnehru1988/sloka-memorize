@@ -1,0 +1,672 @@
+.training-content {
+  --background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 50%, #bcccdc 100%);
+
+  // Loading & Not Found States
+  .loading-container,
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    padding: 2rem;
+    text-align: center;
+
+    ion-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    ion-spinner {
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #718096;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  // Main Content
+  .question-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  // Question Card
+  .question-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    margin-bottom: 2rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+
+    ion-card-header {
+      padding: 1.5rem;
+
+      .header-badges {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+
+        ion-chip {
+          font-weight: 600;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+
+          ion-icon {
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .main-question {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.4;
+        color: white;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+
+        ion-icon {
+          flex-shrink: 0;
+          font-size: 1.8rem;
+          margin-top: 0.1rem;
+        }
+      }
+    }
+
+    ion-card-content {
+      padding: 0 1.5rem 1.5rem;
+
+      .situation-section {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 1.25rem;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        h3 {
+          font-size: 1.2rem;
+          font-weight: 600;
+          margin-bottom: 0.75rem;
+          color: #ffd700;
+        }
+
+        .situation-text {
+          font-size: 1.05rem;
+          line-height: 1.7;
+          margin: 0;
+          color: rgba(255, 255, 255, 0.95);
+        }
+      }
+    }
+  }
+
+  // Answer Header
+  .answer-header {
+    text-align: center;
+    margin: 2rem 0 1.5rem;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .answer-subtitle {
+      font-size: 1.1rem;
+      color: #718096;
+      font-style: italic;
+    }
+  }
+
+  // Sloka Card
+  .sloka-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    border: 2px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    }
+
+    .sloka-number-badge {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+      ion-icon {
+        font-size: 1.3rem;
+      }
+    }
+
+    ion-card-content {
+      padding: 1.5rem;
+
+      // Common section styles
+      .relevance-section,
+      .sanskrit-section,
+      .transliteration-section,
+      .translation-section,
+      .purport-section {
+        margin-bottom: 1.75rem;
+        padding: 1.25rem;
+        border-radius: 12px;
+
+        h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #2d3748;
+          margin-bottom: 0.75rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          ion-icon {
+            font-size: 1.3rem;
+          }
+        }
+
+        p {
+          line-height: 1.7;
+          margin: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      // Relevance Section
+      .relevance-section {
+        background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+        border: 2px solid #81c784;
+
+        .relevance-label {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+
+          ion-icon {
+            font-size: 1.5rem;
+          }
+
+          strong {
+            font-size: 1.05rem;
+            color: #1b5e20;
+          }
+        }
+
+        .relevance-text {
+          font-size: 1rem;
+          color: #2d3748;
+          font-weight: 500;
+        }
+      }
+
+      // Sanskrit Section
+      .sanskrit-section {
+        background: linear-gradient(135deg, #fff9e6 0%, #ffe8b3 100%);
+        border: 2px solid #ffd54f;
+
+        .sanskrit-text {
+          font-family: 'Noto Sans Devanagari', 'Siddhanta', serif;
+          font-size: 1.3rem;
+          line-height: 1.9;
+          color: #bf360c;
+          font-weight: 500;
+          text-align: center;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.6);
+          border-radius: 8px;
+          margin-bottom: 1rem;
+        }
+
+        .audio-controls {
+          display: flex;
+          justify-content: center;
+          margin-top: 1rem;
+
+          ion-button {
+            --border-radius: 12px;
+            font-weight: 500;
+          }
+        }
+      }
+
+      // Transliteration Section
+      .transliteration-section {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border: 2px solid #64b5f6;
+
+        .transliteration-text {
+          font-size: 1.05rem;
+          color: #0d47a1;
+          font-style: italic;
+          font-weight: 500;
+          text-align: center;
+          padding: 0.75rem;
+          background: rgba(255, 255, 255, 0.5);
+          border-radius: 8px;
+        }
+      }
+
+      // Translation Section
+      .translation-section {
+        background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        border: 2px solid #ba68c8;
+
+        .translation-text {
+          font-size: 1.05rem;
+          color: #4a148c;
+          line-height: 1.8;
+          font-weight: 500;
+        }
+      }
+
+      // Purport Section
+      .purport-section {
+        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        border: 2px solid #ffb74d;
+
+        .purport-text {
+          font-size: 1rem;
+          color: #e65100;
+          line-height: 1.8;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  // Reflection Card
+  .reflection-card {
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(253, 203, 110, 0.3);
+    border: 2px solid #f39c12;
+    margin-bottom: 2rem;
+
+    ion-card-header {
+      padding: 1.25rem 1.5rem;
+
+      ion-card-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2d3748;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        ion-icon {
+          font-size: 1.6rem;
+        }
+      }
+    }
+
+    ion-card-content {
+      padding: 0 1.5rem 1.5rem;
+
+      .reflection-prompts {
+        margin-bottom: 1.5rem;
+
+        h4 {
+          font-size: 1.15rem;
+          font-weight: 600;
+          color: #2d3748;
+          margin-bottom: 0.75rem;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          li {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #f39c12;
+            color: #2d3748;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            &::before {
+              content: '💭';
+              margin-right: 0.5rem;
+            }
+          }
+        }
+      }
+
+      .memorization-tip {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 1.25rem;
+        border-radius: 12px;
+        border: 2px solid #f39c12;
+        margin-bottom: 1.5rem;
+
+        h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #2d3748;
+          margin-bottom: 0.75rem;
+        }
+
+        p {
+          font-size: 1rem;
+          color: #4a5568;
+          line-height: 1.7;
+          margin: 0;
+
+          strong {
+            color: #2d3748;
+            font-weight: 700;
+          }
+        }
+      }
+
+      .action-buttons {
+        ion-button {
+          font-weight: 600;
+          --border-radius: 12px;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .bottom-spacing {
+    height: 2rem;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .training-content {
+    .question-content {
+      padding: 0.75rem;
+    }
+
+    .question-card {
+      ion-card-header {
+        padding: 1rem;
+
+        .main-question {
+          font-size: 1.2rem;
+
+          ion-icon {
+            font-size: 1.4rem;
+          }
+        }
+      }
+
+      ion-card-content {
+        padding: 0 1rem 1rem;
+
+        .situation-section {
+          padding: 1rem;
+
+          h3 {
+            font-size: 1.1rem;
+          }
+
+          .situation-text {
+            font-size: 0.95rem;
+          }
+        }
+      }
+    }
+
+    .answer-header {
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .answer-subtitle {
+        font-size: 1rem;
+      }
+    }
+
+    .sloka-card {
+      .sloka-number-badge {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      ion-card-content {
+        padding: 1rem;
+
+        .relevance-section,
+        .sanskrit-section,
+        .transliteration-section,
+        .translation-section,
+        .purport-section {
+          padding: 1rem;
+          margin-bottom: 1.25rem;
+
+          h4 {
+            font-size: 1rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+          }
+        }
+
+        .sanskrit-section .sanskrit-text {
+          font-size: 1.1rem;
+          padding: 0.75rem;
+        }
+
+        .transliteration-section .transliteration-text {
+          font-size: 0.95rem;
+        }
+      }
+    }
+
+    .reflection-card {
+      ion-card-header {
+        padding: 1rem;
+
+        ion-card-title {
+          font-size: 1.2rem;
+        }
+      }
+
+      ion-card-content {
+        padding: 0 1rem 1rem;
+
+        .reflection-prompts {
+          h4 {
+            font-size: 1.05rem;
+          }
+
+          ul li {
+            font-size: 0.9rem;
+            padding: 0.6rem 0.8rem;
+          }
+        }
+
+        .memorization-tip {
+          padding: 1rem;
+
+          h4 {
+            font-size: 1rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  .training-content {
+    --background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%);
+
+    .not-found h2,
+    .loading-container p {
+      color: #e2e8f0;
+    }
+
+    .answer-header {
+      h2 {
+        color: #e2e8f0;
+      }
+
+      .answer-subtitle {
+        color: #cbd5e0;
+      }
+    }
+
+    .sloka-card {
+      background: #2d3748;
+      border-color: #4a5568;
+
+      ion-card-content {
+        .relevance-section,
+        .sanskrit-section,
+        .transliteration-section,
+        .translation-section,
+        .purport-section {
+          h4 {
+            color: #e2e8f0;
+          }
+        }
+
+        .relevance-section {
+          background: linear-gradient(135deg, #2f5233 0%, #3d6b41 100%);
+          border-color: #4caf50;
+
+          .relevance-label strong {
+            color: #81c784;
+          }
+
+          .relevance-text {
+            color: #e8f5e9;
+          }
+        }
+
+        .sanskrit-section {
+          background: linear-gradient(135deg, #4a3c1f 0%, #5d4e28 100%);
+          border-color: #ffb74d;
+
+          .sanskrit-text {
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffcc80;
+          }
+        }
+
+        .transliteration-section {
+          background: linear-gradient(135deg, #1a3a52 0%, #2d4f6b 100%);
+          border-color: #64b5f6;
+
+          .transliteration-text {
+            background: rgba(0, 0, 0, 0.3);
+            color: #90caf9;
+          }
+        }
+
+        .translation-section {
+          background: linear-gradient(135deg, #3d2445 0%, #4e2f5a 100%);
+          border-color: #ba68c8;
+
+          .translation-text {
+            color: #e1bee7;
+          }
+        }
+
+        .purport-section {
+          background: linear-gradient(135deg, #4d3319 0%, #5d4020 100%);
+          border-color: #ffb74d;
+
+          .purport-text {
+            color: #ffe0b2;
+          }
+        }
+      }
+    }
+
+    .reflection-card {
+      background: linear-gradient(135deg, #5d4a1f 0%, #6d5a2f 100%);
+      border-color: #ffa000;
+
+      ion-card-title {
+        color: #e2e8f0;
+      }
+
+      ion-card-content {
+        .reflection-prompts {
+          h4 {
+            color: #e2e8f0;
+          }
+
+          ul li {
+            background: rgba(0, 0, 0, 0.3);
+            border-left-color: #ffa000;
+            color: #e2e8f0;
+          }
+        }
+
+        .memorization-tip {
+          background: rgba(0, 0, 0, 0.3);
+          border-color: #ffa000;
+
+          h4 {
+            color: #e2e8f0;
+          }
+
+          p {
+            color: #cbd5e0;
+
+            strong {
+              color: #e2e8f0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

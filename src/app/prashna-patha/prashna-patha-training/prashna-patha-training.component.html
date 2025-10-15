@@ -1,0 +1,177 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/prashna-patha"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Question & Answer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="training-content">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading()">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>Loading question...</p>
+  </div>
+
+  <!-- Question Not Found -->
+  <div class="not-found" *ngIf="!isLoading() && !question()">
+    <ion-icon name="close-circle" color="danger"></ion-icon>
+    <h2>Question Not Found</h2>
+    <p>The question you're looking for doesn't exist.</p>
+    <ion-button (click)="goBack()" fill="outline">
+      <ion-icon name="arrow-back" slot="start"></ion-icon>
+      Back to Questions
+    </ion-button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="question-content" *ngIf="!isLoading() && question()">
+    <!-- Question Section -->
+    <ion-card class="question-card">
+      <ion-card-header>
+        <div class="header-badges">
+          <ion-chip [color]="getCategoryColor(question()!.category)">
+            <ion-icon name="help-circle-outline"></ion-icon>
+            <ion-label>{{question()!.category}}</ion-label>
+          </ion-chip>
+          <ion-chip *ngIf="question()!.isCustom" color="tertiary">
+            <ion-icon name="heart-outline"></ion-icon>
+            <ion-label>Your Question</ion-label>
+          </ion-chip>
+        </div>
+        <ion-card-title class="main-question">
+          <ion-icon name="help-circle-outline" color="primary"></ion-icon>
+          {{question()!.question}}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="situation-section">
+          <h3>📖 The Situation</h3>
+          <p class="situation-text">{{question()!.situation}}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Answer Section -->
+    <div class="answer-header">
+      <h2>💡 Bhagavad Gītā's Answer</h2>
+      <p class="answer-subtitle">Ancient wisdom for your modern question</p>
+    </div>
+
+    <!-- Related Slokas -->
+    <ion-card *ngFor="let sloka of question()!.relatedSlokas; let i = index" class="sloka-card">
+      <div class="sloka-number-badge">
+        <ion-icon name="book-outline"></ion-icon>
+        Chapter {{sloka.chapter}} : Verse {{sloka.verse}}
+      </div>
+
+      <ion-card-content>
+        <!-- Relevance -->
+        <div class="relevance-section">
+          <div class="relevance-label">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <strong>Why This Sloka?</strong>
+          </div>
+          <p class="relevance-text">{{sloka.relevance}}</p>
+        </div>
+
+        <!-- Sanskrit Text -->
+        <div class="sanskrit-section">
+          <h4>
+            <ion-icon name="book-outline" color="primary"></ion-icon>
+            Sanskrit Text
+          </h4>
+          <p class="sanskrit-text">{{sloka.slokaText}}</p>
+          
+          <!-- Audio Player -->
+          <div class="audio-controls">
+            <ion-button 
+              *ngIf="!isPlaying()" 
+              (click)="playAudio(question()!.audioUrl)"
+              fill="outline"
+              size="small">
+              <ion-icon name="play-outline" slot="start"></ion-icon>
+              Listen to Pronunciation
+            </ion-button>
+            <ion-button 
+              *ngIf="isPlaying()" 
+              (click)="stopAudio()"
+              fill="outline"
+              size="small"
+              color="danger">
+              <ion-icon name="pause-outline" slot="start"></ion-icon>
+              Stop
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Transliteration -->
+        <div class="transliteration-section">
+          <h4>
+            <ion-icon name="text-outline" color="secondary"></ion-icon>
+            Transliteration
+          </h4>
+          <p class="transliteration-text">{{sloka.slokaTransliteration}}</p>
+        </div>
+
+        <!-- Translation -->
+        <div class="translation-section">
+          <h4>
+            <ion-icon name="language-outline" color="tertiary"></ion-icon>
+            English Translation
+          </h4>
+          <p class="translation-text">{{sloka.slokaTranslation}}</p>
+        </div>
+
+        <!-- Purport -->
+        <div class="purport-section">
+          <h4>
+            <ion-icon name="bulb-outline" color="warning"></ion-icon>
+            Practical Application
+          </h4>
+          <p class="purport-text">{{sloka.slokaPurport}}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Reflection Section -->
+    <ion-card class="reflection-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="heart-outline" color="danger"></ion-icon>
+          Personal Reflection
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="reflection-prompts">
+          <h4>💭 Think About This:</h4>
+          <ul>
+            <li>How does this sloka's wisdom apply to your specific situation?</li>
+            <li>What actionable steps can you take based on this teaching?</li>
+            <li>Have you faced similar challenges before? How did you handle them?</li>
+            <li>What's one thing you'll do differently after reading this answer?</li>
+          </ul>
+        </div>
+
+        <div class="memorization-tip">
+          <h4>🎯 Memorization Tip:</h4>
+          <p>
+            Since this sloka answers <strong>YOUR personal question</strong>, it will be easier to remember. 
+            Every time you face this situation again, recall this verse. The emotional connection makes it stick!
+          </p>
+        </div>
+
+        <div class="action-buttons">
+          <ion-button expand="block" (click)="goBack()">
+            <ion-icon name="arrow-back" slot="start"></ion-icon>
+            Explore More Questions
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Bottom Spacing -->
+    <div class="bottom-spacing"></div>
+  </div>
+</ion-content>

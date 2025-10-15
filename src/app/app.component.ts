@@ -14,7 +14,7 @@ import {
   bulb, bulbOutline, bulbSharp, bookmarks, bookmarksOutline, bookmarksSharp,
   library, libraryOutline, librarySharp, flower, flowerOutline, flowerSharp,
   infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp,
-  earOutline, repeatOutline, timeOutline, playCircle
+  earOutline, repeatOutline, timeOutline, playCircle, helpCircle, helpCircleOutline, helpCircleSharp
 } from 'ionicons/icons';
 
 @Component({
@@ -26,6 +26,7 @@ import {
 export class AppComponent {
   public appPages = [
     { title: 'Home', url: '/home', icon: 'home' },
+    { title: 'Prashna Pāṭha (प्रश्न पाठ)', url: '/prashna-patha', icon: 'help-circle' },
     { title: 'Padapāṭha', url: '/padapada', icon: 'text' },
     { title: 'Vākyapāṭha', url: '/vakyapada', icon: 'document-text' },
     { title: 'Anuloma Pāṭha', url: '/anuloma', icon: 'arrow-forward' },
@@ -57,7 +58,7 @@ export class AppComponent {
       bulb, bulbOutline, bulbSharp, bookmarks, bookmarksOutline, bookmarksSharp,
       library, libraryOutline, librarySharp, flower, flowerOutline, flowerSharp,
       infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp,
-      earOutline, repeatOutline, timeOutline, playCircle
+      earOutline, repeatOutline, timeOutline, playCircle, helpCircle, helpCircleOutline, helpCircleSharp
     });
   }
 }

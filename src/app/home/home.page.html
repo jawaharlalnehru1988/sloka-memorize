@@ -48,6 +48,31 @@
     <p>Master the sacred verses of Bhagavad Gītā through time-tested techniques</p>
   </div>
 
+  <!-- Featured: Prashna Patha -->
+  <div class="featured-section">
+    <h3>✨ New: Question-Based Learning</h3>
+    <ion-card class="featured-card prashna-card" (click)="navigateTo('/prashna-patha')">
+      <div class="featured-badge">NEW</div>
+      <ion-card-header>
+        <div class="card-icon large">
+          <ion-icon name="help-circle" color="primary"></ion-icon>
+        </div>
+        <ion-card-title>Prashna Pāṭha</ion-card-title>
+        <ion-card-subtitle>प्रश्न पाठ — Find Answers to Life's Questions</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="featured-description">
+          Have questions about career, relationships, fear, or purpose? Discover how Bhagavad Gītā's timeless wisdom answers your personal challenges. Learn slokas that speak directly to YOUR life situation.
+        </p>
+        <div class="featured-stats">
+          <span><ion-icon name="help-circle-outline"></ion-icon> 15+ Life Questions</span>
+          <span><ion-icon name="book-outline"></ion-icon> Relevant Answers</span>
+          <span><ion-icon name="heart-outline"></ion-icon> Emotional Connection</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
   <div class="techniques-grid">
     <!-- Row 1 -->
     <ion-card class="technique-card" (click)="navigateTo('/padapada')">

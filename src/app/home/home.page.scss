@@ -130,6 +130,143 @@
       margin: 0;
     }
   }
+
+  // Featured Section - Prashna Patha
+  .featured-section {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+
+    h3 {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .featured-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: visible;
+
+      .featured-badge {
+        position: absolute;
+        top: -12px;
+        right: 20px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      &:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 16px 48px rgba(102, 126, 234, 0.5);
+        border-color: rgba(255, 255, 255, 0.6);
+
+        .card-icon ion-icon {
+          transform: scale(1.15) rotate(5deg);
+        }
+
+        .featured-description {
+          opacity: 1;
+        }
+      }
+
+      ion-card-header {
+        text-align: center;
+        padding: 2.5rem 2rem 1rem;
+        color: white;
+
+        .card-icon {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 1.5rem;
+
+          &.large ion-icon {
+            font-size: 4.5rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            transition: all 0.4s ease;
+          }
+        }
+
+        ion-card-title {
+          font-size: 2rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 0.75rem;
+          text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        ion-card-subtitle {
+          font-size: 1.2rem;
+          color: #ffd700;
+          font-weight: 600;
+          font-style: italic;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      ion-card-content {
+        padding: 0 2rem 2rem;
+        color: white;
+
+        .featured-description {
+          font-size: 1.1rem;
+          line-height: 1.7;
+          margin-bottom: 1.5rem;
+          text-align: center;
+          opacity: 0.95;
+          transition: opacity 0.3s ease;
+          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .featured-stats {
+          display: flex;
+          justify-content: space-around;
+          flex-wrap: wrap;
+          gap: 1rem;
+          background: rgba(255, 255, 255, 0.15);
+          padding: 1rem;
+          border-radius: 12px;
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+
+          span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+
+            ion-icon {
+              font-size: 1.3rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
   
   .techniques-grid {
     display: grid;
@@ -230,6 +367,58 @@
 // Responsive design
 @media (max-width: 768px) {
   .home-content {
+    .featured-section {
+      padding: 0.75rem;
+
+      h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+      }
+
+      .featured-card {
+        ion-card-header {
+          padding: 2rem 1.5rem 1rem;
+
+          .card-icon.large ion-icon {
+            font-size: 3.5rem;
+          }
+
+          ion-card-title {
+            font-size: 1.5rem;
+          }
+
+          ion-card-subtitle {
+            font-size: 1rem;
+          }
+        }
+
+        ion-card-content {
+          padding: 0 1.5rem 1.5rem;
+
+          .featured-description {
+            font-size: 1rem;
+          }
+
+          .featured-stats {
+            flex-direction: column;
+            gap: 0.75rem;
+
+            span {
+              font-size: 0.9rem;
+              justify-content: center;
+            }
+          }
+        }
+
+        .featured-badge {
+          top: -10px;
+          right: 15px;
+          padding: 0.4rem 1.2rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
     .inspiration-section {
       padding: 1.5rem 1rem;
       
@@ -324,6 +513,34 @@
 @media (prefers-color-scheme: dark) {
   .home-content {
     --background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+
+    .featured-section {
+      h3 {
+        color: #e2e8f0;
+      }
+
+      .featured-card {
+        background: linear-gradient(135deg, #4c51bf 0%, #6b46c1 100%);
+        border-color: rgba(255, 255, 255, 0.2);
+
+        &:hover {
+          border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        ion-card-header {
+          ion-card-subtitle {
+            color: #fbbf24;
+          }
+        }
+
+        ion-card-content {
+          .featured-stats {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+    }
     
     .inspiration-section {
       background: linear-gradient(135deg, #0d1421 0%, #1a202c 50%, #2d3748 100%);

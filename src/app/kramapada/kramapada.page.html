@@ -220,7 +220,7 @@
                 <span>{{sloka.difficulty}}</span>
               </div>
             </div>
-            <p>{{sloka.meaning}}</p>
+            <p>{{sloka.meaning.length > 50 ? sloka.meaning.substring(0, 50) + '...' : sloka.meaning}}</p>
             <div class="sequence-preview">
               <span class="sequence-count">{{getKramaStepCount(sloka)}} Krama Steps</span>
             </div>
