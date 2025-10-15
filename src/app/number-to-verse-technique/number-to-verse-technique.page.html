@@ -1,0 +1,195 @@
+<ion-content [fullscreen]="true" class="number-to-verse-page">
+  <!-- Technique Header Component -->
+  <app-technique-header
+    title="Number to Verse"
+    subtitle="संख्या से श्लोक"
+    description="Reference-Based Learning"
+    iconName="calculator"
+  ></app-technique-header>
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h2>🔢 Master Verse References</h2>
+      <p>Train your memory to instantly recall slokas from their chapter and verse numbers</p>
+      
+      <div class="stats-container">
+        <div class="stat-item">
+          <ion-icon name="calculator"></ion-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ totalVerses }}</span>
+            <span class="stat-label">Verses</span>
+          </div>
+        </div>
+        
+        <div class="stat-item">
+          <ion-icon name="book"></ion-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ totalChapters }}</span>
+            <span class="stat-label">Chapters</span>
+          </div>
+        </div>
+        
+        <div class="stat-item">
+          <ion-icon name="trending-up"></ion-icon>
+          <div class="stat-info">
+            <span class="stat-number">Purple</span>
+            <span class="stat-label">Theme</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works Section -->
+  <div class="how-it-works">
+    <h3>📚 How It Works</h3>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <ion-icon name="search"></ion-icon>
+        <h4>See Reference</h4>
+        <p>Browse verses by chapter and verse number (e.g., BG 2.47)</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <ion-icon name="eye"></ion-icon>
+        <h4>Read Context</h4>
+        <p>Get hints and first few words to jog your memory</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <ion-icon name="text"></ion-icon>
+        <h4>Recall Sloka</h4>
+        <p>Try to remember the complete Sanskrit verse</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <ion-icon name="volume-high"></ion-icon>
+        <h4>Verify & Learn</h4>
+        <p>Reveal the sloka, listen to pronunciation, and memorize</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearch()"
+      placeholder="Search by verse reference or context..."
+      animated="true"
+    ></ion-searchbar>
+  </div>
+
+  <!-- Chapter Filter Chips -->
+  <div class="filter-section">
+    <h4>📖 Filter by Chapter</h4>
+    <div class="chapter-chips">
+      <ion-chip
+        [class.active]="selectedChapter === null"
+        (click)="filterByChapter(null)"
+      >
+        <ion-icon name="apps"></ion-icon>
+        <ion-label>All Chapters</ion-label>
+      </ion-chip>
+      
+      <ion-chip
+        *ngFor="let chapter of chapters"
+        [class.active]="selectedChapter === chapter.chapter"
+        [style.--chip-color]="chapter.color"
+        (click)="filterByChapter(chapter.chapter)"
+      >
+        <ion-icon [name]="chapter.icon"></ion-icon>
+        <ion-label>Ch {{ chapter.chapter }}</ion-label>
+        <ion-badge>{{ chapter.verseCount }}</ion-badge>
+      </ion-chip>
+    </div>
+  </div>
+
+  <!-- Verses Grid -->
+  <div class="verses-section">
+    <h3>🎯 Verse References ({{ filteredVerses.length }})</h3>
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <ion-icon name="refresh" class="spinning"></ion-icon>
+      <p>Loading verses...</p>
+    </div>
+    
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && filteredVerses.length === 0" class="empty-state">
+      <ion-icon name="search"></ion-icon>
+      <h4>No verses found</h4>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+    
+    <!-- Verses Cards -->
+    <div class="verses-grid" *ngIf="!isLoading && filteredVerses.length > 0">
+      <ion-card
+        *ngFor="let verse of filteredVerses"
+        class="verse-card"
+        (click)="openVerse(verse.id)"
+        button="true"
+      >
+        <ion-card-header>
+          <!-- Chapter Badge -->
+          <div class="chapter-badge" [style.background]="getChapterColor(verse.chapter)">
+            <ion-icon [name]="getChapterIcon(verse.chapter)"></ion-icon>
+            <span>Ch {{ verse.chapter }}</span>
+          </div>
+          
+          <!-- Verse Reference (Main Focus) -->
+          <ion-card-title class="verse-reference">{{ verse.verseReference }}</ion-card-title>
+          
+          <!-- Difficulty Badge -->
+          <ion-badge
+            class="difficulty-badge"
+            [color]="verse.difficulty === 'beginner' ? 'success' : verse.difficulty === 'intermediate' ? 'warning' : 'danger'"
+          >
+            {{ verse.difficulty }}
+          </ion-badge>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <!-- Hint/Context -->
+          <div class="verse-hint">
+            <ion-icon name="information-circle"></ion-icon>
+            <p>{{ verse.hint }}</p>
+          </div>
+          
+          <!-- First Words Preview -->
+          <div class="first-words-preview">
+            <ion-icon name="text"></ion-icon>
+            <p class="devanagari">{{ getFirstWordsPreview(verse.firstWords) }}</p>
+          </div>
+          
+          <!-- Action Button -->
+          <ion-button expand="block" fill="outline" class="practice-button">
+            <ion-icon name="arrow-forward" slot="start"></ion-icon>
+            Practice This Verse
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Info Footer -->
+  <div class="info-footer">
+    <ion-icon name="information-circle"></ion-icon>
+    <div class="info-content">
+      <h4>💡 Training Tip</h4>
+      <p>Start with chapter 2 verses as they contain fundamental teachings. Gradually progress to other chapters as you build confidence in recalling verses by their numbers.</p>
+    </div>
+  </div>
+
+  <!-- Floating Action Button -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openAddVerseModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

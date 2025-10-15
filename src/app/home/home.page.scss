@@ -276,6 +276,30 @@
         color: #fff5e6;
       }
     }
+
+    // Number-to-Verse specific purple gradient styling
+    .number-verse-card {
+      background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 50%, #6A1B9A 100%);
+      box-shadow: 0 12px 40px rgba(156, 39, 176, 0.4);
+
+      .featured-badge.purple {
+        background: linear-gradient(135deg, #CE93D8 0%, #AB47BC 100%);
+        box-shadow: 0 4px 12px rgba(206, 147, 216, 0.4);
+      }
+
+      &:hover {
+        box-shadow: 0 16px 48px rgba(156, 39, 176, 0.5);
+        transform: translateY(-8px) scale(1.02);
+      }
+
+      ion-card-subtitle {
+        color: #f3e5f5;
+      }
+
+      .card-icon ion-icon {
+        color: #CE93D8 !important;
+      }
+    }
   }
 
   @keyframes pulse {

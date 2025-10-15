@@ -15,7 +15,7 @@ import {
   library, libraryOutline, librarySharp, flower, flowerOutline, flowerSharp,
   infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp,
   earOutline, repeatOutline, timeOutline, playCircle, helpCircle, helpCircleOutline, helpCircleSharp,
-  book, bookOutline, bookSharp
+  book, bookOutline, bookSharp, calculator, calculatorOutline, calculatorSharp
 } from 'ionicons/icons';
 
 @Component({
@@ -29,6 +29,7 @@ export class AppComponent {
     { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Prashna Pāṭha (प्रश्न पाठ)', url: '/prashna-patha', icon: 'help-circle' },
     { title: 'Artha-pāṭha (अर्थ पाठ)', url: '/artha-patha', icon: 'book' },
+    { title: 'Number to Verse (संख्या से श्लोक)', url: '/number-to-verse-technique', icon: 'calculator' },
     { title: 'Padapāṭha', url: '/padapada', icon: 'text' },
     { title: 'Vākyapāṭha', url: '/vakyapada', icon: 'document-text' },
     { title: 'Anuloma Pāṭha', url: '/anuloma', icon: 'arrow-forward' },
@@ -61,7 +62,7 @@ export class AppComponent {
       library, libraryOutline, librarySharp, flower, flowerOutline, flowerSharp,
       infinite, infiniteOutline, infiniteSharp, planet, planetOutline, planetSharp,
       earOutline, repeatOutline, timeOutline, playCircle, helpCircle, helpCircleOutline, helpCircleSharp,
-      book, bookOutline, bookSharp
+      book, bookOutline, bookSharp, calculator, calculatorOutline, calculatorSharp
     });
   }
 }

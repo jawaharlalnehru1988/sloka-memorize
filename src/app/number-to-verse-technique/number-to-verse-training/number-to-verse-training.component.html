@@ -1,0 +1,207 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="/number-to-verse-technique"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Number to Verse Training</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="training-content">
+  <!-- Loading State -->
+  <div *ngIf="verse() === undefined" class="loading-container">
+    <ion-icon name="refresh" class="spinning"></ion-icon>
+    <p>Loading verse...</p>
+  </div>
+
+  <!-- Not Found State -->
+  <div *ngIf="verse() === null" class="not-found-container">
+    <ion-icon name="alert-circle"></ion-icon>
+    <h2>Verse Not Found</h2>
+    <p>The requested verse could not be found.</p>
+    <ion-button (click)="goBack()">
+      <ion-icon name="arrow-back" slot="start"></ion-icon>
+      Go Back
+    </ion-button>
+  </div>
+
+  <!-- Verse Content -->
+  <div *ngIf="verse() && verse() !== null" class="verse-container">
+    
+    <!-- Verse Reference Card (Main Focus) -->
+    <ion-card class="reference-card">
+      <ion-card-header>
+        <div class="chapter-badge" [style.background]="getChapterColor(verse()!.chapter)">
+          <ion-icon name="book"></ion-icon>
+          <span>Chapter {{ verse()!.chapter }}</span>
+        </div>
+        
+        <ion-card-title class="verse-number-display">
+          {{ verse()!.verseReference }}
+        </ion-card-title>
+        
+        <ion-badge
+          class="difficulty-badge"
+          [color]="verse()!.difficulty === 'beginner' ? 'success' : verse()!.difficulty === 'intermediate' ? 'warning' : 'danger'"
+        >
+          {{ verse()!.difficulty }}
+        </ion-badge>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <div class="hint-section">
+          <ion-icon name="information-circle"></ion-icon>
+          <div class="hint-text">
+            <h4>Context Hint:</h4>
+            <p>{{ verse()!.hint }}</p>
+          </div>
+        </div>
+        
+        <div class="first-words-section">
+          <ion-icon name="text"></ion-icon>
+          <div class="first-words-text">
+            <h4>First Words:</h4>
+            <p class="devanagari">{{ verse()!.firstWords }}</p>
+          </div>
+        </div>
+        
+        <div class="context-box">
+          <p>{{ verse()!.context }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Reveal Sloka Section -->
+    <div class="reveal-section">
+      <ion-button
+        expand="block"
+        [color]="isSlokaVisible ? 'danger' : 'success'"
+        (click)="toggleSlokaVisible()"
+        class="reveal-button"
+      >
+        <ion-icon [name]="isSlokaVisible ? 'eye-off' : 'eye'" slot="start"></ion-icon>
+        {{ isSlokaVisible ? 'Hide' : 'Reveal' }} Sanskrit Sloka
+      </ion-button>
+
+      <!-- Sloka Display (conditionally shown) -->
+      <div *ngIf="isSlokaVisible" class="sloka-display" @fadeIn>
+        
+        <!-- Devanagari Sloka -->
+        <ion-card class="sloka-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="book"></ion-icon>
+              Sanskrit Sloka (Devanagari)
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="devanagari-text">
+              {{ verse()!.slokaDevanagari }}
+            </div>
+            
+            <!-- Audio Controls -->
+            <div class="audio-controls" *ngIf="verse()!.audioUrl">
+              <ion-button
+                [color]="isPlaying ? 'danger' : 'primary'"
+                (click)="playAudio()"
+                fill="solid"
+              >
+                <ion-icon [name]="isPlaying ? 'pause' : 'play'" slot="start"></ion-icon>
+                {{ isPlaying ? 'Pause' : 'Play' }} Audio
+              </ion-button>
+              
+              <ion-button *ngIf="isPlaying" color="medium" (click)="stopAudio()" fill="outline">
+                <ion-icon name="refresh" slot="start"></ion-icon>
+                Stop
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Transliteration -->
+        <ion-card class="transliteration-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="text"></ion-icon>
+              Transliteration (Pronunciation)
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="transliteration-text">
+              {{ verse()!.slokaTransliteration }}
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Word by Word Meaning -->
+        <ion-card class="word-meaning-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="book"></ion-icon>
+              Word-by-Word Meaning
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="word-meaning-text">
+              {{ verse()!.wordByWordMeaning }}
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- English Meaning -->
+        <ion-card class="meaning-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="information-circle"></ion-icon>
+              English Translation
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>{{ verse()!.meaningEnglish }}</p>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Hindi Meaning -->
+        <ion-card class="meaning-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="information-circle"></ion-icon>
+              हिन्दी अनुवाद
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p class="hindi-text">{{ verse()!.meaningHindi }}</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Practice Tips -->
+    <ion-card class="tips-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="checkmark-circle"></ion-icon>
+          Practice Tips
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul class="tips-list">
+          <li>📝 Write down the verse reference ({{ verse()!.verseReference }}) on a flashcard</li>
+          <li>🧠 Try to recall the complete sloka from memory before revealing</li>
+          <li>🔊 Listen to the audio pronunciation multiple times</li>
+          <li>📖 Understand the context and meaning to aid memorization</li>
+          <li>🔄 Practice daily for better retention</li>
+          <li>✅ Test yourself: Can you recite it without looking?</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Navigation Back -->
+    <div class="navigation-footer">
+      <ion-button expand="block" fill="outline" (click)="goBack()" color="primary">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Back to All Verses
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

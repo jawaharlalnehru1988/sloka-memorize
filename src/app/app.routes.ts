@@ -127,4 +127,12 @@ export const routes: Routes = [
     path: 'artha-patha/:id',
     loadComponent: () => import('./artha-patha/artha-patha-training/artha-patha-training.component').then( m => m.ArthaPathaTrainingComponent)
   },
+  {
+    path: 'number-to-verse-technique',
+    loadComponent: () => import('./number-to-verse-technique/number-to-verse-technique.page').then( m => m.NumberToVerseTechniquePage)
+  },
+  {
+    path: 'number-to-verse-technique/:id',
+    loadComponent: () => import('./number-to-verse-technique/number-to-verse-training/number-to-verse-training.component').then( m => m.NumberToVerseTrainingComponent)
+  },
 ];
