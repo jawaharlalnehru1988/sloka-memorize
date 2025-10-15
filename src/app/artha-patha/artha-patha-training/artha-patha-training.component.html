@@ -1,0 +1,200 @@
+<ion-content [fullscreen]="true">
+  <!-- Header -->
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/artha-patha" text="Back"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Artha-pāṭha Training</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Loading State -->
+  @if (!meaning()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading meaning...</p>
+    </div>
+  }
+
+  <!-- Not Found State -->
+  @else if (meaning() === null) {
+    <div class="not-found-container">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <h2>Meaning Not Found</h2>
+      <p>The requested meaning could not be found.</p>
+      <ion-button routerLink="/artha-patha" fill="solid">
+        <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+        Back to Meanings
+      </ion-button>
+    </div>
+  }
+
+  <!-- Training Content -->
+  @else {
+    <div class="training-container">
+      <!-- Meaning Card -->
+      <div class="meaning-card">
+        <div class="card-header">
+          <div class="category-badge" [style.background]="getCategoryColor()">
+            <ion-icon name="book-outline"></ion-icon>
+            {{ meaning()!.category }}
+          </div>
+          <div class="difficulty-badge" [class]="'difficulty-' + meaning()!.difficulty">
+            {{ meaning()!.difficulty }}
+          </div>
+        </div>
+
+        <div class="verse-reference">
+          {{ meaning()!.verseReference }}
+          <span class="chapter-verse">Chapter {{ meaning()!.chapter }}, Verse {{ meaning()!.verse }}</span>
+        </div>
+
+        <div class="meaning-content">
+          <h3>The Meaning You Know</h3>
+          <p class="meaning-english">{{ meaning()!.meaningEnglish }}</p>
+          @if (meaning()!.meaningHindi) {
+            <p class="meaning-hindi">{{ meaning()!.meaningHindi }}</p>
+          }
+        </div>
+
+        @if (meaning()!.context) {
+          <div class="context-section">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <p>{{ meaning()!.context }}</p>
+          </div>
+        }
+      </div>
+
+      <!-- Now Learn the Sloka Header -->
+      <div class="section-header">
+        <h2>Now Learn the Sanskrit Sloka</h2>
+        <p>Reveal the verse progressively and practice with audio</p>
+      </div>
+
+      <!-- Sloka Reveal Section -->
+      <div class="sloka-section devanagari-section">
+        <div class="section-title">
+          <ion-icon name="eye-outline"></ion-icon>
+          <h3>Sanskrit (Devanagari)</h3>
+          <ion-button 
+            fill="clear" 
+            size="small"
+            (click)="toggleSlokaVisible()"
+          >
+            {{ isSlokaVisible ? 'Hide' : 'Reveal' }}
+          </ion-button>
+        </div>
+        
+        @if (isSlokaVisible) {
+          <div class="sloka-content revealed" [@fadeIn]>
+            <p class="sloka-text">{{ meaning()!.slokaDevanagari }}</p>
+            
+            @if (meaning()!.audioUrl) {
+              <div class="audio-controls">
+                <ion-button 
+                  (click)="playAudio()"
+                  [disabled]="isPlaying"
+                  fill="solid"
+                  color="warning"
+                >
+                  <ion-icon slot="start" [name]="isPlaying ? 'volume-high' : 'play'"></ion-icon>
+                  {{ isPlaying ? 'Playing...' : 'Listen to Pronunciation' }}
+                </ion-button>
+                @if (isPlaying) {
+                  <ion-button (click)="stopAudio()" fill="outline" color="warning">
+                    <ion-icon slot="start" name="stop"></ion-icon>
+                    Stop
+                  </ion-button>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="sloka-placeholder">
+            <ion-icon name="eye-off-outline"></ion-icon>
+            <p>Click "Reveal" to see the Sanskrit sloka</p>
+          </div>
+        }
+      </div>
+
+      <!-- Transliteration Section -->
+      <div class="sloka-section transliteration-section">
+        <div class="section-title">
+          <ion-icon name="text-outline"></ion-icon>
+          <h3>Transliteration (Roman Script)</h3>
+          <ion-button 
+            fill="clear" 
+            size="small"
+            (click)="toggleTransliterationVisible()"
+          >
+            {{ isTransliterationVisible ? 'Hide' : 'Reveal' }}
+          </ion-button>
+        </div>
+        
+        @if (isTransliterationVisible) {
+          <div class="sloka-content revealed" [@fadeIn]>
+            <p class="transliteration-text">{{ meaning()!.slokaTransliteration }}</p>
+          </div>
+        } @else {
+          <div class="sloka-placeholder">
+            <ion-icon name="eye-off-outline"></ion-icon>
+            <p>Click "Reveal" to see the transliteration</p>
+          </div>
+        }
+      </div>
+
+      <!-- Word by Word Meaning -->
+      @if (meaning()!.wordByWordMeaning) {
+        <div class="sloka-section word-meaning-section">
+          <div class="section-title">
+            <ion-icon name="book-outline"></ion-icon>
+            <h3>Word-by-Word Meaning</h3>
+            <ion-button 
+              fill="clear" 
+              size="small"
+              (click)="toggleWordMeaningVisible()"
+            >
+              {{ isWordMeaningVisible ? 'Hide' : 'Reveal' }}
+            </ion-button>
+          </div>
+          
+          @if (isWordMeaningVisible) {
+            <div class="sloka-content revealed" [@fadeIn]>
+              <p class="word-meaning-text">{{ meaning()!.wordByWordMeaning }}</p>
+            </div>
+          } @else {
+            <div class="sloka-placeholder">
+              <ion-icon name="eye-off-outline"></ion-icon>
+              <p>Click "Reveal" for detailed word meanings</p>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Practice Tips -->
+      <div class="practice-tips">
+        <div class="tip-header">
+          <ion-icon name="bulb-outline"></ion-icon>
+          <h3>Practice Tips</h3>
+        </div>
+        <ul>
+          <li>Start by reading the meaning multiple times to connect emotionally</li>
+          <li>Reveal the Devanagari script and observe its beauty</li>
+          <li>Listen to the audio pronunciation repeatedly</li>
+          <li>Use the transliteration to practice correct pronunciation</li>
+          <li>Gradually memorize by connecting the meaning with the Sanskrit words</li>
+          <li>Practice daily for 5-10 minutes for best results</li>
+        </ul>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <ion-button expand="block" fill="solid" color="warning" routerLink="/artha-patha">
+          <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+          Back to All Meanings
+        </ion-button>
+      </div>
+    </div>
+  }
+</ion-content>

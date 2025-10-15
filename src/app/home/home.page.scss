@@ -257,6 +257,25 @@
         }
       }
     }
+
+    // Artha-pāṭha specific gold gradient styling
+    .artha-card {
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      box-shadow: 0 12px 40px rgba(246, 211, 101, 0.4);
+
+      .featured-badge.golden {
+        background: linear-gradient(135deg, #ffd89b 0%, #ff9a76 100%);
+        box-shadow: 0 4px 12px rgba(255, 154, 118, 0.4);
+      }
+
+      &:hover {
+        box-shadow: 0 16px 48px rgba(246, 211, 101, 0.5);
+      }
+
+      ion-card-subtitle {
+        color: #fff5e6;
+      }
+    }
   }
 
   @keyframes pulse {

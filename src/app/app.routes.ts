@@ -119,4 +119,12 @@ export const routes: Routes = [
     path: 'prashna-patha/:id',
     loadComponent: () => import('./prashna-patha/prashna-patha-training/prashna-patha-training.component').then( m => m.PrashnaPathaTrainingComponent)
   },
+  {
+    path: 'artha-patha',
+    loadComponent: () => import('./artha-patha/artha-patha.page').then( m => m.ArthaPathaPage)
+  },
+  {
+    path: 'artha-patha/:id',
+    loadComponent: () => import('./artha-patha/artha-patha-training/artha-patha-training.component').then( m => m.ArthaPathaTrainingComponent)
+  },
 ];

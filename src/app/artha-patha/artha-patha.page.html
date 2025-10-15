@@ -1,0 +1,175 @@
+<ion-content [fullscreen]="true">
+  <!-- Technique Header Component -->
+  <app-technique-header
+    title="Artha-pāṭha"
+    subtitle="अर्थ पाठ"
+    description="Meaning to Sloka Learning"
+    iconName="book"
+  ></app-technique-header>
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h2>Master Sanskrit Slokas Through Their Meanings</h2>
+      <p class="hero-description">
+        You already know the profound wisdom of Bhagavad Gita translations. 
+        Now learn to recite the original Sanskrit slokas with confidence and devotion!
+      </p>
+      
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <ion-icon name="book-outline"></ion-icon>
+          <div class="stat-number">{{ totalMeanings }}</div>
+          <div class="stat-label">Meanings</div>
+        </div>
+        <div class="stat-card">
+          <ion-icon name="text-outline"></ion-icon>
+          <div class="stat-number">{{ totalCategories }}</div>
+          <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat-card">
+          <ion-icon name="trending-up-outline"></ion-icon>
+          <div class="stat-number">3</div>
+          <div class="stat-label">Difficulty Levels</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works Section -->
+  <div class="how-it-works">
+    <h3>How Artha-pāṭha Works</h3>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <ion-icon name="book-outline"></ion-icon>
+        <h4>Read the Meaning</h4>
+        <p>Start with a translation you already understand and connect with</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <ion-icon name="eye-outline"></ion-icon>
+        <h4>Reveal the Sloka</h4>
+        <p>Progressively discover the Sanskrit verse in Devanagari script</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <ion-icon name="volume-high-outline"></ion-icon>
+        <h4>Listen & Learn</h4>
+        <p>Hear authentic pronunciation and practice with transliteration</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <ion-icon name="refresh-outline"></ion-icon>
+        <h4>Practice Daily</h4>
+        <p>Reinforce memory through meaning-driven repetition</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearch()"
+      placeholder="Search by meaning, category, or verse reference..."
+      animated="true"
+    ></ion-searchbar>
+  </div>
+
+  <!-- Category Chips -->
+  <div class="category-section">
+    <h3>Browse by Category</h3>
+    <div class="category-chips">
+      <ion-chip
+        [class.active]="selectedCategory === ''"
+        (click)="filterByCategory('')"
+      >
+        <ion-icon name="apps-outline"></ion-icon>
+        <ion-label>All Categories</ion-label>
+      </ion-chip>
+      @for (category of categories; track category.name) {
+        <ion-chip
+          [class.active]="selectedCategory === category.name"
+          [style.--chip-color]="category.color"
+          (click)="filterByCategory(category.name)"
+        >
+          <ion-icon [name]="category.icon + '-outline'"></ion-icon>
+          <ion-label>{{ category.name }} ({{ category.meaningCount }})</ion-label>
+        </ion-chip>
+      }
+    </div>
+  </div>
+
+  <!-- Meanings Grid -->
+  <div class="meanings-container">
+    @if (isLoading) {
+      <div class="loading-state">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Loading meanings...</p>
+      </div>
+    } @else if (filteredMeanings.length === 0) {
+      <div class="empty-state">
+        <ion-icon name="search-outline"></ion-icon>
+        <h3>No meanings found</h3>
+        <p>Try adjusting your search or category filter</p>
+      </div>
+    } @else {
+      <div class="meanings-grid">
+        @for (meaning of filteredMeanings; track meaning.id) {
+          <ion-card class="meaning-card" (click)="openMeaning(meaning.id)">
+            <ion-card-header>
+              <div class="card-header-content">
+                <div class="category-badge" [style.background]="getCategoryColor(meaning.category)">
+                  <ion-icon [name]="getCategoryIcon(meaning.category)"></ion-icon>
+                  {{ meaning.category }}
+                </div>
+                <div class="difficulty-badge" [class]="'difficulty-' + meaning.difficulty">
+                  {{ meaning.difficulty }}
+                </div>
+              </div>
+              <div class="verse-ref">{{ meaning.verseReference }}</div>
+            </ion-card-header>
+
+            <ion-card-content>
+              <div class="meaning-preview">
+                <p class="meaning-text">{{ getMeaningPreview(meaning.meaningEnglish) }}</p>
+                @if (meaning.meaningHindi) {
+                  <p class="meaning-hindi">{{ getMeaningPreview(meaning.meaningHindi) }}</p>
+                }
+              </div>
+
+              <div class="card-footer">
+                <div class="sloka-info">
+                  <ion-icon name="text-outline"></ion-icon>
+                  <span>Chapter {{ meaning.chapter }}, Verse {{ meaning.verse }}</span>
+                </div>
+                <ion-button fill="clear" size="small">
+                  Learn Sloka
+                  <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Add Custom Meaning FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openAddMeaningModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Info Footer -->
+  <div class="info-footer">
+    <ion-icon name="information-circle-outline"></ion-icon>
+    <p>
+      Artha-pāṭha (अर्थ पाठ) helps you memorize Sanskrit slokas by starting with meanings you already know and love. 
+      This reverse learning approach creates excitement and deep connection with the verses.
+    </p>
+  </div>
+</ion-content>
