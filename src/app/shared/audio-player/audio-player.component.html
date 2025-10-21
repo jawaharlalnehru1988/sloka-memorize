@@ -1,12 +1,47 @@
-<div class="audio-section">
-  <ion-text color="primary">
-    <h3>🎵 {{ audioTitle }}</h3>
-  </ion-text>
+<div class="audio-section" [class.playing]="isPlaying" [class.beat-pulse]="beatDetected">
+  <!-- Enhanced Title with Dancing Colors -->
+  <div class="audio-title-container">
+    <ion-text class="dancing-title">
+      <h3>🎵 {{ audioTitle }}</h3>
+    </ion-text>
+  </div>
   
   <!-- Custom Audio Player -->
-  <div class="custom-audio-player">
-    <!-- Progress Bar -->
+  <div class="custom-audio-player"
+       [class.visualizer-active]="isPlaying">
+       
+    <!-- Audio Visualization -->
+    <div class="audio-visualization" [class.active]="isPlaying">
+      <div class="visualization-container">
+        <!-- Circular Visualizer -->
+        <canvas 
+          #circularCanvas 
+          class="circular-visualizer"
+          width="200" 
+          height="200">
+        </canvas>
+        
+        <!-- Spectrum Visualizer -->
+        <canvas 
+          #spectrumCanvas 
+          class="spectrum-visualizer"
+          width="300" 
+          height="80">
+        </canvas>
+        
+        <!-- Central Play Button -->
+        <div class="central-play-button" 
+             [class.beat-detected]="beatDetected"
+             (click)="playAudio()">
+          <ion-icon 
+            [name]="isPlaying ? 'pause' : 'play'">
+          </ion-icon>
+        </div>
+      </div>
+    </div>
+    <!-- Enhanced Progress Bar with Color Waves -->
     <div class="audio-progress-container" 
+         [class.rainbow-glow]="isPlaying"
          (click)="onProgressBarClick($event)"
          (touchstart)="onTouchStart($event)"
          (touchmove)="onTouchMove($event)"
@@ -16,28 +51,34 @@
          (mouseup)="onMouseUp($event)"
          (mouseleave)="onMouseUp($event)">
       <div class="audio-progress-bar">
-        <div class="audio-progress-fill" [style.width.%]="progress"></div>
-        <div class="audio-progress-thumb" [style.left.%]="progress"></div>
+        <div class="audio-progress-fill" 
+             [class.beat-glow]="beatDetected"
+             [style.width.%]="progress"></div>
+        <div class="audio-progress-thumb" 
+             [class.dancing]="isPlaying"
+             [style.left.%]="progress"></div>
+      </div>
+      
+      <!-- Frequency Visualization on Progress Bar -->
+      <div class="progress-frequency-bars" [class.active]="isPlaying">
+        @for (bar of frequencyBars; track $index) {
+          <div class="frequency-bar" 
+               [style.height.%]="bar"
+               [style.animation-delay.ms]="$index * 50">
+          </div>
+        }
       </div>
     </div>
     
-    <!-- Audio Controls -->
-    <div class="audio-controls">
+    <!-- Enhanced Audio Controls -->
+    <div class="audio-controls" [class.rainbow-mode]="isPlaying">
       <div class="audio-time">
         <span class="current-time">{{ formatTime(currentTime) }}</span>
         <span class="duration">{{ formatTime(duration) }}</span>
       </div>
       
       <div class="audio-actions">
-        <ion-button 
-          expand="block" 
-          fill="solid" 
-          [color]="isPlaying ? 'warning' : 'secondary'"
-          (click)="playAudio()">
-          <ion-icon [name]="isPlaying ? 'pause' : 'play'" slot="start"></ion-icon>
-          {{ isPlaying ? 'Pause ' + audioTitle : 'Play ' + audioTitle }}
-        </ion-button>
-        
+        <!-- Main Play/Pause Button - Hidden since we have central button -->
         <!-- Additional Controls Row -->
         <div class="audio-controls-row">
           <!-- Loop Control -->
@@ -45,6 +86,7 @@
             <ion-button 
               fill="outline" 
               [color]="isLooping ? 'warning' : 'medium'"
+              [class.rainbow-border]="isPlaying && isLooping"
               (click)="toggleLoop()"
               [class.active]="isLooping">
               <ion-icon name="repeat" slot="start"></ion-icon>
@@ -57,6 +99,7 @@
             <ion-button 
               fill="outline" 
               color="primary"
+              [class.rainbow-border]="isPlaying"
               (click)="changePlaybackSpeed()">
               <ion-icon name="speedometer" slot="start"></ion-icon>
               {{ playbackSpeed }}x
@@ -68,6 +111,7 @@
             <ion-button 
               fill="outline" 
               color="success"
+              [class.rainbow-border]="isPlaying"
               (click)="downloadAudio()">
               <ion-icon name="download" slot="start"></ion-icon>
               Download
@@ -79,6 +123,7 @@
             <ion-button 
               fill="outline" 
               color="tertiary"
+              [class.rainbow-border]="isPlaying"
               (click)="shareAudio()">
               <ion-icon name="share" slot="start"></ion-icon>
               Share

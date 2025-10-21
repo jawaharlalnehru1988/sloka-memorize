@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { 
@@ -22,7 +22,10 @@ import { addIcons } from 'ionicons';
     IonText
   ]
 })
-export class AudioPlayerComponent implements OnDestroy, OnChanges {
+export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit {
+  @ViewChild('circularCanvas', { static: false }) circularCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('spectrumCanvas', { static: false }) spectrumCanvas!: ElementRef<HTMLCanvasElement>;
+  
   @Input() audioUrl: string = '';
   @Input() audioTitle: string = 'Audio';
   @Input() enableDownload: boolean = true;
@@ -48,6 +51,25 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
   playbackSpeed: number = 1;
   availableSpeeds: number[] = [0.5, 0.75, 1, 1.25, 1.5, 2];
   
+  // Web Audio API properties for visualization
+  audioContext: AudioContext | null = null;
+  analyser: AnalyserNode | null = null;
+  dataArray: Uint8Array | null = null;
+  source: MediaElementAudioSourceNode | null = null;
+  
+  // Visualization properties
+  beatDetected: boolean = false;
+  frequencyBars: number[] = Array(20).fill(0);
+  circularCtx: CanvasRenderingContext2D | null = null;
+  spectrumCtx: CanvasRenderingContext2D | null = null;
+  animationFrame: number | null = null;
+  
+  // Beat detection properties
+  private beatThreshold: number = 180;
+  private beatDecay: number = 0.98;
+  private beatMin: number = 0.15;
+  private lastBeatTime: number = 0;
+  
   // Touch/drag support for progress bar
   private isDragging: boolean = false;
   private progressContainer: HTMLElement | null = null;
@@ -61,6 +83,344 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
       share,
       repeat
     });
+  }
+
+  ngAfterViewInit(): void {
+    // Initialize canvas contexts
+    setTimeout(() => {
+      this.initializeVisualization();
+    }, 100);
+  }
+
+  private initializeVisualization(): void {
+    if (this.circularCanvas?.nativeElement) {
+      this.circularCtx = this.circularCanvas.nativeElement.getContext('2d');
+    }
+    
+    if (this.spectrumCanvas?.nativeElement) {
+      this.spectrumCtx = this.spectrumCanvas.nativeElement.getContext('2d');
+    }
+    
+    // Setup Web Audio API for real-time analysis
+    this.setupWebAudio();
+    
+    // Start animation loop
+    this.startVisualization();
+  }
+
+  private setupWebAudio(): void {
+    if (!this.currentAudio) return;
+    
+    // Clean up any existing Web Audio setup first
+    this.cleanupWebAudio();
+    
+    try {
+      console.log('Setting up Web Audio API for audio:', this.currentAudio.src);
+      
+      // Create Web Audio API context
+      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      console.log('AudioContext created, state:', this.audioContext.state);
+      
+      // Create analyser node
+      this.analyser = this.audioContext.createAnalyser();
+      this.analyser.fftSize = 512;
+      this.analyser.smoothingTimeConstant = 0.8;
+      
+      // Create data array for frequency data
+      const bufferLength = this.analyser.frequencyBinCount;
+      this.dataArray = new Uint8Array(new ArrayBuffer(bufferLength));
+      console.log('Data array created with length:', bufferLength);
+      
+      // Connect audio element to analyser
+      this.source = this.audioContext.createMediaElementSource(this.currentAudio);
+      this.source.connect(this.analyser);
+      this.analyser.connect(this.audioContext.destination);
+      
+      console.log('Web Audio API initialized successfully - audio should be audible');
+      console.log('Audio context destination:', this.audioContext.destination);
+    } catch (error) {
+      console.error('Error setting up Web Audio API:', error);
+      // If Web Audio setup fails, at least ensure normal audio playback
+      this.cleanupWebAudio();
+    }
+  }
+
+  private cleanupWebAudio(): void {
+    try {
+      if (this.source) {
+        this.source.disconnect();
+        this.source = null;
+      }
+      
+      if (this.analyser) {
+        this.analyser.disconnect();
+        this.analyser = null;
+      }
+      
+      if (this.audioContext && this.audioContext.state !== 'closed') {
+        this.audioContext.close();
+      }
+      this.audioContext = null;
+      
+      // Reset data array
+      this.dataArray = null;
+      
+      console.log('Web Audio API cleaned up');
+    } catch (error) {
+      console.error('Error cleaning up Web Audio API:', error);
+    }
+  }
+
+  private startVisualization(): void {
+    const animate = () => {
+      if (this.isPlaying && this.analyser && this.dataArray) {
+        // Get frequency data
+        (this.analyser as any).getByteFrequencyData(this.dataArray);
+        
+        // Update frequency bars for progress bar visualization
+        this.updateFrequencyBars();
+        
+        // Detect beats
+        this.detectBeat();
+        
+        // Draw circular visualization
+        this.drawCircularVisualization();
+        
+        // Draw spectrum visualization
+        this.drawSpectrumVisualization();
+      } else {
+        // Draw static visualizations when not playing
+        this.drawStaticVisualization();
+      }
+      
+      this.animationFrame = requestAnimationFrame(animate);
+    };
+    
+    animate();
+  }
+
+  private updateFrequencyBars(): void {
+    if (!this.dataArray) return;
+    
+    const barCount = this.frequencyBars.length;
+    const dataPerBar = Math.floor(this.dataArray.length / barCount);
+    
+    for (let i = 0; i < barCount; i++) {
+      let sum = 0;
+      for (let j = 0; j < dataPerBar; j++) {
+        sum += this.dataArray[i * dataPerBar + j];
+      }
+      this.frequencyBars[i] = (sum / dataPerBar / 255) * 100;
+    }
+  }
+
+  private detectBeat(): void {
+    if (!this.dataArray) return;
+    
+    // Calculate average amplitude of lower frequencies (bass)
+    let sum = 0;
+    const bassEnd = Math.floor(this.dataArray.length * 0.1); // First 10% for bass
+    
+    for (let i = 0; i < bassEnd; i++) {
+      sum += this.dataArray[i];
+    }
+    
+    const average = sum / bassEnd;
+    const now = Date.now();
+    
+    // Beat detection logic
+    if (average > this.beatThreshold && (now - this.lastBeatTime) > 200) {
+      this.beatDetected = true;
+      this.lastBeatTime = now;
+      
+      // Reset beat detection after a short time
+      setTimeout(() => {
+        this.beatDetected = false;
+      }, 150);
+    }
+    
+    // Adjust threshold dynamically
+    this.beatThreshold = Math.max(
+      this.beatMin * 255,
+      this.beatThreshold * this.beatDecay
+    );
+  }
+
+  private drawCircularVisualization(): void {
+    if (!this.circularCtx) return;
+    
+    const canvas = this.circularCanvas.nativeElement;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 70; // Slightly smaller to fit better
+    
+    // Clear canvas
+    this.circularCtx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw outer circle with rainbow effect
+    this.circularCtx.beginPath();
+    this.circularCtx.arc(centerX, centerY, radius + 15, 0, 2 * Math.PI);
+    const gradient = this.circularCtx.createConicGradient(0, centerX, centerY);
+    gradient.addColorStop(0, '#ff5722');
+    gradient.addColorStop(0.16, '#ff9800');
+    gradient.addColorStop(0.33, '#4caf50');
+    gradient.addColorStop(0.5, '#2196f3');
+    gradient.addColorStop(0.66, '#9c27b0');
+    gradient.addColorStop(0.83, '#e91e63');
+    gradient.addColorStop(1, '#ff5722');
+    this.circularCtx.strokeStyle = gradient;
+    this.circularCtx.lineWidth = 4;
+    this.circularCtx.stroke();
+    
+    // Draw frequency bars in circular pattern
+    const bars = 48; // More bars for smoother effect
+    const angleStep = (2 * Math.PI) / bars;
+    
+    if (this.dataArray && this.isPlaying) {
+      // Real audio data visualization
+      for (let i = 0; i < bars; i++) {
+        const angle = i * angleStep;
+        const freqIndex = Math.floor((i / bars) * this.dataArray.length);
+        const amplitude = Math.max(this.dataArray[freqIndex] / 255, 0.1); // Minimum amplitude
+        
+        const startX = centerX + Math.cos(angle) * radius;
+        const startY = centerY + Math.sin(angle) * radius;
+        const endX = centerX + Math.cos(angle) * (radius + amplitude * 40);
+        const endY = centerY + Math.sin(angle) * (radius + amplitude * 40);
+        
+        this.circularCtx.beginPath();
+        this.circularCtx.moveTo(startX, startY);
+        this.circularCtx.lineTo(endX, endY);
+        this.circularCtx.strokeStyle = `hsl(${(i * 7.5 + Date.now() * 0.2) % 360}, 85%, 65%)`;
+        this.circularCtx.lineWidth = 3;
+        this.circularCtx.stroke();
+        
+        // Add glow effect
+        this.circularCtx.shadowColor = this.circularCtx.strokeStyle;
+        this.circularCtx.shadowBlur = 8;
+        this.circularCtx.stroke();
+        this.circularCtx.shadowBlur = 0;
+      }
+    } else {
+      // Static/demo visualization when not playing
+      for (let i = 0; i < bars; i++) {
+        const angle = i * angleStep;
+        const amplitude = Math.sin(Date.now() * 0.003 + i * 0.3) * 0.3 + 0.2;
+        
+        const startX = centerX + Math.cos(angle) * radius;
+        const startY = centerY + Math.sin(angle) * radius;
+        const endX = centerX + Math.cos(angle) * (radius + amplitude * 25);
+        const endY = centerY + Math.sin(angle) * (radius + amplitude * 25);
+        
+        this.circularCtx.beginPath();
+        this.circularCtx.moveTo(startX, startY);
+        this.circularCtx.lineTo(endX, endY);
+        this.circularCtx.strokeStyle = `hsla(${(i * 7.5 + Date.now() * 0.1) % 360}, 70%, 55%, 0.7)`;
+        this.circularCtx.lineWidth = 2;
+        this.circularCtx.stroke();
+      }
+    }
+  }
+
+  private drawSpectrumVisualization(): void {
+    if (!this.spectrumCtx) return;
+    
+    const canvas = this.spectrumCanvas.nativeElement;
+    const width = canvas.width;
+    const height = canvas.height;
+    
+    // Clear canvas
+    this.spectrumCtx.clearRect(0, 0, width, height);
+    
+    // Draw spectrum bars
+    const bars = 32; // Reduced for better visibility
+    const barWidth = (width / bars) - 2; // Add spacing between bars
+    
+    if (this.dataArray && this.isPlaying) {
+      // Real audio data visualization
+      for (let i = 0; i < bars; i++) {
+        const freqIndex = Math.floor((i / bars) * this.dataArray.length);
+        const amplitude = this.dataArray[freqIndex] / 255;
+        const barHeight = Math.max(amplitude * height, 2); // Minimum height of 2px
+        
+        const hue = (i * 11 + Date.now() * 0.1) % 360;
+        this.spectrumCtx.fillStyle = `hsl(${hue}, 85%, 65%)`;
+        this.spectrumCtx.fillRect(i * (barWidth + 2), height - barHeight, barWidth, barHeight);
+        
+        // Add glow effect
+        this.spectrumCtx.shadowColor = `hsl(${hue}, 85%, 65%)`;
+        this.spectrumCtx.shadowBlur = 10;
+        this.spectrumCtx.fillRect(i * (barWidth + 2), height - barHeight, barWidth, barHeight);
+        this.spectrumCtx.shadowBlur = 0;
+      }
+    } else {
+      // Static/demo visualization when not playing
+      for (let i = 0; i < bars; i++) {
+        const amplitude = Math.sin(Date.now() * 0.005 + i * 0.5) * 0.3 + 0.1;
+        const barHeight = amplitude * height;
+        
+        const hue = (i * 11 + Date.now() * 0.1) % 360;
+        this.spectrumCtx.fillStyle = `hsla(${hue}, 60%, 50%, 0.6)`;
+        this.spectrumCtx.fillRect(i * (barWidth + 2), height - barHeight, barWidth, barHeight);
+      }
+    }
+  }
+
+  private drawStaticVisualization(): void {
+    // Draw static circular visualization
+    if (this.circularCtx) {
+      const canvas = this.circularCanvas.nativeElement;
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      this.circularCtx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw animated static circle with gradient
+      this.circularCtx.beginPath();
+      this.circularCtx.arc(centerX, centerY, 70, 0, 2 * Math.PI);
+      
+      // Create gradient that rotates
+      const gradient = this.circularCtx.createConicGradient(Date.now() * 0.001, centerX, centerY);
+      gradient.addColorStop(0, 'rgba(255, 87, 34, 0.6)');
+      gradient.addColorStop(0.25, 'rgba(255, 152, 0, 0.6)');
+      gradient.addColorStop(0.5, 'rgba(76, 175, 80, 0.6)');
+      gradient.addColorStop(0.75, 'rgba(33, 150, 243, 0.6)');
+      gradient.addColorStop(1, 'rgba(255, 87, 34, 0.6)');
+      
+      this.circularCtx.strokeStyle = gradient;
+      this.circularCtx.lineWidth = 3;
+      this.circularCtx.stroke();
+      
+      // Add pulsing inner circle
+      const pulseRadius = 40 + Math.sin(Date.now() * 0.005) * 5;
+      this.circularCtx.beginPath();
+      this.circularCtx.arc(centerX, centerY, pulseRadius, 0, 2 * Math.PI);
+      this.circularCtx.strokeStyle = 'rgba(255, 152, 0, 0.4)';
+      this.circularCtx.lineWidth = 2;
+      this.circularCtx.stroke();
+    }
+    
+    // Draw static spectrum visualization
+    if (this.spectrumCtx) {
+      const canvas = this.spectrumCanvas.nativeElement;
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      this.spectrumCtx.clearRect(0, 0, width, height);
+      
+      // Draw animated static bars
+      const bars = 32;
+      const barWidth = (width / bars) - 2;
+      
+      for (let i = 0; i < bars; i++) {
+        const amplitude = Math.sin(Date.now() * 0.003 + i * 0.4) * 0.4 + 0.2;
+        const barHeight = amplitude * height;
+        
+        const hue = (i * 11 + Date.now() * 0.05) % 360;
+        this.spectrumCtx.fillStyle = `hsla(${hue}, 60%, 50%, 0.5)`;
+        this.spectrumCtx.fillRect(i * (barWidth + 2), height - barHeight, barWidth, barHeight);
+      }
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -87,6 +447,15 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
+    // Clean up visualization
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = null;
+    }
+    
+    // Clean up Web Audio API
+    this.cleanupWebAudio();
+    
     // Clean up audio
     if (this.currentAudio) {
       this.currentAudio.pause();
@@ -113,6 +482,17 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
       this.currentAudio.play().then(() => {
         this.isPlaying = true;
         this.onPlay.emit();
+        
+        // Resume AudioContext if it's suspended (required by browsers)
+        if (this.audioContext && this.audioContext.state === 'suspended') {
+          this.audioContext.resume().then(() => {
+            console.log('AudioContext resumed');
+            this.startVisualization();
+          });
+        } else {
+          this.startVisualization();
+        }
+        
         console.log('Audio resumed successfully');
       }).catch(error => {
         console.error('Error resuming audio:', error);
@@ -169,6 +549,17 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
     this.currentAudio.play().then(() => {
       this.isPlaying = true;
       this.onPlay.emit();
+      
+      // Resume AudioContext if it's suspended (required by browsers)
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        this.audioContext.resume().then(() => {
+          console.log('AudioContext resumed');
+          this.startVisualization();
+        });
+      } else {
+        this.startVisualization();
+      }
+      
       console.log('Audio started playing successfully');
     }).catch(error => {
       console.error('Error playing audio:', error);
@@ -181,6 +572,12 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
       this.currentAudio.pause();
       this.isPlaying = false;
       this.onPause.emit();
+      
+      // Stop visualization animation
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+        this.animationFrame = null;
+      }
     }
   }
 
@@ -193,6 +590,11 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
         this.currentTime = 0;
       }
       this.isPlaying = false;
+      
+      // Clean up Web Audio API when stopping for a different audio source
+      if (resetTime) {
+        this.cleanupWebAudio();
+      }
     }
   }
 
