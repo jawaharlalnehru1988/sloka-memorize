@@ -64,6 +64,14 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
   spectrumCtx: CanvasRenderingContext2D | null = null;
   animationFrame: number | null = null;
   
+  // Performance optimization properties
+  private lastFrameTime: number = 0;
+  private frameRate: number = 30; // Reduced from 60fps to 30fps for better performance
+  private frameInterval: number = 1000 / this.frameRate;
+  
+  // Debug flag to disable Web Audio for testing
+  disableWebAudio: boolean = false;
+  
   // Beat detection properties
   private beatThreshold: number = 180;
   private beatDecay: number = 0.98;
@@ -104,22 +112,21 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
     // Setup Web Audio API for real-time analysis
     this.setupWebAudio();
     
-    // Start animation loop
+    // Start animation loop (will show static visualization without Web Audio)
     this.startVisualization();
   }
 
   private setupWebAudio(): void {
-    if (!this.currentAudio) return;
+    if (!this.currentAudio) {
+      console.log('No audio element available for Web Audio setup');
+      return;
+    }
     
     // Clean up any existing Web Audio setup first
     this.cleanupWebAudio();
     
     try {
-      console.log('Setting up Web Audio API for audio:', this.currentAudio.src);
-      
-      // Create Web Audio API context
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      console.log('AudioContext created, state:', this.audioContext.state);
       
       // Create analyser node
       this.analyser = this.audioContext.createAnalyser();
@@ -129,19 +136,47 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
       // Create data array for frequency data
       const bufferLength = this.analyser.frequencyBinCount;
       this.dataArray = new Uint8Array(new ArrayBuffer(bufferLength));
-      console.log('Data array created with length:', bufferLength);
       
-      // Connect audio element to analyser
+      // Connect audio element to analyser and speakers
       this.source = this.audioContext.createMediaElementSource(this.currentAudio);
-      this.source.connect(this.analyser);
-      this.analyser.connect(this.audioContext.destination);
       
-      console.log('Web Audio API initialized successfully - audio should be audible');
-      console.log('Audio context destination:', this.audioContext.destination);
-    } catch (error) {
+      // Create gain node for volume control (optional)
+      const gainNode = this.audioContext.createGain();
+      gainNode.gain.value = 1.0; // Full volume
+      
+      // Connect: source -> analyser -> gain -> destination (speakers)
+      this.source.connect(this.analyser);
+      this.analyser.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+      
+      // Also connect source directly to destination for backup audio path
+      this.source.connect(this.audioContext.destination);
+      
+      setTimeout(() => {
+        if (this.currentAudio && !this.currentAudio.paused && this.analyser && this.dataArray) {
+          // Test if we're getting real audio data
+          (this.analyser as any).getByteFrequencyData(this.dataArray);
+          const hasAudioData = Array.from(this.dataArray).some(value => value > 0);
+          
+          if (!hasAudioData) {
+            console.warn('⚠️ No audio data detected - visualization will show static animation only');
+          }
+        }
+      }, 2000);
+    } catch (error: any) {
       console.error('Error setting up Web Audio API:', error);
+      
+      if (error.name === 'InvalidStateError' || error.message.includes('CORS')) {
+        console.warn('CORS issue detected. Web Audio API cannot access external audio source.');
+        console.info('To fix this, the audio server needs to include CORS headers: Access-Control-Allow-Origin: *');
+      }
+      
+      console.warn('Falling back to normal audio playback without real-time visualization');
       // If Web Audio setup fails, at least ensure normal audio playback
       this.cleanupWebAudio();
+      
+      // Set flag to use static visualization only
+      this.disableWebAudio = true;
     }
   }
 
@@ -165,14 +200,20 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
       // Reset data array
       this.dataArray = null;
       
-      console.log('Web Audio API cleaned up');
     } catch (error) {
       console.error('Error cleaning up Web Audio API:', error);
     }
   }
 
   private startVisualization(): void {
-    const animate = () => {
+    const animate = (currentTime: number) => {
+      // Throttle frame rate for better performance
+      if (currentTime - this.lastFrameTime < this.frameInterval) {
+        this.animationFrame = requestAnimationFrame(animate);
+        return;
+      }
+      this.lastFrameTime = currentTime;
+      
       if (this.isPlaying && this.analyser && this.dataArray) {
         // Get frequency data
         (this.analyser as any).getByteFrequencyData(this.dataArray);
@@ -189,14 +230,16 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
         // Draw spectrum visualization
         this.drawSpectrumVisualization();
       } else {
-        // Draw static visualizations when not playing
-        this.drawStaticVisualization();
+        // Draw static visualizations when not playing (lower frame rate)
+        if (currentTime - this.lastFrameTime > 100) { // 10fps for static
+          this.drawStaticVisualization();
+        }
       }
       
       this.animationFrame = requestAnimationFrame(animate);
     };
     
-    animate();
+    animate(0);
   }
 
   private updateFrequencyBars(): void {
@@ -335,6 +378,17 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
     // Draw spectrum bars
     const bars = 32; // Reduced for better visibility
     const barWidth = (width / bars) - 2; // Add spacing between bars
+    
+    // Debug logging - only log occasionally to avoid spam
+    if (Math.random() < 0.01) { // Log ~1% of the time
+      console.log('Spectrum Debug:', {
+        hasDataArray: !!this.dataArray,
+        isPlaying: this.isPlaying,
+        dataArrayLength: this.dataArray?.length,
+        firstFewValues: this.dataArray?.slice(0, 5),
+        hasSpectrumCtx: !!this.spectrumCtx
+      });
+    }
     
     if (this.dataArray && this.isPlaying) {
       // Real audio data visualization
@@ -478,7 +532,6 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
   private resumeOrStartAudio(): void {
     // If audio is already initialized and just paused, resume it
     if (this.currentAudio && this.currentAudio.src.includes(this.audioUrl)) {
-      console.log('Resuming audio from current position:', this.currentTime);
       this.currentAudio.play().then(() => {
         this.isPlaying = true;
         this.onPlay.emit();
@@ -486,14 +539,14 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
         // Resume AudioContext if it's suspended (required by browsers)
         if (this.audioContext && this.audioContext.state === 'suspended') {
           this.audioContext.resume().then(() => {
-            console.log('AudioContext resumed');
+            this.startVisualization();
+          }).catch(error => {
+            console.error('Failed to resume AudioContext on resume:', error);
             this.startVisualization();
           });
         } else {
           this.startVisualization();
         }
-        
-        console.log('Audio resumed successfully');
       }).catch(error => {
         console.error('Error resuming audio:', error);
         this.isPlaying = false;
@@ -505,8 +558,6 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
   }
 
   private startAudio(): void {
-    console.log(`Starting audio: ${this.audioUrl}`);
-    
     // Store current position if audio exists
     const savedTime = this.currentAudio ? this.currentAudio.currentTime : 0;
     
@@ -553,14 +604,14 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
       // Resume AudioContext if it's suspended (required by browsers)
       if (this.audioContext && this.audioContext.state === 'suspended') {
         this.audioContext.resume().then(() => {
-          console.log('AudioContext resumed');
+            this.startVisualization();
+        }).catch(error => {
+          console.error('Failed to resume AudioContext:', error);
           this.startVisualization();
         });
       } else {
         this.startVisualization();
       }
-      
-      console.log('Audio started playing successfully');
     }).catch(error => {
       console.error('Error playing audio:', error);
       this.isPlaying = false;
@@ -602,10 +653,10 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
   private initializeAudio(audioUrl: string): void {
     if (this.currentAudio) return; // Already initialized
     
-    console.log(`Initializing audio for seeking: ${audioUrl}`);
     
     // Create new audio instance
     this.currentAudio = new Audio(audioUrl);
+    this.currentAudio.crossOrigin = 'anonymous'; // Enable CORS for Web Audio API
     this.currentAudio.preload = 'metadata'; // Load metadata immediately
     this.currentAudio.playbackRate = this.playbackSpeed;
     this.currentAudio.loop = this.isLooping; // Set loop based on current state
@@ -614,7 +665,6 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
     this.currentAudio.addEventListener('loadedmetadata', () => {
       if (this.currentAudio) {
         this.duration = this.currentAudio.duration;
-        console.log(`Audio metadata loaded, duration: ${this.duration} seconds`);
       }
     });
     
@@ -634,7 +684,6 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
       this.isPlaying = false;
       if (this.isLooping) {
         // If looping is enabled, restart the audio
-        console.log('Audio ended, restarting due to loop mode');
         this.currentTime = 0;
         this.progress = 0;
         if (this.currentAudio) {
@@ -808,8 +857,6 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
     if (this.currentAudio) {
       this.currentAudio.playbackRate = this.playbackSpeed;
     }
-    
-    console.log(`Playback speed changed to: ${this.playbackSpeed}x`);
   }
 
   // Download audio file
@@ -834,6 +881,5 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges, AfterViewInit
     }
     
     this.onLoopToggle.emit(this.isLooping);
-    console.log(`Loop mode ${this.isLooping ? 'enabled' : 'disabled'}`);
   }
 }

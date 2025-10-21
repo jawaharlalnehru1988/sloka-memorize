@@ -58,16 +58,6 @@
              [class.dancing]="isPlaying"
              [style.left.%]="progress"></div>
       </div>
-      
-      <!-- Frequency Visualization on Progress Bar -->
-      <div class="progress-frequency-bars" [class.active]="isPlaying">
-        @for (bar of frequencyBars; track $index) {
-          <div class="frequency-bar" 
-               [style.height.%]="bar"
-               [style.animation-delay.ms]="$index * 50">
-          </div>
-        }
-      </div>
     </div>
     
     <!-- Enhanced Audio Controls -->

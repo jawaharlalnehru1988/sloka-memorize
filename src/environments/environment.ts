@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4000',
-  // baseUrl: 'https://dats-backend.vercel.app',
+  // baseUrl: 'http://localhost:4000',
+  baseUrl: 'https://dats-backend.vercel.app',
 
 };
 

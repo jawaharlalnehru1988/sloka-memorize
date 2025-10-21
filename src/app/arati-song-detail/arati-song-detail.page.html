@@ -87,7 +87,6 @@
             [enableLoop]="true"
             (onPlay)="onAudioPlay()"
             (onPause)="onAudioPause()"
-            (onTimeUpdate)="onAudioTimeUpdate($event)"
             (onDownload)="onAudioDownload()"
             (onShare)="onAudioShare()"
             (onLoopToggle)="onLoopToggle($event)">
@@ -114,7 +113,7 @@
             </ion-text>
             <div 
               class="tamil-content"
-              [innerHTML]="song()!.tamilDescription">
+              [innerHTML]="getSanitizedHtml(song()!.tamilDescription)">
             </div>
           </div>
         </ion-card-content>

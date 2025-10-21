@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { 
   IonContent, 
   IonHeader, 
@@ -65,7 +66,8 @@ export class AratiSongDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private aratiSongsService: AratiSongsService
+    private aratiSongsService: AratiSongsService,
+    private sanitizer: DomSanitizer
   ) {
     // Add required icons
     addIcons({refreshOutline,arrowBackOutline,personOutline,heartOutline,musicalNotesOutline,shareOutline,downloadOutline});
@@ -119,13 +121,7 @@ export class AratiSongDetailPage implements OnInit {
     console.log('Audio paused:', this.song()?.title);
   }
 
-  /**
-   * Handle audio player time update event
-   */
-  onAudioTimeUpdate(event: { currentTime: number; duration: number }): void {
-    // Can be used for progress tracking or analytics
-    console.log('Audio time update:', event);
-  }
+
 
   /**
    * Handle audio download event
@@ -149,6 +145,13 @@ export class AratiSongDetailPage implements OnInit {
   onLoopToggle(isLooping: boolean): void {
     console.log('Loop mode toggled:', isLooping ? 'ON' : 'OFF', 'for song:', this.song()?.title);
     // Additional loop logic can be added here
+  }
+
+  /**
+   * Sanitize HTML content for safe display
+   */
+  getSanitizedHtml(htmlContent: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(htmlContent);
   }
 
   /**

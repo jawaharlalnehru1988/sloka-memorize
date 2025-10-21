@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -18,6 +17,7 @@ import {
 import { BhagavadGitaService, BhagavadGitaChapterItem } from '../bhagavad-gita/bhagavad-gita.service';
 import { play, pause, arrowBack, download, speedometer, share, personCircle, call, logoYoutube, globe, logoWhatsapp, refresh } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { AudioPlayerComponent } from '../shared/audio-player/audio-player.component';
 
 @Component({
   selector: 'app-bhagavad-gita-chapter',
@@ -35,30 +35,21 @@ import { addIcons } from 'ionicons';
     IonSpinner,
     IonBackButton,
     IonButtons,
-    FormsModule
-]
+    FormsModule,
+    AudioPlayerComponent
+  ]
 })
 export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   chapterData: BhagavadGitaChapterItem | null = null;
   chapterNumber: string = '';
   loading: boolean = true;
   error: string = '';
-  
-  // Audio control properties
-  currentAudio: HTMLAudioElement | null = null;
-  isPlaying: boolean = false;
-  currentTime: number = 0;
-  duration: number = 0;
-  progress: number = 0;
-  playbackSpeed: number = 1;
-  availableSpeeds: number[] = [0.5, 0.75, 1, 1.25, 1.5, 2];
-  
-  // Floating control visibility
-  showFloatingControl: boolean = false;
-  
-  // Touch/drag support for progress bar
-  private isDragging: boolean = false;
-  private progressContainer: HTMLElement | null = null;
+
+  // Enhanced scroll functionality
+  private scrollHandler = (): void => {
+    // Simple scroll handler if needed
+    console.log('Page scrolled');
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -93,140 +84,69 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
       this.chapterData = cachedChapter;
       this.loading = false;
       this.setupScrollDetection();
-      this.setupMetaTags();
-      
-      // Initialize audio for seeking (load metadata without playing)
-      if (this.chapterData.audioData?.audioSrc) {
-        this.initializeAudio(this.chapterData.audioData.audioSrc);
-      }
-      
-      return;
-    }
-    
-    // If not in cache, fetch from API (which will cache it)
-    this.bhagavadGitaService.getChaptersByLanguage(selectedLanguage).subscribe({
-      next: (response) => {
-        
-        if (response && response.length > 0) {
-          // Find the specific chapter
-          const chapter = response[0].cardItems.find(
-            (item: BhagavadGitaChapterItem) => item.category === this.chapterNumber
-          );
+      this.updateMetadata();
+      console.log('Chapter loaded from cache:', this.chapterData);
+    } else {
+      // If not in cache, try to load from service
+      console.log('Chapter not in cache, loading from service...');
+      this.bhagavadGitaService.getAllBgChapters().subscribe({
+        next: (chaptersResponse: any) => {
+          console.log('Chapters loaded from service, finding chapter:', this.chapterNumber);
+          const chapters = chaptersResponse.map((response: any) => response.chapters).flat();
+          const foundChapter = chapters.find((chapter: any) => chapter.category === this.chapterNumber);
           
-          if (chapter) {
-            this.chapterData = chapter;
-            this.setupMetaTags();
-            
-            // Initialize audio for seeking (load metadata without playing)
-            if (this.chapterData.audioData?.audioSrc) {
-              this.initializeAudio(this.chapterData.audioData.audioSrc);
-            }
+          if (foundChapter) {
+            this.chapterData = foundChapter;
+            this.setupScrollDetection();
+            this.updateMetadata();
+            console.log('Chapter found and loaded:', foundChapter);
           } else {
             this.error = `Chapter ${this.chapterNumber} not found`;
+            console.error('Chapter not found:', this.chapterNumber);
           }
-        } else {
-          this.error = 'No chapter data available';
+          this.loading = false;
+        },
+        error: (error: any) => {
+          console.error('Error loading chapters:', error);
+          this.handleLoadingError(error);
         }
-        
-        this.loading = false;
-        
-        // Setup scroll detection after data is loaded
-        this.setupScrollDetection();
-      },
-      error: (error) => {
-        console.error('❌ Error fetching chapter data:', error);
-        
-        // Provide more specific error messages based on error type
-        if (!navigator.onLine) {
-          this.error = 'No internet connection. Please check your network and try again.';
-        } else if (error.status === 0 || error.name === 'NetworkError') {
-          this.error = 'Network error occurred. Please check your internet connection and try again.';
-        } else if (error.status >= 500) {
-          this.error = 'Server is temporarily unavailable. Please check your internet connection and try again later.';
-        } else if (error.status === 404) {
-          this.error = 'Chapter data not found. Please check your internet connection and try again.';
-        } else {
-          this.error = 'Failed to load chapter data. Please check your internet connection and try again.';
-        }
-        
-        this.loading = false;
-      }
-    });
+      });
+    }
   }
 
-  private setupMetaTags(): void {
-    if (!this.chapterData) return;
-
-    // Set page title
-    const tamilChapterNum = this.getTamilChapterNumber(this.chapterNumber);
-    const pageTitle = `${tamilChapterNum} அத்தியாயம்: ${this.chapterData.title}`;
-    this.titleService.setTitle(pageTitle);
-
-    // Set Open Graph meta tags for social media sharing
-    const lordKrishnaImageUrl = 'https://res.cloudinary.com/dbmkctsda/image/upload/v1755826489/6c5b5f34493a22073fec89464565a7a2_nzjsqr.jpg';
+  private handleLoadingError(error: any): void {
+    this.loading = false;
     
-    this.meta.updateTag({ property: 'og:title', content: pageTitle });
-    this.meta.updateTag({ property: 'og:description', content: this.chapterData.desc });
-    this.meta.updateTag({ property: 'og:image', content: lordKrishnaImageUrl });
-    this.meta.updateTag({ property: 'og:type', content: 'article' });
-    this.meta.updateTag({ property: 'og:url', content: window.location.href });
-    
-    // Twitter Card meta tags
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-    this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
-    this.meta.updateTag({ name: 'twitter:description', content: this.chapterData.desc });
-    this.meta.updateTag({ name: 'twitter:image', content: lordKrishnaImageUrl });
-    
-    // WhatsApp specific meta tags
-    this.meta.updateTag({ property: 'og:site_name', content: 'Hare Krishna Sloka' });
-    this.meta.updateTag({ property: 'og:locale', content: 'en_US' });
-    this.meta.updateTag({ property: 'og:image:width', content: '1200' });
-    this.meta.updateTag({ property: 'og:image:height', content: '630' });
-    this.meta.updateTag({ property: 'og:image:alt', content: 'Lord Krishna - Bhagavad Gita' });
-    
-    console.log('✅ Meta tags set up for social sharing with Lord Krishna image');
+    if (!navigator.onLine) {
+      this.error = 'No internet connection. Please check your network and try again.';
+    } else if (error.status === 0) {
+      this.error = 'Unable to reach the server. Please check your internet connection.';
+    } else if (error.status >= 500) {
+      this.error = 'Server is temporarily unavailable. Please try again later.';
+    } else {
+      this.error = 'Failed to load chapter. Please try again.';
+    }
   }
 
-  private scrollHandler: any = null;
-  
+  private updateMetadata(): void {
+    if (this.chapterData) {
+      this.titleService.setTitle(`${this.chapterData.title} - Bhagavad Gita Chapter ${this.chapterNumber}`);
+      
+      this.meta.updateTag({ name: 'description', content: this.chapterData.desc?.substring(0, 160) || `Listen to Chapter ${this.chapterNumber} of the Bhagavad Gita` });
+      this.meta.updateTag({ property: 'og:title', content: `${this.chapterData.title} - Bhagavad Gita` });
+      this.meta.updateTag({ property: 'og:description', content: this.chapterData.desc?.substring(0, 160) || '' });
+      this.meta.updateTag({ property: 'og:image', content: this.chapterData.img || '' });
+    }
+  }
+
   private setupScrollDetection(): void {
-    // Add scroll event listener to detect when description section is visible
-    setTimeout(() => {
-      // Get the Ionic content element
+    if (typeof window !== 'undefined') {
       const content = document.querySelector('ion-content');
-      if (!content) return;
+      const scrollEl = content?.shadowRoot?.querySelector('.inner-scroll') || content;
       
-      // Save the bound handler for later removal
-      this.scrollHandler = this.onScroll.bind(this);
-      
-      // First, get the scrollable element inside ion-content
-      const scrollEl = content.shadowRoot?.querySelector('.inner-scroll') || content;
-      
-      // Add event listener to the scrollable element
-      scrollEl.addEventListener('scroll', this.scrollHandler);
-      
-      // Initial check in case page is already scrolled
-      this.onScroll({ target: scrollEl });
-      
-      console.log('Scroll detection set up successfully');
-    }, 500); // Longer delay to ensure DOM and shadow DOM are fully ready
-  }
-
-  private onScroll(event: any): void {
-    if (!event.target) return;
-    
-    const scrollEl = event.target;
-    const scrollTop = scrollEl.scrollTop;
-    
-    // Define a scroll threshold where we consider the user to be reading (e.g., 200px down)
-    const scrollThreshold = 200;
-    
-    // Simple approach: show floating control when user has scrolled down enough
-    const shouldShow = scrollTop > scrollThreshold;
-    
-    if (this.showFloatingControl !== shouldShow) {
-      console.log(`Floating control visibility changed to: ${shouldShow}, scroll position: ${scrollTop}`);
-      this.showFloatingControl = shouldShow;
+      if (scrollEl) {
+        scrollEl.addEventListener('scroll', this.scrollHandler, { passive: true });
+      }
     }
   }
 
@@ -240,410 +160,36 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
         scrollEl.removeEventListener('scroll', this.scrollHandler);
       }
     }
-    
-    // Clean up audio
-    if (this.currentAudio) {
-      this.stopCurrentAudio(true); // Reset when cleaning up
-      this.currentAudio = null;
-    }
   }
 
-  playAudio(audioUrl: string): void {
-    if (this.currentAudio && !this.currentAudio.paused) {
-      // If audio is currently playing, pause it
-      this.pauseAudio();
-    } else {
-      // If no audio is playing or it's paused, start/resume playing
-      this.resumeOrStartAudio(audioUrl);
-    }
-  }
-
-  private resumeOrStartAudio(audioUrl: string): void {
-    // If audio is already initialized and just paused, resume it
-    if (this.currentAudio && this.currentAudio.src.includes(audioUrl)) {
-      console.log('Resuming audio from current position:', this.currentTime);
-      this.currentAudio.play().then(() => {
-        this.isPlaying = true;
-        console.log('Audio resumed successfully');
-      }).catch(error => {
-        console.error('Error resuming audio:', error);
-        this.isPlaying = false;
-      });
-    } else {
-      // If no audio or different audio, start fresh
-      this.startAudio(audioUrl);
-    }
-  }
-
-  private startAudio(audioUrl: string): void {
-    console.log(`Starting audio: ${audioUrl}`);
-    
-    // Store current position if audio exists
-    const savedTime = this.currentAudio ? this.currentAudio.currentTime : 0;
-    
-    // Only stop current audio if it's a different source
-    if (this.currentAudio && !this.currentAudio.src.includes(audioUrl)) {
-      this.stopCurrentAudio(true); // Reset time for different audio
-    }
-    
-    // Initialize audio if not already done or if it's a different source
-    if (!this.currentAudio || !this.currentAudio.src.includes(audioUrl)) {
-      this.initializeAudio(audioUrl);
-    }
-    
-    // Wait for metadata to be loaded before playing
-    if (this.duration <= 0) {
-      this.currentAudio!.addEventListener('loadedmetadata', () => {
-        // Restore saved position if any
-        if (savedTime > 0 && this.currentAudio) {
-          this.currentAudio.currentTime = savedTime;
-          this.currentTime = savedTime;
-          this.progress = (savedTime / this.duration) * 100;
-        }
-        this.playLoadedAudio();
-      }, { once: true });
-    } else {
-      // Restore saved position if any
-      if (savedTime > 0 && this.currentAudio) {
-        this.currentAudio.currentTime = savedTime;
-        this.currentTime = savedTime;
-        this.progress = (savedTime / this.duration) * 100;
-      }
-      this.playLoadedAudio();
-    }
-  }
-  
-  private playLoadedAudio(): void {
-    if (!this.currentAudio) return;
-    
-    // Play the audio
-    this.currentAudio.play().then(() => {
-      this.isPlaying = true;
-      console.log('Audio started playing successfully');
-    }).catch(error => {
-      console.error('Error playing audio:', error);
-      this.isPlaying = false;
-    });
-  }
-
-  private pauseAudio(): void {
-    if (this.currentAudio && !this.currentAudio.paused) {
-      this.currentAudio.pause();
-      this.isPlaying = false;
-    }
-  }
-
-  private stopCurrentAudio(resetTime: boolean = true): void {
-    if (this.currentAudio) {
-      this.currentAudio.pause();
-      if (resetTime) {
-        this.currentAudio.currentTime = 0;
-        this.progress = 0;
-        this.currentTime = 0;
-      }
-      this.isPlaying = false;
-    }
-  }
-
-  // Format time in MM:SS format
-  formatTime(time: number): string {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  }
-
-  // Handle progress bar click to seek
-  onProgressBarClick(event: any): void {
-    if (this.isDragging) return; // Don't handle click if we're dragging
-    
-    this.seekToPosition(event);
-  }
-  
-  // Touch event handlers for mobile devices
-  onTouchStart(event: TouchEvent): void {
-    event.preventDefault();
-    this.isDragging = true;
-    this.progressContainer = event.target as HTMLElement;
-    this.addDraggingClass();
-    this.seekToPosition(event);
-  }
-  
-  onTouchMove(event: TouchEvent): void {
-    if (!this.isDragging) return;
-    event.preventDefault();
-    this.seekToPosition(event);
-  }
-  
-  onTouchEnd(event: TouchEvent): void {
-    if (!this.isDragging) return;
-    event.preventDefault();
-    this.isDragging = false;
-    this.removeDraggingClass();
-    this.progressContainer = null;
-  }
-  
-  // Mouse event handlers for desktop devices
-  onMouseDown(event: MouseEvent): void {
-    event.preventDefault();
-    this.isDragging = true;
-    this.progressContainer = event.target as HTMLElement;
-    this.addDraggingClass();
-    this.seekToPosition(event);
-  }
-  
-  onMouseMove(event: MouseEvent): void {
-    if (!this.isDragging) return;
-    event.preventDefault();
-    this.seekToPosition(event);
-  }
-  
-  onMouseUp(event: MouseEvent): void {
-    if (!this.isDragging) return;
-    event.preventDefault();
-    this.isDragging = false;
-    this.removeDraggingClass();
-    this.progressContainer = null;
-  }
-  
-  // Helper methods for visual feedback
-  private addDraggingClass(): void {
-    const container = document.querySelector('.audio-progress-container');
-    if (container) {
-      container.classList.add('dragging');
-    }
-  }
-  
-  private removeDraggingClass(): void {
-    const container = document.querySelector('.audio-progress-container');
-    if (container) {
-      container.classList.remove('dragging');
-    }
-  }
-  
-  // Common seek function for both touch and mouse events
-  private seekToPosition(event: TouchEvent | MouseEvent | any): void {
-    // If no audio is loaded yet, create it first
-    if (!this.currentAudio && this.chapterData?.audioData?.audioSrc) {
-      this.initializeAudio(this.chapterData.audioData.audioSrc);
-    }
-    
-    if (!this.currentAudio) return;
-    
-    // If duration is not available yet, wait for metadata to load
-    if (this.duration <= 0) {
-      this.currentAudio.addEventListener('loadedmetadata', () => {
-        this.performSeek(event);
-      }, { once: true });
-      
-      // Force load metadata if not already loading
-      if (this.currentAudio.readyState === 0) {
-        this.currentAudio.load();
-      }
-      return;
-    }
-    
-    this.performSeek(event);
-  }
-  
-  private performSeek(event: TouchEvent | MouseEvent | any): void {
-    if (!this.currentAudio || this.duration <= 0) return;
-    
-    let clientX: number;
-    
-    // Get the appropriate clientX based on event type
-    if (event.type.startsWith('touch')) {
-      const touchEvent = event as TouchEvent;
-      if (touchEvent.touches && touchEvent.touches.length > 0) {
-        clientX = touchEvent.touches[0].clientX;
-      } else if (touchEvent.changedTouches && touchEvent.changedTouches.length > 0) {
-        clientX = touchEvent.changedTouches[0].clientX;
-      } else {
-        return;
-      }
-    } else {
-      clientX = (event as MouseEvent).clientX || event.offsetX;
-    }
-    
-    // Find the progress container element
-    let progressElement = event.target as HTMLElement;
-    while (progressElement && !progressElement.classList.contains('audio-progress-container')) {
-      progressElement = progressElement.parentElement!;
-    }
-    
-    if (!progressElement) return;
-    
-    const rect = progressElement.getBoundingClientRect();
-    const clickX = clientX - rect.left;
-    const totalWidth = rect.width;
-    const clickPercentage = Math.max(0, Math.min(1, clickX / totalWidth));
-    const newTime = clickPercentage * this.duration;
-    
-    this.currentAudio.currentTime = newTime;
-    this.currentTime = newTime;
-    this.progress = clickPercentage * 100;
-  }
-  
-  // Initialize audio without playing (for seeking when not yet started)
-  private initializeAudio(audioUrl: string): void {
-    if (this.currentAudio) return; // Already initialized
-    
-    console.log(`Initializing audio for seeking: ${audioUrl}`);
-    
-    // Create new audio instance
-    this.currentAudio = new Audio(audioUrl);
-    this.currentAudio.preload = 'metadata'; // Load metadata immediately
-    this.currentAudio.playbackRate = this.playbackSpeed;
-    
-    // Set up event listeners
-    this.currentAudio.addEventListener('loadedmetadata', () => {
-      this.duration = this.currentAudio!.duration;
-      console.log(`Audio metadata loaded, duration: ${this.duration} seconds`);
-    });
-    
-    this.currentAudio.addEventListener('timeupdate', () => {
-      this.currentTime = this.currentAudio!.currentTime;
-      this.progress = (this.currentTime / this.duration) * 100;
-    });
-    
-    this.currentAudio.addEventListener('ended', () => {
-      this.isPlaying = false;
-      this.progress = 0;
-      this.currentTime = 0;
-    });
-    
-    this.currentAudio.addEventListener('error', (error) => {
-      console.error('Error loading audio:', error);
-    });
-    
-    // Force load metadata
-    this.currentAudio.load();
-  }
-
-  // Change playback speed
-  changePlaybackSpeed(): void {
-    const currentIndex = this.availableSpeeds.indexOf(this.playbackSpeed);
-    const nextIndex = (currentIndex + 1) % this.availableSpeeds.length;
-    this.playbackSpeed = this.availableSpeeds[nextIndex];
-    
-    // Apply speed to current audio if playing
-    if (this.currentAudio) {
-      this.currentAudio.playbackRate = this.playbackSpeed;
-    }
-    
-    console.log(`Playback speed changed to: ${this.playbackSpeed}x`);
-  }
-
-  // Download audio file
+  // Audio Player Component Event Handlers
   downloadAudio(): void {
-    if (this.chapterData && this.chapterData.audioData.audioSrc) {
-      console.log('Starting audio download...');
-      
-      const audioUrl = this.chapterData.audioData.audioSrc;
-      const fileName = `${this.chapterData.title}_Chapter_${this.chapterNumber}.mp3`;
-      
-      // Create a temporary anchor element to trigger download
+    if (this.chapterData?.audioData?.audioSrc) {
       const link = document.createElement('a');
-      link.href = audioUrl;
-      link.download = fileName;
+      link.href = this.chapterData.audioData.audioSrc;
+      link.download = `${this.chapterData.title}.mp3`;
       link.target = '_blank';
-      
-      // Append to body, click, and remove
-      document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
-      
-      console.log(`Download initiated for: ${fileName}`);
-    } else {
-      console.error('No audio source available for download');
+      console.log('Download initiated for:', this.chapterData.title);
     }
   }
 
-  // Share chapter functionality
   shareChapter(): void {
     if (this.chapterData) {
-      const tamilChapterNum = this.getTamilChapterNumber(this.chapterNumber);
-      const shareText = 
-      `🕉️ ஹரே கிருஷ்ணா!  ஸ்ரீமத் பகவத் கீதையின் ${tamilChapterNum} அத்தியாயத்தினை தமிழ் அர்த்தத்துடன் கேளுங்கள்: "${this.chapterData.title}"
-
-      அவ்வாறு கேட்டு, இந்தப் புனித நூலின் ஆன்மீக போதனைகளைக் மனதில் பதிய வைக்கவும்.
-
-      இந்த அத்தியாயத்தை உங்கள் நண்பர்களுடனும் குடும்பத்தினருடனும் பகிர்ந்து கொள்ளுங்கள் 🙏
-
-      எல்லா புகழும் பகவான் ஸ்ரீ கிருஷ்ணர் மற்றும்  ஸ்ரீல பிரபுபாதருக்கே! 🙏
+      const shareText = `🕉️ Listen to ${this.chapterData.title} from the Bhagavad Gita\\n\\n${this.chapterData.desc?.substring(0, 100)}...\\n\\nDownload the app: https://your-app-link.com`;
       
-      #BhagavadGita #SpiritualLearning #HareKrishnaTamil #HareKrishnaSloka`;
-
-      const shareUrl = window.location.href;
-
-      // Check if Web Share API is supported
       if (navigator.share) {
-        const tamilChapterNum = this.getTamilChapterNumber(this.chapterNumber);
         navigator.share({
-          title: `${this.chapterData.title} - பகவத் கீதை ${tamilChapterNum} அத்தியாயம்`,
+          title: this.chapterData.title,
           text: shareText,
-          url: shareUrl
-        }).then(() => {
-          console.log('Content shared successfully');
-        }).catch((error) => {
-          console.log('Error sharing:', error);
-          this.fallbackShare(shareText, shareUrl);
-        });
+          url: window.location.href
+        }).catch(err => console.error('Error sharing:', err));
       } else {
-        // Fallback for browsers that don't support Web Share API
-        this.fallbackShare(shareText, shareUrl);
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(shareText)
+          .then(() => alert('Chapter details copied to clipboard!'))
+          .catch(() => alert('Unable to copy to clipboard'));
       }
-    }
-  }
-
-  private fallbackShare(text: string, url: string): void {
-    // Create share options for different platforms
-    const encodedText = encodeURIComponent(text);
-    const encodedUrl = encodeURIComponent(url);
-
-    const shareOptions = [
-      {
-        name: 'Twitter',
-        url: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`
-      },
-      {
-        name: 'Facebook',
-        url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`
-      },
-      {
-        name: 'WhatsApp',
-        url: `https://wa.me/?text=${encodedText}%20${encodedUrl}`
-      },
-      {
-        name: 'LinkedIn',
-        url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
-      },
-      {
-        name: 'Copy Link',
-        action: 'copy'
-      }
-    ];
-
-    // Show share options (simple implementation)
-    const shareMessage = `Share this chapter:\n\n${shareOptions.map((option, index) => 
-      `${index + 1}. ${option.name}`).join('\n')}\n\nWhich platform would you like to use?`;
-
-    // For now, just copy to clipboard and show alert
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(`${text}\n\n${url}`).then(() => {
-        alert('Chapter details copied to clipboard! You can now paste and share on your preferred social media platform.');
-      }).catch(() => {
-        this.showShareAlert(text, url);
-      });
-    } else {
-      this.showShareAlert(text, url);
-    }
-  }
-
-  private showShareAlert(text: string, url: string): void {
-    const fullText = `${text}\n\n${url}`;
-    const userChoice = prompt(`Copy this text to share:\n\n${fullText}\n\nPress Ctrl+C to copy, then click OK`);
-    if (userChoice !== null) {
-      console.log('User acknowledged share text');
     }
   }
 
@@ -651,38 +197,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     this.router.navigate(['/bhagavad-gita']);
   }
 
-  // Convert chapter number to Tamil ordinal
-  getTamilChapterNumber(chapterNum: string | number): string {
-    const num = typeof chapterNum === 'string' ? parseInt(chapterNum) : chapterNum;
-    
-    const tamilOrdinals: { [key: number]: string } = {
-      1: 'முதலாம்',
-      2: 'இரண்டாம்',
-      3: 'மூன்றாம்',
-      4: 'நான்காம்',
-      5: 'ஐந்தாம்',
-      6: 'ஆறாம்',
-      7: 'ஏழாம்',
-      8: 'எட்டாம்',
-      9: 'ஒன்பதாம்',
-      10: 'பத்தாம்',
-      11: 'பதினொன்றாம்',
-      12: 'பன்னிரண்டாம்',
-      13: 'பதிமூன்றாம்',
-      14: 'பதினான்காம்',
-      15: 'பதினைந்தாம்',
-      16: 'பதினாறாம்',
-      17: 'பதினேழாம்',
-      18: 'பதினெட்டாம்'
-    };
-
-    return tamilOrdinals[num] || num.toString();
-  }
-
   retryLoading(): void {
-    console.log('🔄 Retrying to load chapter data...');
-    
-    // Reset error state
     this.error = '';
     this.loading = true;
     
