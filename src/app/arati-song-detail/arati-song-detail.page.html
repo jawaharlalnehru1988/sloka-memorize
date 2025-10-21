@@ -1,0 +1,156 @@
+<div class="arati-song-detail-page">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/arati-songs"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ song()?.title || 'Song Details' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <ion-text>
+        <p>Loading song details...</p>
+      </ion-text>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error() && !isLoading()) {
+    <div class="error-container">
+      <ion-text color="danger">
+        <h3>{{ error() }}</h3>
+      </ion-text>
+      <ion-button fill="outline" color="primary" (click)="onRetry()">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Try Again
+      </ion-button>
+      <ion-button fill="clear" color="primary" (click)="goBack()">
+        <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+        Back to Songs
+      </ion-button>
+    </div>
+  }
+
+  <!-- Song Details -->
+  @if (song() && !isLoading() && !error()) {
+    <div class="song-detail-container">
+    <!-- Hero Section with Image -->
+    <div class="hero-section">
+      <div class="song-image-container">
+        <ion-img 
+          [src]="song()!.img" 
+          [alt]="song()!.title"
+          class="hero-image">
+        </ion-img>
+        <div class="image-overlay"></div>
+      </div>
+      
+      <div class="song-info-overlay">
+        <ion-text>
+          <h1 class="song-title">{{ song()!.title }}</h1>
+        </ion-text>
+        <div class="song-author">
+          <ion-icon name="person-outline" class="author-icon"></ion-icon>
+          <ion-text>
+            <p>{{ song()!.audioData.auther }}</p>
+          </ion-text>
+        </div>
+        <div class="song-actions">
+          <ion-button fill="clear" color="light" (click)="onAddToFavorites()">
+            <ion-icon name="heart-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio Player Section -->
+    <div class="audio-player-section">
+      <ion-card class="player-card">
+        <ion-card-header>
+          <ion-card-title class="player-title">
+            <ion-icon name="musical-notes-outline" class="music-icon"></ion-icon>
+            Now Playing
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <app-audio-player
+            [audioUrl]="song()!.audioData.audioSrc"
+            [audioTitle]="song()!.title"
+            [enableDownload]="true"
+            [enableShare]="true"
+            [enableSpeedControl]="true"
+            [enableLoop]="true"
+            (onPlay)="onAudioPlay()"
+            (onPause)="onAudioPause()"
+            (onTimeUpdate)="onAudioTimeUpdate($event)"
+            (onDownload)="onAudioDownload()"
+            (onShare)="onAudioShare()"
+            (onLoopToggle)="onLoopToggle($event)">
+          </app-audio-player>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Song Description Section -->
+    <div class="description-section">
+      <ion-card class="description-card">
+        <ion-card-header>
+          <ion-card-title>Description</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-text>
+            <p class="english-description">{{ song()!.desc }}</p>
+          </ion-text>
+          
+          <!-- Tamil Description with HTML content -->
+          <div class="tamil-section">
+            <ion-text>
+              <h4>Tamil Description</h4>
+            </ion-text>
+            <div 
+              class="tamil-content"
+              [innerHTML]="song()!.tamilDescription">
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Song Details Section -->
+    <div class="details-section">
+      <ion-card class="details-card">
+        <ion-card-header>
+          <ion-card-title>Song Details</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="detail-item">
+            <ion-text>
+              <strong>Artist:</strong>
+            </ion-text>
+            <ion-chip color="primary" class="detail-chip">
+              <ion-icon name="person-outline"></ion-icon>
+              <ion-label>{{ song()!.audioData.auther }}</ion-label>
+            </ion-chip>
+          </div>
+          
+          <div class="detail-item">
+            <ion-text>
+              <strong>Category:</strong>
+            </ion-text>
+            <ion-chip color="secondary" class="detail-chip">
+              <ion-icon name="musical-notes-outline"></ion-icon>
+              <ion-label>Devotional Arati</ion-label>
+            </ion-chip>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    </div>
+  }
+</ion-content>
+</div>

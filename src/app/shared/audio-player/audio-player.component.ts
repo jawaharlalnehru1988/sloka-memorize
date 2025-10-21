@@ -6,7 +6,7 @@ import {
   IonIcon,
   IonText
 } from '@ionic/angular/standalone';
-import { play, pause, download, speedometer, share } from 'ionicons/icons';
+import { play, pause, download, speedometer, share, repeat } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 
 @Component({
@@ -28,6 +28,7 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
   @Input() enableDownload: boolean = true;
   @Input() enableShare: boolean = true;
   @Input() enableSpeedControl: boolean = true;
+  @Input() enableLoop: boolean = true;
   @Input() autoLoadMetadata: boolean = true;
   
   @Output() onPlay = new EventEmitter<void>();
@@ -35,10 +36,12 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
   @Output() onTimeUpdate = new EventEmitter<{ currentTime: number, duration: number, progress: number }>();
   @Output() onDownload = new EventEmitter<string>();
   @Output() onShare = new EventEmitter<void>();
+  @Output() onLoopToggle = new EventEmitter<boolean>();
   
   // Audio control properties
   currentAudio: HTMLAudioElement | null = null;
   isPlaying: boolean = false;
+  isLooping: boolean = false;
   currentTime: number = 0;
   duration: number = 0;
   progress: number = 0;
@@ -55,7 +58,8 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
       pause,
       download,
       speedometer,
-      share
+      share,
+      repeat
     });
   }
 
@@ -63,9 +67,17 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
     if (changes['audioUrl'] && changes['audioUrl'].currentValue) {
       // Clean up previous audio
       if (this.currentAudio) {
-        this.stopCurrentAudio(true);
+        this.currentAudio.pause();
+        this.currentAudio.src = '';
         this.currentAudio = null;
       }
+      
+      // Reset state
+      this.isPlaying = false;
+      this.isLooping = false;
+      this.currentTime = 0;
+      this.duration = 0;
+      this.progress = 0;
       
       // Initialize new audio if autoLoadMetadata is enabled
       if (this.autoLoadMetadata) {
@@ -77,9 +89,11 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
   ngOnDestroy(): void {
     // Clean up audio
     if (this.currentAudio) {
-      this.stopCurrentAudio(true);
+      this.currentAudio.pause();
+      this.currentAudio.src = ''; // This will stop loading and cleanup
       this.currentAudio = null;
     }
+    this.isPlaying = false;
   }
 
   playAudio(): void {
@@ -192,27 +206,49 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
     this.currentAudio = new Audio(audioUrl);
     this.currentAudio.preload = 'metadata'; // Load metadata immediately
     this.currentAudio.playbackRate = this.playbackSpeed;
+    this.currentAudio.loop = this.isLooping; // Set loop based on current state
     
     // Set up event listeners
     this.currentAudio.addEventListener('loadedmetadata', () => {
-      this.duration = this.currentAudio!.duration;
-      console.log(`Audio metadata loaded, duration: ${this.duration} seconds`);
+      if (this.currentAudio) {
+        this.duration = this.currentAudio.duration;
+        console.log(`Audio metadata loaded, duration: ${this.duration} seconds`);
+      }
     });
     
     this.currentAudio.addEventListener('timeupdate', () => {
-      this.currentTime = this.currentAudio!.currentTime;
-      this.progress = (this.currentTime / this.duration) * 100;
-      this.onTimeUpdate.emit({
-        currentTime: this.currentTime,
-        duration: this.duration,
-        progress: this.progress
-      });
+      if (this.currentAudio) {
+        this.currentTime = this.currentAudio.currentTime;
+        this.progress = (this.currentTime / this.duration) * 100;
+        this.onTimeUpdate.emit({
+          currentTime: this.currentTime,
+          duration: this.duration,
+          progress: this.progress
+        });
+      }
     });
     
     this.currentAudio.addEventListener('ended', () => {
       this.isPlaying = false;
-      this.progress = 0;
-      this.currentTime = 0;
+      if (this.isLooping) {
+        // If looping is enabled, restart the audio
+        console.log('Audio ended, restarting due to loop mode');
+        this.currentTime = 0;
+        this.progress = 0;
+        if (this.currentAudio) {
+          this.currentAudio.currentTime = 0;
+          this.currentAudio.play().then(() => {
+            this.isPlaying = true;
+            this.onPlay.emit();
+          }).catch(error => {
+            console.error('Error restarting audio in loop mode:', error);
+          });
+        }
+      } else {
+        // Normal behavior - stop at the end
+        this.progress = 0;
+        this.currentTime = 0;
+      }
     });
     
     this.currentAudio.addEventListener('error', (error) => {
@@ -384,5 +420,18 @@ export class AudioPlayerComponent implements OnDestroy, OnChanges {
   // Share functionality
   shareAudio(): void {
     this.onShare.emit();
+  }
+
+  // Toggle loop functionality
+  toggleLoop(): void {
+    this.isLooping = !this.isLooping;
+    
+    // Apply loop setting to current audio if it exists
+    if (this.currentAudio) {
+      this.currentAudio.loop = this.isLooping;
+    }
+    
+    this.onLoopToggle.emit(this.isLooping);
+    console.log(`Loop mode ${this.isLooping ? 'enabled' : 'disabled'}`);
   }
 }

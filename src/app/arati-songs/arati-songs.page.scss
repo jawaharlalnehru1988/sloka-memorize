@@ -1,0 +1,422 @@
+// Devotional Theme - Saffron/Gold Colors
+:root {
+  --devotional-primary: #FF9800;
+  --devotional-secondary: #FFC107;
+  --devotional-accent: #FF6F00;
+  --devotional-light: #FFF3E0;
+  --devotional-dark: #E65100;
+  --devotional-gradient: linear-gradient(135deg, #FF9800 0%, #FFC107 50%, #FF6F00 100%);
+  --devotional-card-shadow: 0 4px 16px rgba(255, 152, 0, 0.2);
+  --devotional-text-primary: #BF360C;
+  --devotional-text-secondary: #795548;
+}
+
+// Category Header Styling
+.arati-songs-page .category-header {
+  padding: 20px 16px;
+  background: var(--devotional-gradient);
+  background: linear-gradient(135deg, #FF9800 0%, #FFC107 50%, #FF6F00 100%); // Fallback
+  color: white !important;
+  margin-bottom: 20px;
+
+  .category-title-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .category-icon {
+      font-size: 2rem;
+      margin-right: 12px;
+      color: white !important;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white !important;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  ion-searchbar {
+    --background: rgba(255, 255, 255, 0.15);
+    --border-radius: 25px;
+    --box-shadow: none;
+    --placeholder-color: rgba(255, 255, 255, 0.8);
+    --color: white;
+    --icon-color: rgba(255, 255, 255, 0.8);
+    --clear-button-color: rgba(255, 255, 255, 0.8);
+
+    .searchbar-input-container {
+      backdrop-filter: blur(10px);
+    }
+  }
+}
+
+// Songs Container
+.songs-container {
+  padding: 0 16px 20px;
+}
+
+// Song Card Styling
+.song-card {
+  border-radius: 16px;
+  box-shadow: var(--devotional-card-shadow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: white;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(255, 152, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+
+  .card-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+
+    .song-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .play-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+
+      .play-icon {
+        font-size: 3rem;
+        color: white;
+        background: var(--devotional-accent);
+        border-radius: 50%;
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    &:hover {
+      .song-image {
+        transform: scale(1.05);
+      }
+
+      .play-overlay {
+        opacity: 1;
+      }
+    }
+  }
+
+  ion-card-header {
+    padding: 16px 16px 8px;
+
+    .song-title {
+      color: var(--devotional-text-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .song-author {
+      display: flex;
+      align-items: center;
+      color: var(--devotional-text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+
+      .author-icon {
+        font-size: 1rem;
+        margin-right: 6px;
+        color: var(--devotional-secondary);
+      }
+    }
+  }
+
+  ion-card-content {
+    padding: 0 16px 16px;
+
+    .song-description {
+      color: var(--devotional-text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+
+      .devotional-chip {
+        --background: var(--devotional-light);
+        --color: var(--devotional-accent);
+        font-size: 0.8rem;
+        height: 28px;
+
+        ion-icon {
+          font-size: 1rem;
+          margin-right: 4px;
+        }
+
+        ion-label {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  ion-spinner {
+    --color: var(--devotional-primary);
+    transform: scale(1.5);
+    margin-bottom: 20px;
+  }
+
+  p {
+    color: var(--devotional-text-secondary);
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Error State
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  h3 {
+    margin-bottom: 20px;
+  }
+
+  ion-button {
+    --color: var(--devotional-primary);
+    --border-color: var(--devotional-primary);
+
+    &:hover {
+      --background: var(--devotional-light);
+    }
+  }
+}
+
+// No Results State
+.no-results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  h3 {
+    color: var(--devotional-text-primary);
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: var(--devotional-text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  ion-button {
+    --color: var(--devotional-primary);
+    --border-color: var(--devotional-primary);
+
+    &:hover {
+      --background: var(--devotional-light);
+    }
+  }
+}
+
+// Empty State
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  h3 {
+    color: var(--devotional-text-primary);
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: var(--devotional-text-secondary);
+    line-height: 1.5;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .category-header {
+    padding: 16px 12px;
+
+    .category-title-section {
+      h1 {
+        font-size: 1.3rem;
+      }
+    }
+  }
+
+  .songs-container {
+    padding: 0 12px 20px;
+  }
+
+  .song-card {
+    .card-image-container {
+      height: 180px;
+
+      .play-overlay .play-icon {
+        font-size: 2.5rem;
+        padding: 12px;
+      }
+    }
+
+    ion-card-header {
+      padding: 12px 12px 6px;
+
+      .song-title {
+        font-size: 1rem;
+      }
+
+      .song-author {
+        font-size: 0.85rem;
+      }
+    }
+
+    ion-card-content {
+      padding: 0 12px 12px;
+
+      .song-description {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+// Header toolbar styling with high specificity
+.arati-songs-page {
+  // Main header
+  ion-header {
+    ion-toolbar {
+      --background: linear-gradient(135deg, #FF9800 0%, #FFC107 50%, #FF6F00 100%) !important;
+      --color: white !important;
+      background: linear-gradient(135deg, #FF9800 0%, #FFC107 50%, #FF6F00 100%) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+
+      ion-title {
+        font-weight: 600 !important;
+        color: white !important;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+        background: none !important;
+        -webkit-text-fill-color: white !important;
+      }
+
+      ion-back-button {
+        --color: white !important;
+        color: white !important;
+        
+        ion-icon {
+          color: white !important;
+          --color: white !important;
+        }
+      }
+      
+      ion-buttons {
+        color: white !important;
+        
+        ion-button {
+          color: white !important;
+          --color: white !important;
+        }
+      }
+    }
+  }
+
+  // Content area background
+  ion-content {
+    --background: linear-gradient(180deg, #FFF8F0 0%, #FFF3E0 100%) !important;
+    background: linear-gradient(180deg, #FFF8F0 0%, #FFF3E0 100%) !important;
+    
+    // Collapsible header
+    ion-header {
+      ion-toolbar {
+        --background: rgba(255, 152, 0, 0.95) !important;
+        --color: white !important;
+        background: rgba(255, 152, 0, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        
+        ion-title {
+          color: white !important;
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+        }
+      }
+    }
+  }
+
+  // Ensure text visibility in all states
+  .loading-container,
+  .error-container,
+  .no-results-container,
+  .empty-container {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 16px !important;
+    margin: 20px 16px !important;
+    padding: 24px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    
+    ion-text {
+      color: var(--devotional-text-primary) !important;
+      
+      h3 {
+        color: var(--devotional-text-primary) !important;
+        margin-bottom: 8px !important;
+      }
+      
+      p {
+        color: var(--devotional-text-secondary) !important;
+      }
+    }
+    
+    ion-spinner {
+      --color: var(--devotional-primary) !important;
+    }
+    
+    ion-button {
+      --color: var(--devotional-primary) !important;
+    }
+  }
+}

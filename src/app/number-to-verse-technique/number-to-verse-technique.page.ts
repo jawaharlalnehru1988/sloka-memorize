@@ -2,8 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { 
-  IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardContent,
-  IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonIcon,
+  IonContent, IonCard, IonCardContent,
+  IonCardHeader, IonCardTitle, IonButton, IonIcon,
   IonSearchbar, IonChip, IonLabel, IonBadge, IonFab, IonFabButton,
   ModalController
 } from '@ionic/angular/standalone';
@@ -24,8 +24,8 @@ import { SeoService } from '../shared/services/seo.service';
   styleUrls: ['./number-to-verse-technique.page.scss'],
   standalone: true,
   imports: [
-    IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardContent,
-    IonCardHeader, IonCardTitle, IonCardSubtitle, IonButton, IonIcon,
+    IonContent, IonCard, IonCardContent,
+    IonCardHeader, IonCardTitle, IonButton, IonIcon,
     IonSearchbar, IonChip, IonLabel, IonBadge, IonFab, IonFabButton,
     CommonModule, FormsModule, TechniqueHeaderComponent
   ]

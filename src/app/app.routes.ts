@@ -135,4 +135,12 @@ export const routes: Routes = [
     path: 'number-to-verse-technique/:id',
     loadComponent: () => import('./number-to-verse-technique/number-to-verse-training/number-to-verse-training.component').then( m => m.NumberToVerseTrainingComponent)
   },
+  {
+    path: 'arati-songs',
+    loadComponent: () => import('./arati-songs/arati-songs.page').then( m => m.AratiSongsPage)
+  },
+  {
+    path: 'arati-song-detail/:title',
+    loadComponent: () => import('./arati-song-detail/arati-song-detail.page').then( m => m.AratiSongDetailPage)
+  },
 ];

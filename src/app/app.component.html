@@ -32,6 +32,20 @@
           }
         </ion-list>
 
+        <ion-list id="inbox-list">
+          <ion-list-header>Sadhana Practices</ion-list-header>
+          <ion-note>Regular Practice Methods</ion-note>
+
+          @for (sadhana of sadhanaPages; track sadhana; let i = $index) {
+            <ion-menu-toggle auto-hide="false">
+              <ion-item routerDirection="root" [routerLink]="[sadhana.url]" lines="none" detail="false" routerLinkActive="selected">
+                <ion-icon aria-hidden="true" slot="start" [ios]="sadhana.icon + '-outline'" [md]="sadhana.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ sadhana.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          }
+        </ion-list>
+
         
       </ion-content>
     </ion-menu>

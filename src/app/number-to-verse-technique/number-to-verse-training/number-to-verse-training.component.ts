@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
   IonContent, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle,
   IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon,
-  IonBadge, IonChip, IonLabel
+  IonBadge
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -22,7 +22,7 @@ import { NumberToVerse, VerseReference } from '../number-to-verse';
     CommonModule,
     IonContent, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle,
     IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon,
-    IonBadge, IonChip, IonLabel
+    IonBadge
   ]
 })
 export class NumberToVerseTrainingComponent implements OnInit, OnDestroy {

@@ -49,6 +49,14 @@ export class AppComponent {
     // { title: 'Ishopanishad', url: '/ishopanishad', icon: 'infinite' },
     // { title: 'Brahma-samhita', url: '/brahma-samhita', icon: 'planet' }
   ];
+  public sadhanaPages = [
+    { title: 'Arati Songs', url: '/arati-songs', icon: 'bookmarks', image: '/assets/Bhagavadgita.png' },
+    // { title: '35 important SB slokas', url: '/35-slokas', icon: 'bookmarks', image: '/assets/Bhagavadgita.png' },
+    // { title: 'Śrīmad Bhāgavatam', url: '/srimad-bhagavatam', icon: 'library' },
+    // { title: 'Upadeshamrtam', url: '/upadeshamritam', icon: 'flower' },
+    // { title: 'Ishopanishad', url: '/ishopanishad', icon: 'infinite' },
+    // { title: 'Brahma-samhita', url: '/brahma-samhita', icon: 'planet' }
+  ];
   constructor() {
     addIcons({ 
       mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, 

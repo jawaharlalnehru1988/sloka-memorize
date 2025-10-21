@@ -40,35 +40,50 @@
         
         <!-- Additional Controls Row -->
         <div class="audio-controls-row">
+          <!-- Loop Control -->
+          @if (enableLoop) {
+            <ion-button 
+              fill="outline" 
+              [color]="isLooping ? 'warning' : 'medium'"
+              (click)="toggleLoop()"
+              [class.active]="isLooping">
+              <ion-icon name="repeat" slot="start"></ion-icon>
+              {{ isLooping ? 'Repeat On' : 'Repeat Off' }}
+            </ion-button>
+          }
+          
           <!-- Playback Speed Control -->
-          <ion-button 
-            *ngIf="enableSpeedControl"
-            fill="outline" 
-            color="primary"
-            (click)="changePlaybackSpeed()">
-            <ion-icon name="speedometer" slot="start"></ion-icon>
-            {{ playbackSpeed }}x
-          </ion-button>
+          @if (enableSpeedControl) {
+            <ion-button 
+              fill="outline" 
+              color="primary"
+              (click)="changePlaybackSpeed()">
+              <ion-icon name="speedometer" slot="start"></ion-icon>
+              {{ playbackSpeed }}x
+            </ion-button>
+          }
           
           <!-- Download Button -->
-          <ion-button 
-            *ngIf="enableDownload"
-            fill="outline" 
-            color="success"
-            (click)="downloadAudio()">
-            <ion-icon name="download" slot="start"></ion-icon>
-            Download
-          </ion-button>
+          @if (enableDownload) {
+            <ion-button 
+              fill="outline" 
+              color="success"
+              (click)="downloadAudio()">
+              <ion-icon name="download" slot="start"></ion-icon>
+              Download
+            </ion-button>
+          }
 
           <!-- Share Button -->
-          <ion-button 
-            *ngIf="enableShare"
-            fill="outline" 
-            color="tertiary"
-            (click)="shareAudio()">
-            <ion-icon name="share" slot="start"></ion-icon>
-            Share
-          </ion-button>
+          @if (enableShare) {
+            <ion-button 
+              fill="outline" 
+              color="tertiary"
+              (click)="shareAudio()">
+              <ion-icon name="share" slot="start"></ion-icon>
+              Share
+            </ion-button>
+          }
         </div>
       </div>
     </div>

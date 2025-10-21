@@ -195,6 +195,32 @@
                 --box-shadow: 0 4px 16px rgba(var(--ion-color-tertiary-rgb), 0.4);
               }
             }
+
+            // Loop button styling
+            &[color="warning"] {
+              --background: linear-gradient(45deg, var(--ion-color-warning), var(--ion-color-warning-shade));
+              --color: white;
+              --box-shadow: 0 3px 12px rgba(var(--ion-color-warning-rgb), 0.3);
+              
+              &:hover {
+                --box-shadow: 0 4px 16px rgba(var(--ion-color-warning-rgb), 0.4);
+              }
+              
+              &.active {
+                --background: linear-gradient(45deg, var(--ion-color-warning-shade), var(--ion-color-warning-tint));
+                transform: scale(1.02);
+                animation: pulse-loop 2s infinite;
+              }
+            }
+
+            &[color="medium"] {
+              --color: var(--ion-color-medium);
+              --border-color: var(--ion-color-medium);
+              
+              &:hover {
+                --background: rgba(var(--ion-color-medium-rgb), 0.1);
+              }
+            }
           }
 
           // Mobile responsive
@@ -205,5 +231,18 @@
         }
       }
     }
+  }
+}
+
+// Pulse animation for active loop button
+@keyframes pulse-loop {
+  0% {
+    box-shadow: 0 3px 12px rgba(var(--ion-color-warning-rgb), 0.3);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(var(--ion-color-warning-rgb), 0.6);
+  }
+  100% {
+    box-shadow: 0 3px 12px rgba(var(--ion-color-warning-rgb), 0.3);
   }
 }
