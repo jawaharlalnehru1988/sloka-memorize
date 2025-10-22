@@ -219,6 +219,63 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     }
   }
 
+  shareChapterWithRichContent(): void {
+    if (this.chapterData) {
+      // Get current language
+      const lang = this.route.snapshot.queryParamMap.get('lang') || 'tamil';
+      const baseUrl = window.location.origin;
+      const canonicalUrl = `${baseUrl}/bhagavad-gita/chapter/${encodeURIComponent(this.chapterNumber)}?lang=${encodeURIComponent(lang)}`;
+      
+      // Create rich Tamil content exactly like yesterday
+      const richShareText = `🕉 ஹரே கிருஷ்ணா!  ஸ்ரீமத் பகவத் கீதையின் ${this.getChapterNumberInTamil(this.chapterNumber)} அத்தியாயத்தினை தமிழ் அர்த்தத்துடன் கேளுங்கள்: "${this.chapterData.title}"
+
+அவ்வாறு கேட்டு, இந்தப் புனித நூலின் ஆன்மீக போதனைகளைக் மனதில் பதிய வைக்கவும்.
+
+இந்த அத்தியாயத்தை உங்கள் நண்பர்களுடனும் குடும்பத்தினருடனும் பகிர்ந்து கொள்ளுங்கள் 🙏
+
+எல்லா புகழும் பகவான் ஸ்ரீ கிருஷ்ணர் மற்றும்  ஸ்ரீல பிரபுபாதருக்கே! 🙏
+      
+#BhagavadGita #SpiritualLearning #HareKrishnaTamil #HareKrishnaSloka ${canonicalUrl}`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: `🕉️ ${this.chapterData.title} - ஸ்ரீமத் பகவத் கீதை`,
+          text: richShareText
+        }).catch(err => console.error('Error sharing:', err));
+      } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(richShareText)
+          .then(() => alert('அத்தியாய விவரங்கள் கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது! 🙏'))
+          .catch(() => alert('கிளிப்போர்டுக்கு நகலெடுக்க முடியவில்லை'));
+      }
+    }
+  }
+
+  private getChapterNumberInTamil(chapterNumber: string): string {
+    const tamilNumbers: { [key: string]: string } = {
+      '1': 'முதலாம்',
+      '2': 'இரண்டாம்',
+      '3': 'மூன்றாம்',
+      '4': 'நான்காம்',
+      '5': 'ஐந்தாம்',
+      '6': 'ஆறாம்',
+      '7': 'ஏழாம்',
+      '8': 'எட்டாம்',
+      '9': 'ஒன்பதாம்',
+      '10': 'பத்தாம்',
+      '11': 'பதினொன்றாம்',
+      '12': 'பன்னிரண்டாம்',
+      '13': 'பதின்மூன்றாம்',
+      '14': 'பதினான்காம்',
+      '15': 'பதினைந்தாம்',
+      '16': 'பதினாறாம்',
+      '17': 'பதினேழாம்',
+      '18': 'பதினெட்டாம்'
+    };
+    
+    return tamilNumbers[chapterNumber] || `${chapterNumber}ஆம்`;
+  }
+
   /**
    * Tries to parse the chapter number from the current path.
    * Handles cases where the link was opened in an in-app browser that strips route params.

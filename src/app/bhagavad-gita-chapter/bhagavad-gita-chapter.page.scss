@@ -933,3 +933,89 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+// Chapter Share Section Styling
+.chapter-share-section {
+  margin: 1rem 0;
+  padding: 0;
+  
+  .share-chapter-button {
+    --background: rgba(255, 193, 7, 0.1);
+    --border-color: var(--ion-color-tertiary);
+    --color: var(--ion-color-tertiary);
+    margin: 0;
+    height: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    
+    // Add gradient border effect
+    --border-width: 2px;
+    --border-style: solid;
+    
+    // Hover/Active effects
+    &:hover {
+      --background: rgba(255, 193, 7, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(255, 193, 7, 0.2);
+    }
+    
+    // Icon styling
+    ion-icon {
+      font-size: 1.3rem;
+      margin-right: 0.5rem;
+    }
+    
+    // Add subtle animation
+    transition: all 0.3s ease;
+    
+    // Add Tamil-inspired styling
+    border-radius: 12px;
+    
+    // Special gradient border for Tamil content
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 12px;
+      padding: 2px;
+      background: linear-gradient(45deg, 
+        var(--ion-color-tertiary) 0%, 
+        var(--ion-color-warning) 25%, 
+        var(--ion-color-success) 50%, 
+        var(--ion-color-primary) 75%, 
+        var(--ion-color-tertiary) 100%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: xor;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      pointer-events: none;
+    }
+  }
+}
+
+// Mobile-specific styling for share button
+@media (max-width: 768px) {
+  .chapter-share-section {
+    margin: 1.5rem 0;
+    
+    .share-chapter-button {
+      height: 55px;
+      font-size: 1.1rem;
+      
+      ion-icon {
+        font-size: 1.4rem;
+      }
+    }
+  }
+}

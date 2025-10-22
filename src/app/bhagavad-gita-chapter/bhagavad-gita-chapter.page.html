@@ -78,12 +78,24 @@
           [audioUrl]="chapterData.audioData.audioSrc"
           [audioTitle]="'Listen to ' + chapterData.title"
           [enableDownload]="true"
-          [enableShare]="true"
+          [enableShare]="false"
           [enableSpeedControl]="true"
           [enableLoop]="true"
-          (onDownload)="downloadAudio()"
-          (onShare)="shareChapter()">
+          (onDownload)="downloadAudio()">
         </app-audio-player>
+
+        <!-- Custom Share Button with Rich Tamil Content -->
+        <div class="chapter-share-section">
+          <ion-button 
+            expand="block" 
+            fill="outline" 
+            color="tertiary"
+            class="share-chapter-button"
+            (click)="shareChapterWithRichContent()">
+            <ion-icon name="share" slot="start"></ion-icon>
+            🙏 Share this Chapter
+          </ion-button>
+        </div>
 
         <!-- Description Section -->
         <div class="description-section">
