@@ -62,12 +62,31 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Get chapter number from route parameters
+    // Get chapter number from route parameters with fallbacks
     this.chapterNumber = this.route.snapshot.paramMap.get('chapterNumber') || '';
-    console.log('Loading chapter:', this.chapterNumber);
-    
+    if (!this.chapterNumber) {
+      // try a query param named 'chapter' (some shared links may include it)
+      this.chapterNumber = this.route.snapshot.queryParamMap.get('chapter') || '';
+    }
+
+    // As a last resort try to parse chapter number from the path (e.g. when opened inside in-app browsers)
+    if (!this.chapterNumber) {
+      this.chapterNumber = this.parseChapterFromPath();
+    }
+
+    console.log('Loading chapter:', this.chapterNumber, 'href:', window.location.href);
+
     if (this.chapterNumber) {
       this.loadChapterData();
+
+      // Safety timeout: if loading doesn't finish within 12s, show a helpful message instead of an infinite spinner
+      setTimeout(() => {
+        if (this.loading) {
+          console.warn('Chapter load timeout for', this.chapterNumber);
+          this.loading = false;
+          this.error = 'Taking too long to load content. Please try opening the link in your browser or retry.';
+        }
+      }, 12000);
     } else {
       this.error = 'Chapter number not provided';
       this.loading = false;
@@ -93,7 +112,8 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
         next: (chaptersResponse: any) => {
           console.log('Chapters loaded from service, finding chapter:', this.chapterNumber);
           const chapters = chaptersResponse.map((response: any) => response.chapters).flat();
-          const foundChapter = chapters.find((chapter: any) => chapter.category === this.chapterNumber);
+          // Ensure category comparison as string to avoid type mismatches
+          const foundChapter = chapters.find((chapter: any) => String(chapter.category) === String(this.chapterNumber));
           
           if (foundChapter) {
             this.chapterData = foundChapter;
@@ -176,21 +196,56 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
 
   shareChapter(): void {
     if (this.chapterData) {
-      const shareText = `🕉️ Listen to ${this.chapterData.title} from the Bhagavad Gita\\n\\n${this.chapterData.desc?.substring(0, 100)}...\\n\\nDownload the app: https://your-app-link.com`;
-      
+      // Build a canonical deep link that includes chapter and lang so recipients load reliably
+      const lang = this.route.snapshot.queryParamMap.get('lang') || 'tamil';
+      const baseUrl = window.location.origin;
+      const canonicalUrl = `${baseUrl}/bhagavad-gita/chapter/${encodeURIComponent(this.chapterNumber)}?lang=${encodeURIComponent(lang)}`;
+      const hashFallbackUrl = `${baseUrl}/#/bhagavad-gita/chapter/${encodeURIComponent(this.chapterNumber)}?lang=${encodeURIComponent(lang)}`;
+
+      const shareText = `🕉️ Listen to ${this.chapterData.title} from the Bhagavad Gita\n\n${this.chapterData.desc?.substring(0, 100)}...\n\nListen: ${canonicalUrl}\n\nIf link doesn't work, try: ${hashFallbackUrl}`;
+
       if (navigator.share) {
         navigator.share({
           title: this.chapterData.title,
           text: shareText,
-          url: window.location.href
+          url: canonicalUrl  // Use primary URL for the share API
         }).catch(err => console.error('Error sharing:', err));
       } else {
-        // Fallback: copy to clipboard
+        // Fallback: copy to clipboard with both URLs
         navigator.clipboard.writeText(shareText)
           .then(() => alert('Chapter details copied to clipboard!'))
           .catch(() => alert('Unable to copy to clipboard'));
       }
     }
+  }
+
+  /**
+   * Tries to parse the chapter number from the current path.
+   * Handles cases where the link was opened in an in-app browser that strips route params.
+   */
+  private parseChapterFromPath(): string {
+    try {
+      const path = window.location.pathname || '';
+      // Example paths: /bhagavad-gita/chapter/3 or /#/bhagavad-gita/chapter/3
+      const parts = path.split('/').filter(Boolean);
+      const chapterIndex = parts.findIndex(p => p === 'chapter');
+      if (chapterIndex >= 0 && parts.length > chapterIndex + 1) {
+        return parts[chapterIndex + 1];
+      }
+
+      // check hash-based routing
+      if (window.location.hash) {
+        const hash = window.location.hash.replace(/^#/, '');
+        const hashParts = hash.split('/').filter(Boolean);
+        const idx = hashParts.findIndex(p => p === 'chapter');
+        if (idx >= 0 && hashParts.length > idx + 1) {
+          return hashParts[idx + 1];
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to parse chapter from path', e);
+    }
+    return '';
   }
 
   goBack(): void {

@@ -135,8 +135,28 @@ export class AratiSongDetailPage implements OnInit {
    * Handle audio share event
    */
   onAudioShare(): void {
-    console.log('Share requested for:', this.song()?.title);
-    // Additional share logic can be added here
+    const currentSong = this.song();
+    if (currentSong) {
+      const baseUrl = window.location.origin;
+      const encodedTitle = encodeURIComponent(currentSong.title);
+      const canonicalUrl = `${baseUrl}/arati-song-detail/${encodedTitle}`;
+      const hashFallbackUrl = `${baseUrl}/#/arati-song-detail/${encodedTitle}`;
+
+      const shareText = `🎵 Listen to ${currentSong.title} - Devotional Arati Song\n\n${currentSong.desc?.substring(0, 100)}...\n\nListen: ${canonicalUrl}\n\nIf link doesn't work, try: ${hashFallbackUrl}`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: currentSong.title,
+          text: shareText,
+          url: canonicalUrl
+        }).catch(err => console.error('Error sharing:', err));
+      } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(shareText)
+          .then(() => alert('Song details copied to clipboard!'))
+          .catch(() => alert('Unable to copy to clipboard'));
+      }
+    }
   }
 
   /**

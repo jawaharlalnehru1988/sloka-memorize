@@ -1,4 +1,4 @@
-// Devotional Theme Variables
+// Devotional Theme Variables - Simple approach like Bhagavad Gita page
 :root {
   --devotional-primary: #FF9800;
   --devotional-secondary: #FFC107;
@@ -8,17 +8,7 @@
   --devotional-gradient: linear-gradient(135deg, #FF9800 0%, #FFC107 50%, #FF6F00 100%);
   --devotional-card-shadow: 0 4px 16px rgba(255, 152, 0, 0.2);
   
-  // Light mode colors
-  --text-primary: #BF360C;
-  --text-secondary: #795548;
-  --text-light: #FFFFFF;
-  --card-background: rgba(255, 255, 255, 0.95);
-  --content-background: rgba(255, 255, 255, 0.92);
-  --loading-background: rgba(255, 255, 255, 0.85);
-  --border-color: #eee;
-  --shadow-color: rgba(0, 0, 0, 0.5);
-  
-  // New devotional background gradients
+  // Devotional background gradients
   --devotional-bg-gradient: linear-gradient(
     135deg, 
     #FF6B35 0%,     /* Orange-Red */
@@ -38,45 +28,6 @@
     rgba(220, 20, 60, 0.15) 75%,
     rgba(25, 25, 112, 0.1) 100%
   );
-}
-
-// Dark mode theme variables
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-primary: #FFB74D;
-    --text-secondary: #BCAAA4;
-    --text-light: #FFFFFF;
-    --card-background: rgba(30, 30, 30, 0.95);
-    --content-background: rgba(40, 40, 40, 0.95);
-    --loading-background: rgba(30, 30, 30, 0.90);
-    --border-color: #444;
-    --shadow-color: rgba(0, 0, 0, 0.8);
-  }
-}
-
-// Additional dark mode overrides for iOS/Android
-[data-theme="dark"] {
-  --text-primary: #FFB74D !important;
-  --text-secondary: #BCAAA4 !important;
-  --text-light: #FFFFFF !important;
-  --card-background: rgba(30, 30, 30, 0.95) !important;
-  --content-background: rgba(40, 40, 40, 0.95) !important;
-  --loading-background: rgba(30, 30, 30, 0.90) !important;
-  --border-color: #444 !important;
-  --shadow-color: rgba(0, 0, 0, 0.8) !important;
-}
-
-// Ionic dark mode integration
-.ios body.dark,
-.md body.dark {
-  --text-primary: #FFB74D;
-  --text-secondary: #BCAAA4;
-  --text-light: #FFFFFF;
-  --card-background: rgba(30, 30, 30, 0.95);
-  --content-background: rgba(40, 40, 40, 0.95);
-  --loading-background: rgba(30, 30, 30, 0.90);
-  --border-color: #444;
-  --shadow-color: rgba(0, 0, 0, 0.8);
 }
 
 // Header Styling - High specificity to override defaults
@@ -192,8 +143,8 @@ ion-content {
         font-weight: 700;
         margin: 0 0 8px 0;
         line-height: 1.2;
-        color: var(--text-light);
-        text-shadow: 0 2px 4px var(--shadow-color);
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       }
 
       .song-author {
@@ -211,8 +162,8 @@ ion-content {
           margin: 0;
           font-size: 1.1rem;
           font-weight: 500;
-          color: var(--text-light);
-          text-shadow: 0 1px 2px var(--shadow-color);
+          color: white;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
       }    .song-actions {
       display: flex;
@@ -243,7 +194,7 @@ ion-content {
   .player-card {
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3);
-    background: var(--card-background);
+    background: var(--ion-item-background);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     margin: 0;
@@ -254,7 +205,7 @@ ion-content {
       .player-title {
         display: flex;
         align-items: center;
-        color: var(--text-primary);
+        color: var(--ion-text-color);
         font-size: 1.1rem;
         font-weight: 600;
         margin: 0;
@@ -280,7 +231,7 @@ ion-content {
   .description-card {
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(220, 20, 60, 0.2);
-    background: var(--content-background);
+    background: var(--ion-item-background);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     margin: 0;
@@ -289,7 +240,7 @@ ion-content {
       padding: 16px 16px 8px;
 
       ion-card-title {
-        color: var(--text-primary);
+        color: var(--ion-text-color);
         font-size: 1.1rem;
         font-weight: 600;
         margin: 0;
@@ -302,16 +253,16 @@ ion-content {
       .english-description {
         font-size: 1rem;
         line-height: 1.6;
-        color: var(--text-secondary);
+        color: var(--ion-text-color);
         margin-bottom: 20px;
       }
 
       .tamil-section {
-        border-top: 1px solid var(--border-color);
+        border-top: 1px solid var(--ion-border-color);
         padding-top: 16px;
 
         h4 {
-          color: var(--text-primary);
+          color: var(--ion-text-color);
           font-size: 1rem;
           font-weight: 600;
           margin: 0 0 12px 0;
@@ -320,13 +271,13 @@ ion-content {
         .tamil-content {
           font-size: 0.95rem;
           line-height: 1.6;
-          color: var(--text-secondary);
+          color: var(--ion-text-color);
 
           // Style Tamil HTML content
           ::ng-deep {
             p {
               margin-bottom: 12px;
-              color: var(--text-secondary);
+              color: var(--ion-text-color);
               
               &:last-child {
                 margin-bottom: 0;
@@ -334,7 +285,7 @@ ion-content {
             }
 
             strong, b {
-              color: var(--text-primary);
+              color: var(--ion-text-color);
               font-weight: 600;
             }
 
@@ -350,7 +301,7 @@ ion-content {
 
             li {
               margin-bottom: 6px;
-              color: var(--text-secondary);
+              color: var(--ion-text-color);
             }
           }
         }
@@ -366,7 +317,7 @@ ion-content {
   .details-card {
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(25, 25, 112, 0.25);
-    background: var(--content-background);
+    background: var(--ion-item-background);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.25);
     margin: 0;
@@ -375,7 +326,7 @@ ion-content {
       padding: 16px 16px 8px;
 
       ion-card-title {
-        color: var(--text-primary);
+        color: var(--ion-text-color);
         font-size: 1.1rem;
         font-weight: 600;
         margin: 0;
@@ -397,7 +348,7 @@ ion-content {
 
         ion-text {
           font-size: 1rem;
-          color: var(--text-secondary);
+          color: var(--ion-text-color);
         }
 
         .detail-chip {
@@ -428,7 +379,7 @@ ion-content {
   padding: 60px 20px;
   text-align: center;
   min-height: 50vh;
-  background: var(--loading-background);
+  background: var(--ion-background-color);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   margin: 20px;
@@ -441,7 +392,7 @@ ion-content {
   }
 
   p {
-    color: var(--text-secondary);
+    color: var(--ion-text-color);
     font-size: 1rem;
     margin: 0;
     font-weight: 500;
@@ -457,7 +408,7 @@ ion-content {
   padding: 60px 20px;
   text-align: center;
   min-height: 50vh;
-  background: var(--loading-background);
+  background: var(--ion-background-color);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   margin: 20px;
@@ -465,7 +416,7 @@ ion-content {
 
   h3 {
     margin-bottom: 20px;
-    color: var(--text-primary);
+    color: var(--ion-text-color);
   }
 
   ion-button {
@@ -481,7 +432,7 @@ ion-content {
     }
 
     &[fill="clear"] {
-      --color: var(--text-secondary);
+      --color: var(--ion-text-color);
     }
   }
 }
