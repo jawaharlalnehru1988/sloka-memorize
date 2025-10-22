@@ -64,6 +64,10 @@ export const routes: Routes = [
     loadComponent: () => import('./smarana/smarana.page').then( m => m.SmaranaPage)
   },
   {
+    path: 'bhagavad-gita/chapter/:chapterNumber',
+    loadComponent: () => import('./bhagavad-gita-chapter/bhagavad-gita-chapter.page').then( m => m.BhagavadGitaChapterPage)
+  },
+  {
     path: 'bhagavad-gita',
     loadComponent: () => import('./bhagavad-gita/bhagavad-gita.page').then( m => m.BhagavadGitaPage)
   },
