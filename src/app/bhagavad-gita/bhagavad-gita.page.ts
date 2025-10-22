@@ -23,10 +23,12 @@ import {
   IonSelect,
   IonSelectOption,
   IonItem,
-  IonLabel
+  IonLabel,
+  IonRefresher,
+  IonRefresherContent
 } from '@ionic/angular/standalone';
 import { BhagavadGitaService, BhagavadGitaChapterResponse, BhagavadGitaChapterItem } from './bhagavad-gita.service';
-import { book, close, chevronDown, play, bookmark, image, library } from 'ionicons/icons';
+import { book, close, chevronDown, play, bookmark, image, library, chevronDownCircleOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { TechniqueHeaderComponent } from "../shared/components/technique-header/technique-header.component";
 
@@ -65,6 +67,8 @@ export interface CardContent {
     IonSelectOption,
     IonItem,
     IonLabel,
+    IonRefresher,
+    IonRefresherContent,
     FormsModule,
     TechniqueHeaderComponent
 ]
@@ -82,7 +86,7 @@ export class BhagavadGitaPage implements OnInit {
     private meta: Meta,
     private titleService: Title
   ) {
-    addIcons({book, library});
+    addIcons({book, library, chevronDownCircleOutline});
   }
 
   ngOnInit() {
@@ -238,5 +242,37 @@ export class BhagavadGitaPage implements OnInit {
     this.router.navigate(['/sloka-renderer'], {
       queryParams: { view: 'all' }
     });
+  }
+
+  // Pull-to-refresh functionality
+  handleRefresh(event: any): void {
+    console.log('🔄 Pull-to-refresh triggered for Bhagavad Gita chapters');
+    
+    // Clear cache to force fresh data
+    this.bhagavadGitaService.clearCache();
+    
+    // Reset state
+    this.cardContents = [];
+    this.loading = true;
+    
+    // Reload chapter data
+    this.loadChapterData();
+    
+    // Complete the refresh animation
+    setTimeout(() => {
+      event.target.complete();
+      console.log('✅ Pull-to-refresh completed for Bhagavad Gita');
+    }, 1500);
+  }
+
+  // Check if device is mobile
+  isMobile(): boolean {
+    const width = window.innerWidth;
+    const userAgent = navigator.userAgent.toLowerCase();
+    
+    const isMobileWidth = width < 768;
+    const isMobileUserAgent = /android|iphone|ipad|ipod|blackberry|windows phone|mobile/.test(userAgent);
+    
+    return isMobileWidth || isMobileUserAgent;
   }
 }

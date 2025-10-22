@@ -8,6 +8,16 @@
 </app-technique-header>
 
 <ion-content [fullscreen]="true" class="bg-gradient">
+  <!-- Pull to Refresh (Mobile Only) -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" [disabled]="!isMobile()">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="🕉️ Pull to refresh chapters"
+      refreshingSpinner="crescent"
+      refreshingText="🔄 Loading chapters...">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Bhagavad Gītā</ion-title>

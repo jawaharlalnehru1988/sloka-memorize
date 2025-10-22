@@ -8,6 +8,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="chapter-detail-bg">
+  <!-- Pull to Refresh (Mobile Only) -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" [disabled]="!isMobile()">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="🕉️ Pull to refresh chapter"
+      refreshingSpinner="crescent"
+      refreshingText="🔄 Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">{{ chapterData?.title }}</ion-title>

@@ -12,10 +12,12 @@ import {
   IonText,
   IonSpinner,
   IonBackButton,
-  IonButtons
+  IonButtons,
+  IonRefresher,
+  IonRefresherContent
 } from '@ionic/angular/standalone';
 import { BhagavadGitaService, BhagavadGitaChapterItem } from '../bhagavad-gita/bhagavad-gita.service';
-import { play, pause, arrowBack, download, speedometer, share, personCircle, call, logoYoutube, globe, logoWhatsapp, refresh } from 'ionicons/icons';
+import { play, pause, arrowBack, download, speedometer, share, personCircle, call, logoYoutube, globe, logoWhatsapp, refresh, chevronDownCircleOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { AudioPlayerComponent } from '../shared/audio-player/audio-player.component';
 
@@ -35,6 +37,8 @@ import { AudioPlayerComponent } from '../shared/audio-player/audio-player.compon
     IonSpinner,
     IonBackButton,
     IonButtons,
+    IonRefresher,
+    IonRefresherContent,
     FormsModule,
     AudioPlayerComponent
   ]
@@ -58,7 +62,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     private meta: Meta,
     private titleService: Title
   ) {
-    addIcons({refresh,arrowBack,speedometer,download,share,personCircle,call,logoWhatsapp,logoYoutube,globe,play,pause});
+    addIcons({refresh,arrowBack,speedometer,download,share,personCircle,call,logoWhatsapp,logoYoutube,globe,play,pause,chevronDownCircleOutline});
   }
 
   ngOnInit() {
@@ -74,15 +78,27 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
       this.chapterNumber = this.parseChapterFromPath();
     }
 
-    console.log('Loading chapter:', this.chapterNumber, 'href:', window.location.href);
+    console.log('🔍 Chapter Detection Details:', {
+      chapterNumber: this.chapterNumber,
+      href: window.location.href,
+      pathname: window.location.pathname,
+      hash: window.location.hash,
+      routeParams: this.route.snapshot.paramMap.keys.map(key => ({ key, value: this.route.snapshot.paramMap.get(key) })),
+      queryParams: this.route.snapshot.queryParamMap.keys.map(key => ({ key, value: this.route.snapshot.queryParamMap.get(key) }))
+    });
 
     if (this.chapterNumber) {
-      this.loadChapterData();
+      console.log('✅ Starting to load chapter:', this.chapterNumber);
+      
+      // Small delay to ensure route is fully resolved (helps with shared links)
+      setTimeout(() => {
+        this.loadChapterData();
+      }, 50);
 
       // Safety timeout: if loading doesn't finish within 12s, show a helpful message instead of an infinite spinner
       setTimeout(() => {
         if (this.loading) {
-          console.warn('Chapter load timeout for', this.chapterNumber);
+          console.warn('⚠️ Chapter load timeout for:', this.chapterNumber);
           this.loading = false;
           this.error = 'Taking too long to load content. Please try opening the link in your browser or retry.';
         }
@@ -96,24 +112,38 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
   private loadChapterData(): void {
     const selectedLanguage = this.route.snapshot.queryParamMap.get('lang') || 'tamil';
     
+    console.log('🔄 Loading chapter data for:', {
+      chapterNumber: this.chapterNumber,
+      language: selectedLanguage
+    });
+    
     // First try to get data from cache synchronously
     const cachedChapter = this.bhagavadGitaService.getChapterByNumber(this.chapterNumber, selectedLanguage);
     
     if (cachedChapter) {
+      console.log('✅ Chapter loaded from cache:', cachedChapter.title);
       this.chapterData = cachedChapter;
       this.loading = false;
       this.setupScrollDetection();
       this.updateMetadata();
-      console.log('Chapter loaded from cache:', this.chapterData);
     } else {
       // If not in cache, try to load from service
-      console.log('Chapter not in cache, loading from service...');
+      console.log('📡 Chapter not in cache, loading from service...');
       this.bhagavadGitaService.getAllBgChapters().subscribe({
         next: (chaptersResponse: any) => {
           console.log('Chapters loaded from service, finding chapter:', this.chapterNumber);
-          const chapters = chaptersResponse.map((response: any) => response.chapters).flat();
-          // Ensure category comparison as string to avoid type mismatches
-          const foundChapter = chapters.find((chapter: any) => String(chapter.category) === String(this.chapterNumber));
+          
+          // Extract all cardItems from all responses (correct structure)
+          const allChapterItems = chaptersResponse
+            .map((response: any) => response.cardItems || [])
+            .flat();
+          
+          console.log('Total chapter items found:', allChapterItems.length);
+          
+          // Find the specific chapter by number
+          const foundChapter = allChapterItems.find((chapter: any) => 
+            String(chapter.category) === String(this.chapterNumber)
+          );
           
           if (foundChapter) {
             this.chapterData = foundChapter;
@@ -122,12 +152,19 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
             console.log('Chapter found and loaded:', foundChapter);
           } else {
             this.error = `Chapter ${this.chapterNumber} not found`;
-            console.error('Chapter not found:', this.chapterNumber);
+            console.error('Chapter not found:', this.chapterNumber, 'Available chapters:', 
+              allChapterItems.map((ch: any) => ch.category));
           }
           this.loading = false;
         },
         error: (error: any) => {
           console.error('Error loading chapters:', error);
+          console.error('Error details:', {
+            status: error.status,
+            statusText: error.statusText,
+            url: error.url,
+            message: error.message
+          });
           this.handleLoadingError(error);
         }
       });
@@ -322,5 +359,40 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
     
     // Retry loading chapter data
     this.loadChapterData();
+  }
+
+  // Pull-to-refresh functionality
+  handleRefresh(event: any): void {
+    console.log('🔄 Pull-to-refresh triggered');
+    
+    // Clear cache to force fresh data
+    this.bhagavadGitaService.clearCache();
+    
+    // Reset state
+    this.chapterData = null;
+    this.error = '';
+    this.loading = true;
+    
+    // Reload chapter data
+    this.loadChapterData();
+    
+    // Complete the refresh animation after data loads or on error
+    setTimeout(() => {
+      event.target.complete();
+      console.log('✅ Pull-to-refresh completed');
+    }, 1500); // Give time for the API call
+  }
+
+  // Check if device is mobile
+  isMobile(): boolean {
+    // Check window width and user agent for mobile detection
+    const width = window.innerWidth;
+    const userAgent = navigator.userAgent.toLowerCase();
+    
+    // Consider mobile if width < 768px or mobile user agent
+    const isMobileWidth = width < 768;
+    const isMobileUserAgent = /android|iphone|ipad|ipod|blackberry|windows phone|mobile/.test(userAgent);
+    
+    return isMobileWidth || isMobileUserAgent;
   }
 }
