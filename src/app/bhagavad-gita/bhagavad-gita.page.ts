@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { SeoService } from '../shared/services/seo.service';
 import { 
@@ -83,6 +83,7 @@ export class BhagavadGitaPage implements OnInit {
   constructor(
     private bhagavadGitaService: BhagavadGitaService,
     private router: Router,
+    private route: ActivatedRoute,
     private meta: Meta,
     private titleService: Title
   ) {
@@ -90,6 +91,25 @@ export class BhagavadGitaPage implements OnInit {
   }
 
   ngOnInit() {
+    // Initialize language from URL query parameter if available
+    const urlLang = this.route.snapshot.queryParamMap.get('lang');
+    
+    if (urlLang && ['tamil', 'kannada', 'sanskrit'].includes(urlLang)) {
+      // Valid language parameter found - use it
+      this.selectedLanguage = urlLang;
+      console.log('🌐 Language initialized from URL:', this.selectedLanguage);
+    } else {
+      // No language parameter or invalid language - redirect to Tamil as default
+      console.log('🔄 No valid language parameter found, redirecting to Tamil default');
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { lang: 'tamil' },
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      });
+      this.selectedLanguage = 'tamil';
+    }
+
     this.setupMetaTags();
     this.loadChapterData();
     this.setupSEO();
@@ -229,6 +249,14 @@ export class BhagavadGitaPage implements OnInit {
 
   onLanguageChange(): void {
     console.log('🔄 Language changed to:', this.selectedLanguage);
+    
+    // Update URL with language query parameter
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { lang: this.selectedLanguage },
+      queryParamsHandling: 'merge', // Keep any existing query params
+      replaceUrl: true // Replace current history entry instead of adding new one
+    });
     
     // Clear existing card contents
     this.cardContents = [];

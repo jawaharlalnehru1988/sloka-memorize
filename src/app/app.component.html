@@ -2,9 +2,9 @@
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
-        <ion-list id="labels-list">
+        <ion-list id="index-list">
           <ion-list-header>Scriptures</ion-list-header>
-
+            <ion-note>Main Scriptures to master</ion-note>
           @for (scripture of scripturePages; track scripture) {
             <ion-menu-toggle auto-hide="false">
               <ion-item routerDirection="root" [routerLink]="[scripture.url]" lines="none" detail="false" routerLinkActive="selected">
@@ -18,6 +18,23 @@
             </ion-menu-toggle>
           }
         </ion-list>
+
+          <ion-list id="inbox-list">
+            <ion-list-header>Sadhana Practices</ion-list-header>
+            <ion-note>Regular Practice Methods</ion-note>
+          
+            @for (sadhana of sadhanaPages; track sadhana; let i = $index) {
+            <ion-menu-toggle auto-hide="false">
+              <ion-item routerDirection="root" [routerLink]="[sadhana.url]" lines="none" detail="false"
+                routerLinkActive="selected">
+                <ion-icon aria-hidden="true" slot="start" [ios]="sadhana.icon + '-outline'"
+                  [md]="sadhana.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ sadhana.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+            }
+          </ion-list>
+
         <ion-list id="inbox-list">
           <ion-list-header>Memorization Techniques</ion-list-header>
           <ion-note>Traditional Vedic Methods</ion-note>
@@ -32,19 +49,7 @@
           }
         </ion-list>
 
-        <ion-list id="inbox-list">
-          <ion-list-header>Sadhana Practices</ion-list-header>
-          <ion-note>Regular Practice Methods</ion-note>
-
-          @for (sadhana of sadhanaPages; track sadhana; let i = $index) {
-            <ion-menu-toggle auto-hide="false">
-              <ion-item routerDirection="root" [routerLink]="[sadhana.url]" lines="none" detail="false" routerLinkActive="selected">
-                <ion-icon aria-hidden="true" slot="start" [ios]="sadhana.icon + '-outline'" [md]="sadhana.icon + '-sharp'"></ion-icon>
-                <ion-label>{{ sadhana.title }}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-          }
-        </ion-list>
+      
 
         
       </ion-content>
