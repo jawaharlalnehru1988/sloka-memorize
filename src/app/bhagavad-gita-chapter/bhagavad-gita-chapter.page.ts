@@ -187,12 +187,46 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
 
   private updateMetadata(): void {
     if (this.chapterData) {
-      this.titleService.setTitle(`${this.chapterData.title} - Bhagavad Gita Chapter ${this.chapterNumber}`);
+      // Rich preview thumbnail image
+      const shareImageUrl = 'https://res.cloudinary.com/dbmkctsda/image/upload/v1755826489/6c5b5f34493a22073fec89464565a7a2_nzjsqr.jpg';
+      const currentUrl = window.location.href;
+      const description = this.chapterData.desc?.substring(0, 160) || `🕉️ Listen to Chapter ${this.chapterNumber} of the Bhagavad Gita in Tamil. Divine teachings of Lord Krishna for spiritual enlightenment.`;
+      const title = `🕉️ ${this.chapterData.title} - Bhagavad Gita Chapter ${this.chapterNumber}`;
+
+      // Set page title
+      this.titleService.setTitle(title);
       
-      this.meta.updateTag({ name: 'description', content: this.chapterData.desc?.substring(0, 160) || `Listen to Chapter ${this.chapterNumber} of the Bhagavad Gita` });
-      this.meta.updateTag({ property: 'og:title', content: `${this.chapterData.title} - Bhagavad Gita` });
-      this.meta.updateTag({ property: 'og:description', content: this.chapterData.desc?.substring(0, 160) || '' });
-      this.meta.updateTag({ property: 'og:image', content: this.chapterData.img || '' });
+      // Standard meta tags
+      this.meta.updateTag({ name: 'description', content: description });
+      this.meta.updateTag({ name: 'keywords', content: 'Bhagavad Gita, Tamil, Krishna, Spiritual, Chapter, Audio, Srimad Bhagavad Gita, Hindu Scripture' });
+      this.meta.updateTag({ name: 'author', content: 'Hare Krishna Sloka' });
+      
+      // Open Graph meta tags for rich link previews (Facebook, WhatsApp, LinkedIn)
+      this.meta.updateTag({ property: 'og:type', content: 'article' });
+      this.meta.updateTag({ property: 'og:site_name', content: 'Hare Krishna Sloka' });
+      this.meta.updateTag({ property: 'og:title', content: title });
+      this.meta.updateTag({ property: 'og:description', content: description });
+      this.meta.updateTag({ property: 'og:image', content: shareImageUrl });
+      this.meta.updateTag({ property: 'og:image:width', content: '1200' });
+      this.meta.updateTag({ property: 'og:image:height', content: '630' });
+      this.meta.updateTag({ property: 'og:image:alt', content: `Bhagavad Gita Chapter ${this.chapterNumber} - ${this.chapterData.title}` });
+      this.meta.updateTag({ property: 'og:url', content: currentUrl });
+      this.meta.updateTag({ property: 'og:locale', content: 'ta_IN' });
+      
+      // Twitter Card meta tags for Twitter sharing
+      this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+      this.meta.updateTag({ name: 'twitter:site', content: '@HareKrishnaSloka' });
+      this.meta.updateTag({ name: 'twitter:creator', content: '@HareKrishnaSloka' });
+      this.meta.updateTag({ name: 'twitter:title', content: title });
+      this.meta.updateTag({ name: 'twitter:description', content: description });
+      this.meta.updateTag({ name: 'twitter:image', content: shareImageUrl });
+      this.meta.updateTag({ name: 'twitter:image:alt', content: `Bhagavad Gita Chapter ${this.chapterNumber} - ${this.chapterData.title}` });
+      
+      // WhatsApp specific meta tags
+      this.meta.updateTag({ property: 'og:image:type', content: 'image/jpeg' });
+      this.meta.updateTag({ name: 'theme-color', content: '#ff6d00' });
+      
+      console.log('✅ Rich preview metadata updated with thumbnail:', shareImageUrl);
     }
   }
 
@@ -263,6 +297,7 @@ export class BhagavadGitaChapterPage implements OnInit, OnDestroy {
       const baseUrl = window.location.origin;
       const canonicalUrl = `${baseUrl}/bhagavad-gita/chapter/${encodeURIComponent(this.chapterNumber)}?lang=${encodeURIComponent(lang)}`;
       
+
       // Create rich Tamil content exactly like yesterday
       const richShareText = `🕉 ஹரே கிருஷ்ணா!  ஸ்ரீமத் பகவத் கீதையின் ${this.getChapterNumberInTamil(this.chapterNumber)} அத்தியாயத்தினை தமிழ் அர்த்தத்துடன் கேளுங்கள்: "${this.chapterData.title}"
 
